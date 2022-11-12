@@ -44,4 +44,4 @@ Java Spring + MongoDB
 
 > Edit book
 
-<img src="./dokumentace/view/book edit/book_edit.png" width="80%">
+<img src="./dokumentace/view/book_edit/book_edit.png" width="80%">
