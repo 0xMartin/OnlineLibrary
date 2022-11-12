@@ -1,4 +1,4 @@
-package cz.utb.fai.LibraryApp.models;
+package cz.utb.fai.LibraryApp.model;
 
 import java.util.List;
 

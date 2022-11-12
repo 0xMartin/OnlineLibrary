@@ -1,4 +1,4 @@
-package cz.utb.fai.LibraryApp.models;
+package cz.utb.fai.LibraryApp.model;
 
 import java.sql.Date;
 
@@ -27,6 +27,11 @@ public class Borrow {
     private Date date;
 
     /**
+     * Stav o tom zda kniha byla jiz vracena
+     */
+    private boolean returned;
+
+    /**
      * Uzivatel, ktery si knihu pujcil
      */
     @DocumentReference(lazy = false)
@@ -45,13 +50,15 @@ public class Borrow {
      * @param expiration Za kolik dni bude vypujcka knihy expirovat (od data
      *                   vytvoreni vypujcky)
      * @param date       Datum vytvoreni vypujcky knihy
+     * @param returned   Stav o tom zda kniha byla jiz vrace
      * @param user       Uzivatel, ktery si knihu vypujcil
      * @param book       Knihy, kterou si uzivatel vypujcil
      */
-    public Borrow(long id, long expiration, Date date, User user, Book book) {
+    public Borrow(long id, long expiration, Date date, boolean returned, User user, Book book) {
         this.id = id;
         this.expiration = expiration;
         this.date = date;
+        this.returned = returned;
         this.user = user;
         this.book = book;
     }
