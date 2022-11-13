@@ -1,7 +1,7 @@
 package cz.utb.fai.LibraryApp.bussines;
 
 import cz.utb.fai.LibraryApp.model.User;
-import cz.utb.fai.LibraryApp.repository.*;
+import cz.utb.fai.LibraryApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

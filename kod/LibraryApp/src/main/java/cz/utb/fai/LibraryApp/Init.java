@@ -114,7 +114,7 @@ public class Init {
             "admin12345",
             state,
             role
-          )
+          ).encodePassword()
         );
     } else {
       return null;

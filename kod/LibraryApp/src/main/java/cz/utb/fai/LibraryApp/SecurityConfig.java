@@ -75,7 +75,7 @@ public class SecurityConfig {
       .and()
       .formLogin()
       .loginPage("/auth/login")
-      .loginProcessingUrl("/auth/process-login")
+      //.loginProcessingUrl("/auth/process-login")
       .defaultSuccessUrl("/home")
       .failureUrl("/auth/login?error=true")
       .permitAll()
