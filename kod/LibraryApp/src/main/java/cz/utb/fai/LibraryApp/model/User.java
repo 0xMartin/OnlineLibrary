@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import cz.utb.fai.LibraryApp.Security;
+import cz.utb.fai.LibraryApp.SecurityConfig;
 
 /**
  * Trida reprezentujici uzivatele
@@ -105,13 +105,13 @@ public class User {
     this.personaID = personaID;
     this.address = address;
     this.username = username;
-    this.password = Security.encoder().encode(password);
+    this.password = SecurityConfig.encoder().encode(password);
     this.state = state;
     this.role = role;
   }
   
   public void setPassword(String password) {
-    this.password = Security.encoder().encode(password);
+    this.password = SecurityConfig.encoder().encode(password);
   }
 
 }
