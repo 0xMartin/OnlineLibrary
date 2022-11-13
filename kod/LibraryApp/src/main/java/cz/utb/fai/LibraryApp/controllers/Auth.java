@@ -2,7 +2,6 @@ package cz.utb.fai.LibraryApp.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
@@ -16,10 +15,10 @@ public class Auth {
         return "login";
     }
 
-    @PostMapping("/process-login")
+    @GetMapping("/register")
     public String processLogin() {
         
-        return "login";
+        return "register";
     }
 
 }

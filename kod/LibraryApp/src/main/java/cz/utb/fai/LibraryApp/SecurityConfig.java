@@ -75,7 +75,6 @@ public class SecurityConfig {
       .and()
       .formLogin()
       .loginPage("/auth/login")
-      //.loginProcessingUrl("/auth/process-login")
       .defaultSuccessUrl("/home")
       .failureUrl("/auth/login?error=true")
       .permitAll()
@@ -101,4 +100,5 @@ public class SecurityConfig {
     logger.info("Auth manager setup done");
     return authenticationManagerBuilder.build();
   }
+
 }
