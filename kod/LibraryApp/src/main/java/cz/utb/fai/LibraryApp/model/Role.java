@@ -22,8 +22,8 @@ public class Role {
   @Field("name")
   private ERole name;
 
-  public Role(long id, ERole role) {
+  public Role(long id, ERole name) {
     this.id = id;
-    this.name = role;
+    this.name = name;
   }
 }

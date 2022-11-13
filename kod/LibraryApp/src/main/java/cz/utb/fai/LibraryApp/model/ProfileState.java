@@ -22,8 +22,8 @@ public class ProfileState {
   @Field("name")
   private EProfileState name;
 
-  public ProfileState(long id, EProfileState state) {
+  public ProfileState(long id, EProfileState name) {
     this.id = id;
-    this.name = state;
+    this.name = name;
   }
 }

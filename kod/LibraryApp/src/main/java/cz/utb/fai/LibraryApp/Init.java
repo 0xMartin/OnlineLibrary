@@ -97,9 +97,9 @@ public class Init {
     ProfileStateRepository stateRepository
   ) {
     if (repository.count() == 0) {
-      Role role = roleRepository.findItemByName(ERole.LIBRARIAN.toString());
+      Role role = roleRepository.findItemByName(ERole.LIBRARIAN);
       ProfileState state = stateRepository.findItemByName(
-        EProfileState.CONFIRMED.toString()
+        EProfileState.CONFIRMED
       );
 
       return args ->
@@ -120,5 +120,4 @@ public class Init {
       return null;
     }
   }
-  
 }
