@@ -5,6 +5,7 @@ import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.*;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +22,8 @@ public class UserService {
    * @return User
    */
   public User profile() {
-    return null;
+    final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    return user;
   }
 
   /**

@@ -6,25 +6,37 @@
 
         <!-- Navigation -->
         <ul class="navbar-nav mr-auto">
+             <!-- Home (book catalog) -->
             <li class="nav-item active">
                 <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/profile">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/profile">Admin</a>
-            </li>
+
+             <!-- Profile (only for logined users) -->
+            <div sec:authorize="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Profile</a>
+                </li>
+            </div>
+
+            <!-- Admin (only for user with role librarian = ADMIN) -->
+            <div sec:authorize="hasRole('LIBRARIAN')">
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Admin</a>
+                </li>
+            </div>
         </ul>
 
         <!-- Logout button -->
-        <form class="form-inline my-2 my-lg-0" type="POST" action="#">
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Logout</button>
-        </form>
+        <div sec:authorize="isAuthenticated()">
+            <button class="btn btn-outline-primary my-2 my-sm-0" onclick="location.href='/auth/logout'"
+                type="button">Logout</button>
+        </div>
 
         <!-- Login button -->
-        <button class="btn btn-outline-primary my-2 my-sm-0" onclick="location.href='/auth/login'"
-            type="button">Login</button>
+        <div sec:authorize="isAnonymous()">
+            <button class="btn btn-outline-primary my-2 my-sm-0" onclick="location.href='/auth/login'"
+                type="button">Login</button>
+        </div>
 
     </div>
 </nav>
