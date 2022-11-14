@@ -1,7 +1,8 @@
 package cz.utb.fai.LibraryApp;
 
-import cz.utb.fai.LibraryApp.bussines.CustomUserDetailsService;
-import cz.utb.fai.LibraryApp.enums.*;
+import cz.utb.fai.LibraryApp.bussines.enums.*;
+import cz.utb.fai.LibraryApp.bussines.services.CustomUserDetailsService;
+
 import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

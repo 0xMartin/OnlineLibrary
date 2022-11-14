@@ -22,4 +22,6 @@ public class GlobalConfig {
      */
     public static long BORROW_DAY_COUNT = 6;
 
+    public static final String VIEW_PREFIX = "view";
+
 }

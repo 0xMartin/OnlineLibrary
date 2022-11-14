@@ -1,4 +1,4 @@
-package cz.utb.fai.LibraryApp.enums;
+package cz.utb.fai.LibraryApp.bussines.enums;
 
 /**
  * Uzivatelske role

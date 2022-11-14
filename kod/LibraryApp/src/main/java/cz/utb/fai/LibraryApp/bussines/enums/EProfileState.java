@@ -1,9 +1,13 @@
-package cz.utb.fai.LibraryApp.enums;
+package cz.utb.fai.LibraryApp.bussines.enums;
 
 /**
  * Stav uzivatelskeho profilu
  */
 public enum EProfileState {
+  /**
+   * Profil stale ceka na potvrzeni
+   */
+  WAITING,
   /**
    * Nepotvrzeny profil
    */

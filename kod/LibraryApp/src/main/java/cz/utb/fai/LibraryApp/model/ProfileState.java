@@ -1,6 +1,6 @@
 package cz.utb.fai.LibraryApp.model;
 
-import cz.utb.fai.LibraryApp.enums.EProfileState;
+import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

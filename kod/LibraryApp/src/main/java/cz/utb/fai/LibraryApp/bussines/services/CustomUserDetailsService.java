@@ -1,4 +1,4 @@
-package cz.utb.fai.LibraryApp.bussines;
+package cz.utb.fai.LibraryApp.bussines.services;
 
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.UserRepository;

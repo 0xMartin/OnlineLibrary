@@ -1,7 +1,7 @@
 package cz.utb.fai.LibraryApp;
 
-import cz.utb.fai.LibraryApp.enums.EProfileState;
-import cz.utb.fai.LibraryApp.enums.ERole;
+import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
+import cz.utb.fai.LibraryApp.bussines.enums.ERole;
 import cz.utb.fai.LibraryApp.model.ProfileState;
 import cz.utb.fai.LibraryApp.model.Role;
 import cz.utb.fai.LibraryApp.model.User;
@@ -80,9 +80,10 @@ public class Init {
       return args ->
         repository.saveAll(
           Arrays.asList(
-            new ProfileState(0, EProfileState.NOT_CONFIRMED),
-            new ProfileState(1, EProfileState.CONFIRMED),
-            new ProfileState(2, EProfileState.BANNED)
+            new ProfileState(0, EProfileState.WAITING),
+            new ProfileState(1, EProfileState.NOT_CONFIRMED),
+            new ProfileState(2, EProfileState.CONFIRMED),
+            new ProfileState(3, EProfileState.BANNED)
           )
         );
     } else {
