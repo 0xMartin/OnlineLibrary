@@ -76,7 +76,7 @@ public class SecurityConfig {
       .and()
       .formLogin()
       .loginPage("/auth/login")
-      .defaultSuccessUrl("/home")
+      .defaultSuccessUrl("/home", true)
       .failureUrl("/auth/login?error=true")
       .permitAll()
       .and()

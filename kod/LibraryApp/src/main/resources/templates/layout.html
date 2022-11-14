@@ -4,9 +4,10 @@
 <th:block layout:insert="~{fragments/htmlhead}" />
 
 <body>
+    
     <th:block layout:replace="~{fragments/navigation}" />
 
-    <div class="container-fluid">
+    <div class="container-fluid" id="container">
         <div class="row">
             <div class="col-md-12">
                 <th:block layout:fragment="content" />
@@ -14,9 +15,17 @@
         </div>
     </div>
 
-    <th:block layout:fragment="body_end" />
+    <th:block layout:replace="~{fragments/footer}" />
     
+    <th:block layout:fragment="page_scripts" />
     <th:block layout:replace="~{fragments/body_scripts :: end}" />
+
+    <script>
+        const navigation = document.querySelector("#navigation");
+        const container = document.querySelector("#container");
+        container.style.marginTop = (navigation.offsetHeight + 5) + "px";
+    </script>
+
 </body>
 
 </html>

@@ -1,8 +1,6 @@
 package cz.utb.fai.LibraryApp.controllers;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
-import cz.utb.fai.LibraryApp.GlobalConfig;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,14 +9,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = AppRequestMapping.HOME)
 public class HomeController {
 
+  /**
+   * View s katalogem knih (homepage)
+   * @return Nazev view
+   */
   @GetMapping
   public String home() {
-    return GlobalConfig.VIEW_PREFIX + "/index";
+    return AppRequestMapping.VIEW_PREFIX + "/index";
   }
 
+  /**
+   * View s informacemi of aplikaci
+   * @return Nazev view
+   */
   @GetMapping("/about")
   public String about() {
-    return GlobalConfig.VIEW_PREFIX + "/about";
+    return AppRequestMapping.VIEW_PREFIX + "/about";
   }
-  
 }

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" id="navigation">
 
     <a class="navbar-brand" href="/home"><i class="fa fa-book" aria-hidden="true"></i></a>
 
@@ -7,20 +7,20 @@
         <!-- Navigation -->
         <ul class="navbar-nav mr-auto">
              <!-- Home (book catalog) -->
-            <li class="nav-item active">
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
                 <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
             </li>
 
              <!-- Profile (only for logined users) -->
             <div sec:authorize="isAuthenticated()">
-                <li class="nav-item">
+                <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/profile' ? 'active':''}">
                     <a class="nav-link" href="/profile">Profile</a>
                 </li>
             </div>
 
             <!-- Admin (only for user with role librarian = ADMIN) -->
             <div sec:authorize="hasRole('LIBRARIAN')">
-                <li class="nav-item">
+                <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/admin' ? 'active':''}">
                     <a class="nav-link" href="/profile">Admin</a>
                 </li>
             </div>
@@ -28,14 +28,14 @@
 
         <!-- Logout button -->
         <div sec:authorize="isAuthenticated()">
-            <button class="btn btn-outline-primary my-2 my-sm-0" onclick="location.href='/auth/logout'"
-                type="button">Logout</button>
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/logout'"
+                type="button">Log out</button>
         </div>
 
         <!-- Login button -->
         <div sec:authorize="isAnonymous()">
-            <button class="btn btn-outline-primary my-2 my-sm-0" onclick="location.href='/auth/login'"
-                type="button">Login</button>
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/login'"
+                type="button">Log in</button>
         </div>
 
     </div>

@@ -1,43 +1,55 @@
 package cz.utb.fai.LibraryApp.controllers;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
-import cz.utb.fai.LibraryApp.GlobalConfig;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.User;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = AppRequestMapping.PROFILE)
 public class ProfileController {
 
-    @Autowired
-    protected UserService userService;
+  @Autowired
+  protected UserService userService;
 
+  /**
+   * View s profilem uzivatele (parametry uzivatele + historie vsech vypujcek)
+   * @param model ViewModel
+   * @param page Cislo stranky s vypujckama knizek (stranky po 8 zaznamech)
+   * @param borrowedOnly Zobrazovat jen aktualne vypujcene knihy v seznamu
+   * @return Nazev View
+   */
   @GetMapping
-  public String profile(Model model) {
+  public String profile(
+    Model model,
+    @RequestParam(required = false) Long page,
+    @RequestParam(required = false) Boolean borrowedOnly
+  ) {
     User u = this.userService.profile();
-    model.addAttribute("USER_ID", u.getId());
-    model.addAttribute("USER_NAME", u.getName());
-    model.addAttribute("USER_SURNAME", u.getSurname());
-    model.addAttribute("USER_PERSONALID", u.getPersonaID());
-    model.addAttribute("USER_ADDRESS", u.getAddress());
-    model.addAttribute("USER_USERNAME", u.getUsername());
-    return GlobalConfig.VIEW_PREFIX + "/profile";
+    model.addAttribute("USER", u);
+    return AppRequestMapping.VIEW_PREFIX + "/profile";
   }
 
+  /**
+   * View pro editace parametru uzivatele
+   * @return Nazev View
+   */
   @GetMapping("edit")
   public String edit() {
-    return GlobalConfig.VIEW_PREFIX + "/edit_profile";
+    return AppRequestMapping.VIEW_PREFIX + "/edit_profile";
   }
 
+  /**
+   * View pro zmenu hesla
+   * @return Nazev View
+   */
   @GetMapping("changePassword")
   public String changePassword() {
-    return GlobalConfig.VIEW_PREFIX + "/change_password";
+    return AppRequestMapping.VIEW_PREFIX + "/change_password";
   }
-
 }

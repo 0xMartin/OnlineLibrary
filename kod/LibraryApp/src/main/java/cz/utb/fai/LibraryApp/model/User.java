@@ -33,8 +33,8 @@ public class User {
   /**
    * Rodne cislo uzivatele
    */
-  @Field("personaID")
-  private String personaID;
+  @Field("personalID")
+  private String personalID;
 
   /**
    * Adresa uzivatele
@@ -91,7 +91,7 @@ public class User {
     long id,
     String name,
     String surname,
-    String personaID,
+    String personalID,
     String address,
     String username,
     String password,
@@ -101,7 +101,7 @@ public class User {
     this.id = id;
     this.name = name;
     this.surname = surname;
-    this.personaID = personaID;
+    this.personalID = personalID;
     this.address = address;
     this.username = username;
     this.password = password;

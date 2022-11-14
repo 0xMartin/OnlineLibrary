@@ -5,8 +5,80 @@
 <th:block layout:fragment="content">
     <div class="container">
         <h1>Profile</h1>
-        
-        
+
+        <div class="row">
+            <!-- User info -->
+            <div class="col-8">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><b>Role</b> <span class="badge badge-primary" th:text="${USER.role.name}"></span></td>
+                            <td><b>Name</b> <span class="badge badge-primary" th:text="${USER.name}"></span></td>
+                            <td><b>Surname</b> <span class="badge badge-primary" th:text="${USER.surname}"></span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Username</b> <span class="badge badge-primary" th:text="${USER.username}"></span>
+                            </td>
+                            <td><b>Personal ID</b> <span class="badge badge-primary"
+                                    th:text="${USER.personalID}"></span>
+                            </td>
+                            <td><b>Address</b> <span class="badge badge-primary" th:text="${USER.address}"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-4 d-flex flex-column">
+                <button type="button" class="btn btn-secondary m-1">Edit profile</button>
+                <button type="button" class="btn btn-secondary m-1">Change password</button>
+            </div>
+        </div>
+
+        <!-- Borrowed books -->
+        <div class="d-flex justify-content-between my-2">
+            <h3 class="pr-5 my-0">Borrowed books</h3>
+            <div class="d-flex justify-content-center">
+                <div class="form-check pr-2 d-flex align-items-center">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Only currently borrowed
+                    </label>
+                </div>
+                <button type="button" class="btn btn-primary pr-2">Reload</button>
+            </div>
+        </div>
+        <div class="row border border-secondary rounded p-3 mb-5">
+            <th:block th:each="i: ${#numbers.sequence(0, 7)}">
+
+                <!--Book Card-->
+                <div class="col-md-3 pb-4">
+                    <div class="card p-2">
+                        <img class="card-img-top" src="./images/img1.png">
+                        <div class="card-body">
+                            <h5 class="card-title">Kniha 1</h5>
+                            <p class="card-text"><b>Remaining days</b> 6 days</p>
+                            <div class="d-flex justify-content-between">
+                                <a href="#" class="btn btn-primary" style="width: 45%;">Info</a>
+                                <a href="#" class="btn btn-danger" style="width: 45%;">Return</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </th:block>
+            <div class="col-md-12">
+                <hr>
+                <div class="d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-secondary m-1">&#60;</button>
+                    <button type="button" class="btn btn-primary m-1">1</button>
+                    <button type="button" class="btn btn-secondary m-1">2</button>
+                    <button type="button" class="btn btn-secondary m-1">3</button>
+                    <button type="button" class="btn btn-secondary m-1">&#62;</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </th:block>
 

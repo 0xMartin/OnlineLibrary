@@ -54,6 +54,12 @@ public class Init {
         GlobalConfig.BORROW_DAY_COUNT = (long) BORROW_DAY_COUNT.longValue();
         logger.info("BORROW_DAY_COUNT set on: " + BORROW_DAY_COUNT);
       }
+
+      Long MIN_PASSWORD_LENGTH = (Long) obj.get("MIN_PASSWORD_LENGTH");
+      if (MIN_PASSWORD_LENGTH != null) {
+        GlobalConfig.MIN_PASSWORD_LENGTH = (long) MIN_PASSWORD_LENGTH.longValue();
+        logger.info("MIN_PASSWORD_LENGTH set on: " + MIN_PASSWORD_LENGTH);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
