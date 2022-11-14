@@ -9,10 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(value = AppRequestMapping.HOME)
-public class Home {
+public class HomeController {
 
   @GetMapping
   public String home() {
     return GlobalConfig.VIEW_PREFIX + "/index";
   }
+
+  @GetMapping("/about")
+  public String about() {
+    return GlobalConfig.VIEW_PREFIX + "/about";
+  }
+  
 }
