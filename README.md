@@ -24,7 +24,7 @@ Java Spring + MongoDB + Thymeleaf
 
 > Book catalog (home)
 
-<img src="./dokumentace/view/register/register.png" width="80%">
+<img src="./dokumentace/view/book_catalog/book_catalog.png" width="80%">
 
 > Profile
 
