@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -54,6 +55,34 @@ public class ProfileController {
    */
   @GetMapping("changePassword")
   public String changePassword() {
+    return AppRequestMapping.VIEW_PREFIX + "/change_password";
+  }
+
+  /**
+   * Zmeni heslo uzivatele
+   * @param model ViewModel
+   * @param currentPass Aktualni heslo
+   * @param newPass Nove heslo
+   * @return Nazev View
+   */
+  @PostMapping(
+    path = "changePassword",
+    consumes = "application/x-www-form-urlencoded"
+  )
+  public String changePassword(
+    Model model,
+    String currentPass,
+    String newPass
+  ) {
+    try {
+      this.userService.changePassword(currentPass, newPass);
+      model.addAttribute(
+        AppRequestMapping.RESPONSE_SUCCESS,
+        "Password changed successfully"
+      );
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
     return AppRequestMapping.VIEW_PREFIX + "/change_password";
   }
 }

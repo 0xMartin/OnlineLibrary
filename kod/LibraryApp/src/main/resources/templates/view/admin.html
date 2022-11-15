@@ -7,24 +7,35 @@
 
         <h1>Admin</h1>
 
-        <table>
-            <th:block th:each="user : ${NOTIFICATIONS}">
-                <tr>
-                    <td th:text="${user.username}"></td>
-                    <td th:text="${user.name}"></td>
-                    <td th:text="${user.surname}"></td>
-                    <td th:text="${user.personalID}"></td>
-                    <td th:text="${user.address}"></td>
-                    <td th:text="${user.role.name}"></td>
-                    <td th:text="${user.state.name}"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" th:text="${user.address}">...</td>
-                </tr>
-            </th:block>
+        <div class="bg-primary">
+            <h4 class="text-light p-2 m-0">Notifications</h4>
+        </div>
+        <table class="table">
+            <tbody>
+                <th:block th:each="user : ${NOTIFICATIONS}">
+                    <tr>
+                        <td>User <a class="text-primary font-weight-bold" th:text="${user.username}" href="#"></a>
+                            waiting for confirm</td>
+                        <td><button type="button" class="btn btn-success" th:onclick="confirm([[${user.username}]])">Confirm</button></td>
+                        <td><button type="button" class="btn btn-danger" th:onclick="reject([[${user.username}]])">Reject</button></td>
+                    </tr>
+                </th:block>
+            </tbody>
         </table>
 
     </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+   <script>
+      function confirm(username) {
+        window.location.href = '/admin?username=' + username + '&confirmed=true';
+      }
+
+      function reject(username) {
+        window.location.href = '/admin?username=' + username + '&confirmed=false';
+      }
+   </script>
 </th:block>
 
 </html>

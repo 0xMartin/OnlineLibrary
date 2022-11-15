@@ -1,7 +1,5 @@
 package cz.utb.fai.LibraryApp.repository;
 
-import java.util.List;
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -17,9 +15,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query("{role:'?0'}")
     User findItemByRoleID(long roleID);
-
-    @Query("{state:'?0'}")
-    List<User> findAllByState(long stateID);
 
     public long count();
 }

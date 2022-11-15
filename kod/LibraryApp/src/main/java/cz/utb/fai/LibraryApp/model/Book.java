@@ -101,4 +101,19 @@ public class Book {
     this.available = available;
     this.borrowed = borrowed;
   }
+
+  /**
+   * Inkrementuje pocet vypujcenych knih
+   */
+  public void incrementBorrowed() {
+    this.borrowed = Math.min(this.available, this.borrowed + 1);
+  }
+
+  /**
+   * Dekrementuje pocet vypujcenych knih
+   */
+  public void decrementBorrowed() {
+    this.borrowed = Math.max(0, this.borrowed - 1);
+  }
+  
 }

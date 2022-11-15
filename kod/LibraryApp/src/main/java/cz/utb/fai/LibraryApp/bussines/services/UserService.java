@@ -1,6 +1,7 @@
 package cz.utb.fai.LibraryApp.bussines.services;
 
 import cz.utb.fai.LibraryApp.GlobalConfig;
+import cz.utb.fai.LibraryApp.SecurityConfig;
 import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
 import cz.utb.fai.LibraryApp.bussines.enums.ERole;
 import cz.utb.fai.LibraryApp.model.ProfileState;
@@ -53,11 +54,15 @@ public class UserService {
 
   /**
    * V datatbazi najde uzivatele s konkretnim ID
-   * @param id ID uzivatele
+   * @param username Uzivatelske jmeno
    * @return User
    */
-  public User findUser(long id) {
-    return null;
+  public User findUser(String username) throws Exception {
+    Optional<User> user = this.userRepository.findById(username);
+    if (!user.isPresent()) {
+      throw new Exception(String.format("%s not found", username));
+    }
+    return user.get();
   }
 
   /**
@@ -65,7 +70,7 @@ public class UserService {
    * @return List<User>
    */
   public List<User> users() {
-    return null;
+    return this.userRepository.findAll();
   }
 
   /**
@@ -97,13 +102,16 @@ public class UserService {
     if (state == null) {
       throw new Exception("WAITING state not exists");
     }
-    return this.userRepository.findAllByState(state.getId());
+    long id = state.getId();
+    return this.userRepository.findAll()
+      .stream()
+      .filter(u -> u.getState().getId() == id)
+      .toList();
   }
 
   /**
    * Vytvori uzivatele. Uzivatel bude po vlozeni nepotvrzen se stavem WAITING (cekajici na potvrzeni).
    * @param user Novy uzivatel
-   * @return True: operace se uspesne podarila
    */
   public void createUser(User user) throws Exception {
     if (user == null) {
@@ -146,7 +154,9 @@ public class UserService {
     }
     user.setRole(role);
 
-    ProfileState state = profileStateRepository.findItemByName(EProfileState.WAITING);
+    ProfileState state = profileStateRepository.findItemByName(
+      EProfileState.WAITING
+    );
     if (state == null) {
       throw new Exception("Profile state setup error");
     }
@@ -158,32 +168,87 @@ public class UserService {
 
   /**
    * Editace parametru uzivatele. Neni mozne menit heselo a username
-   * @param id ID uzivatele
+   * @param username Uzivatelske jmeno
    * @param user Nove parametry uzivatele
-   * @return True: operace se uspesne podarila
    */
-  public void editUser(long id, User user) throws Exception {}
+  public void editUser(String username, User user) throws Exception {
+    if (user == null) {
+      throw new Exception("User is not defined");
+    }
+
+    if (user.getName().length() == 0) {
+      throw new Exception("Name is not defined");
+    }
+    if (user.getSurname().length() == 0) {
+      throw new Exception("Surname is not defined");
+    }
+    if (user.getAddress().length() == 0) {
+      throw new Exception("Address is not defined");
+    }
+    if (user.getPersonalID().length() == 0) {
+      throw new Exception("Personal ID is not defined");
+    }
+
+    User user_Db = this.findUser(username);
+    user_Db.setName(user.getName());
+    user_Db.setSurname(user.getSurname());
+    user_Db.setAddress(user.getAddress());
+    user_Db.setPersonalID(user.getPersonalID());
+    this.userRepository.save(user_Db);
+  }
 
   /**
    * Odstrani uzivatele s databaze
-   * @param id ID uzivatele
-   * @return True: operace se uspesne podarila
+   * @param username Uzivatelske jmeno
    */
-  public void removeUser(long id) throws Exception {}
+  public void removeUser(String username) throws Exception {
+    User user = this.findUser(username);
+
+    // vraceni knih zpatky (dekrementuje pocet vypujcenych knih)
+    user
+      .getBorrows()
+      .forEach(b -> {
+        b.getBook().decrementBorrowed();
+      });
+
+    this.userRepository.delete(user);
+  }
 
   /**
    * Zmeni heslo uzivatele
-   * @param oldPass Stare heslo (aktualni)
+   * @param currentPass Aktualni heslo
    * @param newPass Nove heslo
-   * @return True: operace se uspesne podarila
    */
-  public void changePassword(String oldPass, String newPass) throws Exception {}
+  public void changePassword(String currentPass, String newPass)
+    throws Exception {
+    User profile = this.profile();
+    if (!SecurityConfig.encoder().matches(currentPass, profile.getPassword())) {
+      throw new Exception("Current password does not match");
+    }
+    if (newPass.length() < GlobalConfig.MIN_PASSWORD_LENGTH) {
+      throw new Exception(
+        "Minimum password length is " + GlobalConfig.MIN_PASSWORD_LENGTH
+      );
+    }
+    profile.setPassword(newPass);
+    profile.encodePassword();
+    this.userRepository.save(profile);
+  }
 
   /**
    * Nastaveni stavu profilu (WAITING, NOT_CONFIRMED, CONFIRMED, BANNED)
-   * @param id ID uzivatele
+   * @param username Uzivatelske jmeno
    * @param state Stav
-   * @return True: operace se uspesne podarila
    */
-  public void setProfileState(long id, EProfileState state) throws Exception {}
+  public void setProfileState(String username, EProfileState state)
+    throws Exception {
+    User user = this.findUser(username);
+
+    ProfileState s = this.profileStateRepository.findItemByName(state);
+    if (s == null) {
+      throw new Exception(String.format("%s not found", state));
+    }
+    user.setState(s);
+    this.userRepository.save(user);
+  }
 }
