@@ -21,7 +21,7 @@
             <!-- Admin (only for user with role librarian = ADMIN) -->
             <div sec:authorize="hasRole('LIBRARIAN')">
                 <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/admin' ? 'active':''}">
-                    <a class="nav-link" href="/profile">Admin</a>
+                    <a class="nav-link" href="/admin">Admin</a>
                 </li>
             </div>
         </ul>

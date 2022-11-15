@@ -59,6 +59,8 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
       .authorizeRequests()
+      .antMatchers("/images/**")
+      .permitAll()
       .antMatchers("/css/**")
       .permitAll()
       .antMatchers("/js/**")

@@ -22,6 +22,11 @@ public class ProfileState {
   @Field("name")
   private EProfileState name;
 
+  /**
+   * Defaultni konstruktor
+   */
+  public ProfileState() {}
+
   public ProfileState(long id, EProfileState name) {
     this.id = id;
     this.name = name;

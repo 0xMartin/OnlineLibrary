@@ -41,8 +41,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="personID">Person ID</label>
-                        <input type="text" name='personID' class="form-control" id="personID"
+                        <label for="personalID">Personal ID</label>
+                        <input type="text" name='personalID' class="form-control" id="personalID"
                             placeholder="Enter Person ID">
                     </div>
                 </div>
@@ -55,17 +55,14 @@
             </div>
             <button type="submit" name="submit" class="btn btn-primary">Register</button>
             <div th:if="${ERROR != null}">
-                <div class="alert alert-danger" role="alert" th:text="${ERROR}"></div>
+                <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+            </div>
+            <div th:if="${SUCCESS != null}">
+                <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
             </div>
         </form>
 
     </div>
-</th:block>
-
-<th:block layout:fragment="page_scripts">
-    <script>
-
-    </script>
 </th:block>
 
 </html>

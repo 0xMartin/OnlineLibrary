@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <h1>Admin</h1>
+
+        <table>
+            <th:block th:each="user : ${NOTIFICATIONS}">
+                <tr>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.surname}"></td>
+                    <td th:text="${user.personalID}"></td>
+                    <td th:text="${user.address}"></td>
+                    <td th:text="${user.role.name}"></td>
+                    <td th:text="${user.state.name}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" th:text="${user.address}">...</td>
+                </tr>
+            </th:block>
+        </table>
+
+    </div>
+</th:block>
+
+</html>

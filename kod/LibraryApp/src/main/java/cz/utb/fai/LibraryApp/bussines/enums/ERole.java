@@ -12,5 +12,11 @@ public enum ERole {
   /**
    * Role knihovnika
    */
-  LIBRARIAN,
+  LIBRARIAN;
+
+  public static class Names {
+
+    public static final String CUSTOMER = "ROLE_CUSTOMER";
+    public static final String LIBRARIAN = "ROLE_LIBRARIAN";
+  }
 }

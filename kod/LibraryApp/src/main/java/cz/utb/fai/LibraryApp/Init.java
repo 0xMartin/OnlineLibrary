@@ -112,13 +112,12 @@ public class Init {
       return args ->
         repository.save(
           new User(
-            0,
+            "admin",
+            "admin12345",
             "Admin",
             "Admin",
             "000000/0000",
             "Not defined",
-            "admin",
-            "admin12345",
             state,
             role
           ).encodePassword()

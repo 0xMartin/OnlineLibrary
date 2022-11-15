@@ -48,6 +48,11 @@ public class Borrow {
   private Book book;
 
   /**
+   * Defaultni konstruktor
+   */
+  public Borrow() {}
+
+  /**
    * Vytvori instanci reprezentujici vypujceni knihy
    *
    * @param id         ID vypujceni

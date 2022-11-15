@@ -30,8 +30,12 @@ public class ProfileController {
     @RequestParam(required = false) Long page,
     @RequestParam(required = false) Boolean borrowedOnly
   ) {
-    User u = this.userService.profile();
-    model.addAttribute("USER", u);
+    try {
+      User u = this.userService.profile();
+      model.addAttribute("USER", u);
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
     return AppRequestMapping.VIEW_PREFIX + "/profile";
   }
 

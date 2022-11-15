@@ -21,5 +21,5 @@ public enum EProfileState {
   /**
    * Profil zabanovany
    */
-  BANNED,
+  BANNED;
 }

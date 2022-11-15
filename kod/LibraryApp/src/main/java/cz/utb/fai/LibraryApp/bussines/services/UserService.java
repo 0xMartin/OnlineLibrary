@@ -2,9 +2,13 @@ package cz.utb.fai.LibraryApp.bussines.services;
 
 import cz.utb.fai.LibraryApp.GlobalConfig;
 import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
+import cz.utb.fai.LibraryApp.bussines.enums.ERole;
+import cz.utb.fai.LibraryApp.model.ProfileState;
+import cz.utb.fai.LibraryApp.model.Role;
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.*;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,19 +24,30 @@ public class UserService {
   @Autowired
   protected UserRepository userRepository;
 
+  @Autowired
+  protected RoleRepository roleRepository;
+
+  @Autowired
+  protected ProfileStateRepository profileStateRepository;
+
   /**
    * Navrati vsechny informace o aktualne prihlasenem uzivateli (profil uzivatele)
    * @return User
    */
-  public User profile() {
+  public User profile() throws Exception {
     Authentication authentication = SecurityContextHolder
       .getContext()
       .getAuthentication();
     if (!(authentication instanceof AnonymousAuthenticationToken)) {
       String currentPrincipalName = authentication.getName();
-      return this.userRepository.findItemByUsername(currentPrincipalName);
+      Optional<User> user = this.userRepository.findById(currentPrincipalName);
+      if (user.isPresent()) {
+        return user.get();
+      } else {
+        throw new Exception("User is not logged in");
+      }
     } else {
-      return null;
+      throw new Exception("User is not logged in");
     }
   }
 
@@ -73,6 +88,19 @@ public class UserService {
   }
 
   /**
+   * Navrati vsechny uzivatele jejihz profil ma stav WAITING
+   * @return List<User>
+   */
+  public List<User> findUsersWithWaitingState() throws Exception {
+    ProfileState state =
+      this.profileStateRepository.findItemByName(EProfileState.WAITING);
+    if (state == null) {
+      throw new Exception("WAITING state not exists");
+    }
+    return this.userRepository.findAllByState(state.getId());
+  }
+
+  /**
    * Vytvori uzivatele. Uzivatel bude po vlozeni nepotvrzen se stavem WAITING (cekajici na potvrzeni).
    * @param user Novy uzivatel
    * @return True: operace se uspesne podarila
@@ -81,6 +109,7 @@ public class UserService {
     if (user == null) {
       throw new Exception("User is not defined");
     }
+
     if (user.getName().length() == 0) {
       throw new Exception("Name is not defined");
     }
@@ -101,7 +130,28 @@ public class UserService {
         "Minimum password length is " + GlobalConfig.MIN_PASSWORD_LENGTH
       );
     }
-    user.setId(this.userRepository.count());
+
+    if (this.userRepository.findById(user.getUsername()).isPresent()) {
+      throw new Exception(
+        String.format(
+          "User with %s username already exists",
+          user.getUsername()
+        )
+      );
+    }
+
+    Role role = roleRepository.findItemByName(ERole.CUSTOMER);
+    if (role == null) {
+      throw new Exception("Role setup error");
+    }
+    user.setRole(role);
+
+    ProfileState state = profileStateRepository.findItemByName(EProfileState.WAITING);
+    if (state == null) {
+      throw new Exception("Profile state setup error");
+    }
+    user.setState(state);
+
     user.encodePassword();
     this.userRepository.save(user);
   }

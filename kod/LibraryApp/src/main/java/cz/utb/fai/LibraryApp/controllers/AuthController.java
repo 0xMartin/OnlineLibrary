@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -43,10 +42,11 @@ public class AuthController {
    * @param user User
    * @return Nazev view
    */
-  @PostMapping("/register")
-  public String processRegister(Model model, @RequestBody User user) {
+  @PostMapping(path = "/register", consumes = "application/x-www-form-urlencoded")
+  public String processRegister(Model model, User user) {
     try {
       userService.createUser(user);
+      model.addAttribute(AppRequestMapping.RESPONSE_SUCCESS, "Registration was successful");
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }

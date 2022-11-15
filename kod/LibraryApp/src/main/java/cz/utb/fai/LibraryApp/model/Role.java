@@ -22,6 +22,11 @@ public class Role {
   @Field("name")
   private ERole name;
 
+  /**
+   * Defaultni konstruktor
+   */
+  public Role() {}
+
   public Role(long id, ERole name) {
     this.id = id;
     this.name = name;

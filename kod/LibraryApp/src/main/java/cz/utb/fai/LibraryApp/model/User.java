@@ -4,6 +4,7 @@ import cz.utb.fai.LibraryApp.SecurityConfig;
 import java.util.List;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -15,8 +16,18 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 public class User {
 
+    /**
+   * ID = Uzivatelske jmeno (pro prihlasovani)
+   */
   @Id
-  private long id;
+  @Indexed(unique=true)
+  private String username;
+
+  /**
+   * Heslo uzivatele (hash)
+   */
+  @Field("password")
+  private String password;
 
   /**
    * Jmeno uzivatele
@@ -43,18 +54,6 @@ public class User {
   private String address;
 
   /**
-   * Uzivatelske jmeno (pro prihlasovani)
-   */
-  @Field("username")
-  private String username;
-
-  /**
-   * Heslo uzivatele (hash)
-   */
-  @Field("password")
-  private String password;
-
-  /**
    * Stav profilu uzivatele, ve kterem se aktualne nachazi
    */
   @DocumentReference(lazy = false)
@@ -75,36 +74,38 @@ public class User {
   private List<Borrow> borrows;
 
   /**
+   * Defaultni konstruktor
+   */
+  public User() {}
+
+  /**
    * Vytvori instanci uzivatele
    *
-   * @param id        ID uzivatele
+   * @param username  Uzivatelske jmeno
+   * @param password  Heslo uzivatele
    * @param name      Jmeno uzivatele
    * @param surname   Prijmeni uzivatele
    * @param personaID Rodne cislo uzivatele
    * @param address   Adresa uzivatele
-   * @param username  Uzivatelske jmeno
-   * @param password  Heslo uzivatele
    * @param state     Stav profilu (vice v ./enums/EProfileState.java)
    * @param role      Role uzivatle (vice v ./enums/ERole.java)
    */
   public User(
-    long id,
+    String username,
+    String password,
     String name,
     String surname,
     String personalID,
     String address,
-    String username,
-    String password,
     ProfileState state,
     Role role
   ) {
-    this.id = id;
+    this.username = username;
+    this.password = password;
     this.name = name;
     this.surname = surname;
     this.personalID = personalID;
     this.address = address;
-    this.username = username;
-    this.password = password;
     this.state = state;
     this.role = role;
   }

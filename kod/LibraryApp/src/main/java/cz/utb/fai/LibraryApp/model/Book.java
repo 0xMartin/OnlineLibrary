@@ -66,6 +66,11 @@ public class Book {
   private List<Borrow> borrows;
 
   /**
+   * Defaultni konstruktor
+   */
+  public Book() {}
+
+  /**
    * Vytvori instanci knihy
    *
    * @param id                ID knihy
