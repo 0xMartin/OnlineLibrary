@@ -1,6 +1,8 @@
 # AP7PD_projekt
 Java Spring + MongoDB + Thymeleaf
 
+<img src="./dokumentace/spring.png" width="50%">
+
 ## ERD diabram
 <img src="./dokumentace/erd_diagram/erd_diagram.png">
 
