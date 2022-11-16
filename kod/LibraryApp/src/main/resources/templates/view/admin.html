@@ -5,7 +5,11 @@
 <th:block layout:fragment="content">
     <div class="container">
 
-        <h1>Admin</h1>
+        <div class="d-flex justify-content-start">
+            <h1>Admin</h1>
+            <button type="button" class="btn btn-secondary my-2 ml-5" th:onclick="window.location.href='/admin/users'">Users</button>
+            <button type="button" class="btn btn-secondary my-2 ml-5" th:onclick="window.location.href='/admin/books'">Books</button>
+        </div>
 
         <div class="bg-primary">
             <h4 class="text-light p-2 m-0">Notifications</h4>

@@ -170,8 +170,9 @@ public class UserService {
    * Editace parametru uzivatele. Neni mozne menit heselo a username
    * @param username Uzivatelske jmeno
    * @param user Nove parametry uzivatele
+   * @return Nove uzivatelske data
    */
-  public void editUser(String username, User user) throws Exception {
+  public User editUser(String username, User user) throws Exception {
     if (user == null) {
       throw new Exception("User is not defined");
     }
@@ -194,7 +195,20 @@ public class UserService {
     user_Db.setSurname(user.getSurname());
     user_Db.setAddress(user.getAddress());
     user_Db.setPersonalID(user.getPersonalID());
+
+    //state
+    if (user_Db.getRole().getName() != ERole.LIBRARIAN) {
+      ProfileState state =
+        this.profileStateRepository.findItemByName(EProfileState.WAITING);
+      if (state == null) {
+        throw new Exception("WAITING state not found");
+      }
+      user_Db.setState(state);
+    }
+
     this.userRepository.save(user_Db);
+
+    return user_Db;
   }
 
   /**

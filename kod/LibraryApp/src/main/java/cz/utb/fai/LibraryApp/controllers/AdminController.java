@@ -2,6 +2,8 @@ package cz.utb.fai.LibraryApp.controllers;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
 import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
+import cz.utb.fai.LibraryApp.bussines.services.BookService;
+import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.User;
 import java.util.List;
@@ -18,6 +20,12 @@ public class AdminController {
 
   @Autowired
   protected UserService userService;
+
+  @Autowired
+  protected BookService bookService;
+
+  @Autowired
+  protected BorrowService borrowService;
 
   /**
    * Zakladni view (notifikace a jejich potvrzovani, vypujcene knihy, odkazy na spravu uzivatelu a knih)
@@ -46,5 +54,17 @@ public class AdminController {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
     return AppRequestMapping.VIEW_PREFIX + "/admin";
+  }
+
+  @GetMapping("/users")
+  public String users(Model model) {
+    List<User> users = this.userService.users();
+    model.addAttribute("USERS", users);
+    return AppRequestMapping.VIEW_PREFIX + "/users";
+  }
+
+  @GetMapping("/books")
+  public String books(Model model) {
+    return AppRequestMapping.VIEW_PREFIX + "/users";
   }
 }

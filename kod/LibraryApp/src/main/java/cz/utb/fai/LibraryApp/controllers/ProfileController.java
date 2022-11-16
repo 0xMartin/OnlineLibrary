@@ -42,10 +42,43 @@ public class ProfileController {
 
   /**
    * View pro editace parametru uzivatele
+   * @param model ViewModel
    * @return Nazev View
    */
   @GetMapping("edit")
-  public String edit() {
+  public String edit(Model model) {
+    try {
+      User u = this.userService.profile();
+      model.addAttribute("USER", u);
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/edit_profile";
+  }
+
+  /**
+   * Provede zmeny v porfilu
+   * @param model ViewModel
+   * @param user Nove paramtery profilu uzivatele
+   * @return Nazev View
+   */
+  @PostMapping(path = "edit", consumes = "application/x-www-form-urlencoded")
+  public String edit(Model model, User user) {
+    try {
+      User u = this.userService.profile();
+      model.addAttribute("USER", u);
+
+      User n = this.userService.editUser(u.getUsername(), user);
+      model.addAttribute("USER", n);
+
+
+      model.addAttribute(
+        AppRequestMapping.RESPONSE_SUCCESS,
+        "Changed successfully"
+      );
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
     return AppRequestMapping.VIEW_PREFIX + "/edit_profile";
   }
 

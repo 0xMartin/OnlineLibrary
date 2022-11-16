@@ -6,36 +6,50 @@
 
         <!-- Navigation -->
         <ul class="navbar-nav mr-auto">
-             <!-- Home (book catalog) -->
+            <!-- Home (book catalog) -->
             <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
                 <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
             </li>
 
-             <!-- Profile (only for logined users) -->
-            <div sec:authorize="isAuthenticated()">
-                <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/profile' ? 'active':''}">
-                    <a class="nav-link" href="/profile">Profile</a>
-                </li>
-            </div>
+            <!-- Profile (only for logined users) -->
+            <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/profile') ? 'active':''}">
+                    Profile
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/profile">Info</a>
+                    <a class="dropdown-item" href="/profile/edit">Edit</a>
+                    <a class="dropdown-item" href="/profile/changePassword">Change Password</a>
+                </div>
+            </li>
 
             <!-- Admin (only for user with role librarian = ADMIN) -->
-            <div sec:authorize="hasRole('LIBRARIAN')">
-                <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/admin' ? 'active':''}">
-                    <a class="nav-link" href="/admin">Admin</a>
-                </li>
-            </div>
+            <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin') ? 'active':''}">
+                    Admin
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/admin">Main page</a>
+                    <a class="dropdown-item" href="/admin/users">Users</a>
+                    <a class="dropdown-item" href="/admin/books">Books</a>
+                </div>
+            </li>
         </ul>
 
         <!-- Logout button -->
         <div sec:authorize="isAuthenticated()">
-            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/logout'"
-                type="button">Log out</button>
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/logout'" type="button">Log
+                out</button>
         </div>
 
         <!-- Login button -->
         <div sec:authorize="isAnonymous()">
-            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/login'"
-                type="button">Log in</button>
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/login'" type="button">Log
+                in</button>
         </div>
 
     </div>
