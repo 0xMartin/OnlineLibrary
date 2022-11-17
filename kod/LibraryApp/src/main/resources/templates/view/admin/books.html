@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="d-flex justify-content-start">
+            <h1>Admin - Books</h1>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin'">Back</button>
+            <button type="button" class="btn btn-success my-2 ml-5"
+                th:onclick="window.location.href='/admin/createBook'">Create
+                new book</button>
+        </div>
+
+        <table class="table">
+            <thead>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Page Count</th>
+                <th>Year Of Publication</th>
+                <th>Image</th>
+                <th>Available</th>
+                <th>Borrowed</th>
+                <th></th>
+                <th></th>
+            </thead>
+            <tbody>
+                <th:block th:each="book : ${BOOKS}">
+                    <tr>
+                        <td th:text="${book.name}"></td>
+                        <td th:text="${book.author}"></td>
+                        <td th:text="${book.pageCount}"></td>
+                        <td th:text="${book.yearOfPublication}"></td>
+                        <td th:text="${book.image}"></td>
+                        <td th:text="${book.available}"></td>
+                        <td th:text="${book.borrowed}"></td>
+                        <td><button type="button" class="btn btn-primary"
+                                th:onclick="editUser([[${user.username}]])">Edit</button></td>
+                        <td><button type="button" class="btn btn-danger"
+                                th:onclick="deleteUser([[${user.username}]])">Delete</button></td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+        <div th:if="${SUCCESS != null}">
+            <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        function editBook(id) {
+            window.location.href = '/admin/editBook?id=' + username;
+        }
+
+        function deleteBook(id) {
+            window.location.href = '/admin/booksDelete?id=' + username;
+        }
+    </script>
+</th:block>
+
+</html>u

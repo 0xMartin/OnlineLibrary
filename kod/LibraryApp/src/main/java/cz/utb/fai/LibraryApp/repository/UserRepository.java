@@ -5,6 +5,9 @@ import org.springframework.data.mongodb.repository.Query;
 
 import cz.utb.fai.LibraryApp.model.User;
 
+/**
+ * Rozhrani pristukujici k uzivatelum v databazi
+ */
 public interface UserRepository extends MongoRepository<User, String> {   
 
     @Query("{name:'?0'}")

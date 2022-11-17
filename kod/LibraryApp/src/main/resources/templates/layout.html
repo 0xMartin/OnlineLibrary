@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<th:block layout:insert="~{fragments/htmlhead}" />
+<head xmlns:th="http://www.thymeleaf.org">
+    <th:block layout:insert="~{fragments/htmlhead}" />
+    <th:block layout:fragment="page_css" />
+</head>
 
 <body>
-    
+
     <th:block layout:replace="~{fragments/navigation}" />
 
     <div class="container-fluid" id="container">
@@ -16,7 +19,7 @@
     </div>
 
     <th:block layout:replace="~{fragments/footer}" />
-    
+
     <th:block layout:fragment="page_scripts" />
     <th:block layout:replace="~{fragments/body_scripts :: end}" />
 

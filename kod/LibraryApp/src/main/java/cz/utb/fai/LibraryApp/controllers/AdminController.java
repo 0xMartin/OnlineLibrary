@@ -234,6 +234,18 @@ public class AdminController {
    */
   @GetMapping("/books")
   public String books(Model model) {
-    return AppRequestMapping.VIEW_PREFIX + "/admin/users";
+    model.addAttribute("BOOKS", this.bookService.books());
+    return AppRequestMapping.VIEW_PREFIX + "/admin/books";
   }
+
+  /**
+   * Navrati view se vytvoreni noveh knihy
+   * @param model ViewModel
+   * @return Navez view
+   */
+  @GetMapping("/createBook")
+  public String createBook(Model model) {
+    return AppRequestMapping.VIEW_PREFIX + "/admin/create_book";
+  }
+  
 }
