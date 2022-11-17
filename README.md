@@ -44,6 +44,6 @@ Java Spring + MongoDB + Thymeleaf
 
 <img src="./dokumentace/view/admin/admin.png" width="80%">
 
-> Edit book
+> Create/Edit book
 
 <img src="./dokumentace/view/book_edit/book_edit.png" width="80%">
