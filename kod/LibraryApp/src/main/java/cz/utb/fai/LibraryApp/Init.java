@@ -40,15 +40,6 @@ public class Init {
         logger.info("MAX_BORROWED_BOOKS set on: " + MAX_BORROWED_BOOKS);
       }
 
-      Long MAX_ADMIN_COUNT = (Long) obj.get("MAX_ADMIN_COUNT");
-      if (MAX_ADMIN_COUNT != null) {
-        GlobalConfig.MAX_ADMIN_COUNT = (long) MAX_ADMIN_COUNT.longValue();
-        if (GlobalConfig.MAX_ADMIN_COUNT < 1) {
-          GlobalConfig.MAX_ADMIN_COUNT = 1;
-        }
-        logger.info("MAX_ADMIN_COUNT set on: " + MAX_ADMIN_COUNT);
-      }
-
       Long BORROW_DAY_COUNT = (Long) obj.get("BORROW_DAY_COUNT");
       if (BORROW_DAY_COUNT != null) {
         GlobalConfig.BORROW_DAY_COUNT = (long) BORROW_DAY_COUNT.longValue();

@@ -10,12 +10,6 @@ public class GlobalConfig {
     public static long MAX_BORROWED_BOOKS = 6;
 
     /**
-     * maximalni pocet adminu (min 1)
-     * [POCET UZIVATELU]
-     */
-    public static long MAX_ADMIN_COUNT = 1;
-
-    /**
      * douba, na kterou si uzivatel pujcuje knihu (po uplynuti se kniha automaticky
      * vrati)
      * [DNY]

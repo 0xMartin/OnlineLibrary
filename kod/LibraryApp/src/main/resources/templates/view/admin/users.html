@@ -9,7 +9,8 @@
             <h1>Admin - Users</h1>
             <button type="button" class="btn btn-secondary my-2 ml-5"
                 th:onclick="window.location.href='/admin'">Back</button>
-            <button type="button" class="btn btn-success my-2 ml-5" th:onclick="window.location.href='/admin'">Create
+            <button type="button" class="btn btn-success my-2 ml-5"
+                th:onclick="window.location.href='/admin/createUser'">Create
                 new user</button>
         </div>
 
@@ -22,9 +23,9 @@
                 <th>Address</th>
                 <th>Personal ID</th>
                 <th>State</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Ban</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </thead>
             <tbody>
                 <th:block th:each="user : ${USERS}">
@@ -41,12 +42,23 @@
                         <td><button type="button" class="btn btn-danger"
                                 th:onclick="deleteUser([[${user.username}]])">Delete</button></td>
                         <td>
-                            <button type="button" class="btn btn-danger"
-                                th:if="${user.state.name.toString()} != 'BANNED'"
-                                th:onclick='banUser([[${user.username}]], true)'>Ban</button>
-                            <button type="button" class="btn btn-success"
-                                th:if="${user.state.name.toString()} == 'BANNED'"
-                                th:onclick='banUser([[${user.username}]], false)'>Unban</button>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    State
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item"
+                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=CONFIRMED'">Confirmed</a>
+                                    <a class="dropdown-item"
+                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=NOT_CONFIRMED'">Not
+                                        confirmed</a>
+                                    <a class="dropdown-item"
+                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=WAITING'">Waiting</a>
+                                    <a class="dropdown-item"
+                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=BANNED'">Banned</a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </th:block>
@@ -65,15 +77,11 @@
 <th:block layout:fragment="page_scripts">
     <script>
         function editUser(username) {
-            window.location.href = '/admin/edit?username=' + username;
+            window.location.href = '/admin/editUser?username=' + username;
         }
 
         function deleteUser(username) {
             window.location.href = '/admin/usersDelete?username=' + username;
-        }
-
-        function banUser(username, ban) {
-            window.location.href = '/admin/banUser?username=' + username + "&ban=" + ban;
         }
     </script>
 </th:block>
