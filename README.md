@@ -36,7 +36,7 @@ Java Spring + MongoDB + Thymeleaf
 
 <img src="./dokumentace/view/change_password/change_password.png" width="80%">
 
-> Edit user
+> Edit user/proofile
 
 <img src="./dokumentace/view/user_edit/user_edit.png" width="80%">
 
