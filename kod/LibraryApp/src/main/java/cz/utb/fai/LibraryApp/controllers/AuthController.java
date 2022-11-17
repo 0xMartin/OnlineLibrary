@@ -24,7 +24,7 @@ public class AuthController {
    */
   @GetMapping("/login")
   public String login() {
-    return AppRequestMapping.VIEW_PREFIX + "/login";
+    return AppRequestMapping.VIEW_PREFIX + "/auth/login";
   }
 
   /**
@@ -33,7 +33,7 @@ public class AuthController {
    */
   @GetMapping("/register")
   public String register() {
-    return AppRequestMapping.VIEW_PREFIX + "/register";
+    return AppRequestMapping.VIEW_PREFIX + "/auth/register";
   }
 
   /**
@@ -50,6 +50,6 @@ public class AuthController {
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
-    return AppRequestMapping.VIEW_PREFIX + "/register";
+    return AppRequestMapping.VIEW_PREFIX + "/auth/register";
   }
 }

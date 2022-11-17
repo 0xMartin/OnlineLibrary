@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <h1>Register</h1>
+
+        <form id="form" action="register" method='POST' autocomplete="off">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name='username' class="form-control" id="username"
+                            placeholder="Enter Username">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name='password' class="form-control" id="password"
+                            placeholder="Enter Password">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" name='name' class="form-control" id="name" placeholder="Enter Name">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" name='surname' class="form-control" id="surname" placeholder="Enter Surname">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="personalID">Personal ID</label>
+                        <input type="text" name='personalID' class="form-control" id="personalID"
+                            placeholder="Enter Person ID">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" name='address' class="form-control" id="address" placeholder="Enter Address">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">Register</button>
+            <div th:if="${ERROR != null}">
+                <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+            </div>
+            <div th:if="${SUCCESS != null}">
+                <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+            </div>
+        </form>
+
+    </div>
+</th:block>
+
+</html>

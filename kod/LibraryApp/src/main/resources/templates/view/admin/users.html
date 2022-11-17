@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="d-flex justify-content-start">
+            <h1>Admin - Users</h1>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin'">Back</button>
+            <button type="button" class="btn btn-success my-2 ml-5" th:onclick="window.location.href='/admin'">Create
+                new user</button>
+        </div>
+
+        <table class="table">
+            <thead>
+                <th>Role</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Address</th>
+                <th>Personal ID</th>
+                <th>State</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Ban</th>
+            </thead>
+            <tbody>
+                <th:block th:each="user : ${USERS}">
+                    <tr>
+                        <td th:text="${user.role.name}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.surname}"></td>
+                        <td th:text="${user.address}"></td>
+                        <td th:text="${user.personalID}"></td>
+                        <td th:text="${user.state.name}"></td>
+                        <td><button type="button" class="btn btn-primary"
+                                th:onclick="editUser([[${user.username}]])">Edit</button></td>
+                        <td><button type="button" class="btn btn-danger"
+                                th:onclick="deleteUser([[${user.username}]])">Delete</button></td>
+                        <td>
+                            <button type="button" class="btn btn-danger"
+                                th:if="${user.state.name.toString()} != 'BANNED'"
+                                th:onclick='banUser([[${user.username}]], true)'>Ban</button>
+                            <button type="button" class="btn btn-success"
+                                th:if="${user.state.name.toString()} == 'BANNED'"
+                                th:onclick='banUser([[${user.username}]], false)'>Unban</button>
+                        </td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+        <div th:if="${SUCCESS != null}">
+            <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        function editUser(username) {
+            window.location.href = '/admin/edit?username=' + username;
+        }
+
+        function deleteUser(username) {
+            window.location.href = '/admin/usersDelete?username=' + username;
+        }
+
+        function banUser(username, ban) {
+            window.location.href = '/admin/banUser?username=' + username + "&ban=" + ban;
+        }
+    </script>
+</th:block>
+
+</html>u

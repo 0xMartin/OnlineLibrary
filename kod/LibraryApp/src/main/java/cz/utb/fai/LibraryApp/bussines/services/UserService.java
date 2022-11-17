@@ -218,6 +218,7 @@ public class UserService {
   public void removeUser(String username) throws Exception {
     User user = this.findUser(username);
 
+    //String.format("Failed to remove '%s'", username)
     // vraceni knih zpatky (dekrementuje pocet vypujcenych knih)
     user
       .getBorrows()
@@ -257,6 +258,10 @@ public class UserService {
   public void setProfileState(String username, EProfileState state)
     throws Exception {
     User user = this.findUser(username);
+
+    if (this.profile().getUsername().equals(username)) {
+      throw new Exception("You cannot modify the state of your own profile");
+    }
 
     ProfileState s = this.profileStateRepository.findItemByName(state);
     if (s == null) {

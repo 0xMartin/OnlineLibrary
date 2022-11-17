@@ -37,7 +37,7 @@ public class ProfileController {
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
-    return AppRequestMapping.VIEW_PREFIX + "/profile";
+    return AppRequestMapping.VIEW_PREFIX + "/profile/profile";
   }
 
   /**
@@ -53,7 +53,7 @@ public class ProfileController {
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
-    return AppRequestMapping.VIEW_PREFIX + "/edit_profile";
+    return AppRequestMapping.VIEW_PREFIX + "/profile/edit_profile";
   }
 
   /**
@@ -79,7 +79,7 @@ public class ProfileController {
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
-    return AppRequestMapping.VIEW_PREFIX + "/edit_profile";
+    return AppRequestMapping.VIEW_PREFIX + "/profile/edit_profile";
   }
 
   /**
@@ -88,7 +88,7 @@ public class ProfileController {
    */
   @GetMapping("changePassword")
   public String changePassword() {
-    return AppRequestMapping.VIEW_PREFIX + "/change_password";
+    return AppRequestMapping.VIEW_PREFIX + "/profile/change_password";
   }
 
   /**
@@ -116,6 +116,6 @@ public class ProfileController {
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
-    return AppRequestMapping.VIEW_PREFIX + "/change_password";
+    return AppRequestMapping.VIEW_PREFIX + "/profile/change_password";
   }
 }

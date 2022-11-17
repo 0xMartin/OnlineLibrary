@@ -15,7 +15,7 @@ public class HomeController {
    */
   @GetMapping
   public String home() {
-    return AppRequestMapping.VIEW_PREFIX + "/index";
+    return AppRequestMapping.VIEW_PREFIX + "/home/index";
   }
 
   /**
@@ -24,6 +24,6 @@ public class HomeController {
    */
   @GetMapping("/about")
   public String about() {
-    return AppRequestMapping.VIEW_PREFIX + "/about";
+    return AppRequestMapping.VIEW_PREFIX + "/home/about";
   }
 }
