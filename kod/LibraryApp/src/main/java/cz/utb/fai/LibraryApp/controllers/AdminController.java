@@ -5,6 +5,7 @@ import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
 import cz.utb.fai.LibraryApp.bussines.services.BookService;
 import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
+import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.User;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(value = AppRequestMapping.ADMIN)
@@ -239,7 +241,7 @@ public class AdminController {
   }
 
   /**
-   * Navrati view se vytvoreni noveh knihy
+   * Navrati view pro vytvoreni noveh knihy
    * @param model ViewModel
    * @return Navez view
    */
@@ -247,5 +249,33 @@ public class AdminController {
   public String createBook(Model model) {
     return AppRequestMapping.VIEW_PREFIX + "/admin/create_book";
   }
-  
+
+  /**
+   * Navrati view pro vytvoreni noveh knihy a zaroven vytvori knihu dle predanych dat
+   * @param model ViewModel
+   * @param book Parametry nove knihy
+   * @param image Obrazek nove knihy
+   * @return Navez view
+   */
+  @PostMapping(
+    path = "/createBook",
+    consumes = "application/x-www-form-urlencoded"
+  )
+  public String createBook(
+    Model model,
+    Book book,
+    @RequestParam("bookImage") MultipartFile image
+  ) {
+    try {
+      this.bookService.createBook(book, image);
+
+      model.addAttribute(
+        AppRequestMapping.RESPONSE_SUCCESS,
+        "Book successfully created"
+      );
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/admin/create_book";
+  }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Servis pro spravu knih
@@ -61,9 +62,10 @@ public class BookService {
   /**
    * Vytvori novou knihu
    * @param book Nova kniha
+   * @param image Obrazek knihy
    * @throws Exception
    */
-  public void createBook(Book book) throws Exception {
+  public void createBook(Book book, MultipartFile image) throws Exception {
     if (book == null) {
       throw new Exception("Book is not defined");
     }
@@ -81,9 +83,12 @@ public class BookService {
       throw new Exception("Available must be positive value");
     }
 
+    String imageUrl = this.imageService.uploadImage(image);
+
     book.setId(this.bookRepository.count());
     book.setBorrowed(0);
-    
+    book.setImage(imageUrl);
+
     this.bookRepository.save(book);
   }
 
