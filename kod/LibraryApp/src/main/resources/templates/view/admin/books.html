@@ -20,7 +20,6 @@
                 <th>Author</th>
                 <th>Page Count</th>
                 <th>Year Of Publication</th>
-                <th>Image</th>
                 <th>Available</th>
                 <th>Borrowed</th>
                 <th></th>
@@ -33,13 +32,12 @@
                         <td th:text="${book.author}"></td>
                         <td th:text="${book.pageCount}"></td>
                         <td th:text="${book.yearOfPublication}"></td>
-                        <td th:text="${book.image}"></td>
                         <td th:text="${book.available}"></td>
                         <td th:text="${book.borrowed}"></td>
                         <td><button type="button" class="btn btn-primary"
-                                th:onclick="editUser([[${user.username}]])">Edit</button></td>
+                                th:onclick="editBook([[${book.id}]])">Edit</button></td>
                         <td><button type="button" class="btn btn-danger"
-                                th:onclick="deleteUser([[${user.username}]])">Delete</button></td>
+                                th:onclick="deleteBook([[${book.id}]])">Delete</button></td>
                     </tr>
                 </th:block>
             </tbody>

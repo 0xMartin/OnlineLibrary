@@ -19,7 +19,7 @@
                 th:onclick="window.location.href='/admin/books'">Back</button>
         </div>
 
-        <form id="form" action="createUser" method='POST' autocomplete="off">
+        <form id="form" action="createBook" method='POST' autocomplete="off" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-7">
                     <div class="form-group">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="bookImage">Image of book</label>
-                        <input accept="image/*" type="file" class="form-control" id="bookImage"
+                        <input accept="image/*" type="file" class="form-control" id="bookImage" name="bookImage"
                             onchange="loadFile(event)" />
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 package cz.utb.fai.LibraryApp.bussines.services;
 
-import cz.utb.fai.LibraryApp.GlobalConfig;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,13 +14,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageService {
 
+  public final String UPLOAD_DIRECTORY = "images";
+
   /**
    * Uploaduje obrazek na disk do predem urceneho adresare "GlobalConfig.UPLOAD_DIRECTORY"
    * @param image Obrazek ve forme "MultipartFile"
    * @return Nazev obrazku na disku
    * @throws Exception
    */
-  public String uploadImage(MultipartFile image) throws Exception {
+  public String uploadImage(MultipartFile image) throws Exception, IOException {
     if (image == null) {
       throw new Exception("Image is not defined");
     }
@@ -37,7 +39,7 @@ public class ImageService {
 
     UUID uuid = UUID.randomUUID();
     String nameOfImage = uuid.toString() + "." + extension;
-    Path path = Paths.get(GlobalConfig.UPLOAD_DIRECTORY, originalFilename);
+    Path path = Paths.get(UPLOAD_DIRECTORY, nameOfImage);
 
     Files.write(path, image.getBytes());
     return nameOfImage;

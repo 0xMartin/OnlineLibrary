@@ -3,11 +3,6 @@ package cz.utb.fai.LibraryApp;
 public class GlobalConfig {
 
   /**
-   * Slozka, do ktere se budou uploadovat obrazky
-   */
-  public static final String UPLOAD_DIRECTORY = "images";
-
-  /**
    * maximalni pocet knih, ktere si uzivatel muze vypujcit (zmena nebudou
    * provedeny na jiz vypujcene knihy)
    * [POCET KNIH]

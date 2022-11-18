@@ -9,6 +9,7 @@ import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.User;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -259,15 +260,29 @@ public class AdminController {
    */
   @PostMapping(
     path = "/createBook",
-    consumes = "application/x-www-form-urlencoded"
+    consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
   public String createBook(
     Model model,
-    Book book,
-    @RequestParam("bookImage") MultipartFile image
+    @RequestParam("bookImage") MultipartFile bookImage,
+    @RequestParam(name = "name") String name,
+    @RequestParam(name = "author") String author,
+    @RequestParam(name = "pageCount") Long pageCount,
+    @RequestParam(name = "yearOfPublication") Long yearOfPublication,
+    @RequestParam(name = "available") Long available
   ) {
     try {
-      this.bookService.createBook(book, image);
+      Book book = new Book(
+        0,
+        name,
+        author,
+        pageCount,
+        yearOfPublication,
+        "",
+        available,
+        0
+      );
+      this.bookService.createBook(book, bookImage);
 
       model.addAttribute(
         AppRequestMapping.RESPONSE_SUCCESS,
