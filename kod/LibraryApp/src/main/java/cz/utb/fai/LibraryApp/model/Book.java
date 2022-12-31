@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Book {
 
   @Id
-  private long id;
+  private Long id;
 
   /**
    * Jmeno knihy
@@ -33,13 +33,13 @@ public class Book {
    * Pocet stran knihy
    */
   @Field("pageCount")
-  private long pageCount;
+  private Long pageCount;
 
   /**
    * Rok vydani knihy
    */
   @Field("yearOfPublication")
-  private long yearOfPublication;
+  private Long yearOfPublication;
 
   /**
    * Obrazek knihy
@@ -51,13 +51,13 @@ public class Book {
    * Pocet dostupnych knih v knihovne
    */
   @Field("available")
-  private long available;
+  private Long available;
 
   /**
    * Aktualni pocet vypujcenych kusu teto knihy
    */
   @Field("borrowed")
-  private long borrowed;
+  private Long borrowed;
 
   /**
    * Seznam vsech vypujcek teto knihy
@@ -83,14 +83,14 @@ public class Book {
    * @param borrowed          Aktualni pocet vypujcenych kusu teto knihy
    */
   public Book(
-    long id,
+    Long id,
     String name,
     String author,
-    long pageCount,
-    long yearOfPublication,
+    Long pageCount,
+    Long yearOfPublication,
     String image,
-    long available,
-    long borrowed
+    Long available,
+    Long borrowed
   ) {
     this.id = id;
     this.name = name;

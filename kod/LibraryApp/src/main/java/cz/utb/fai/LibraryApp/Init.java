@@ -57,62 +57,39 @@ public class Init {
   }
 
   @Bean
-  public ApplicationRunner initRole(RoleRepository repository) {
-    if (repository.count() == 0) {
-      return args ->
-        repository.saveAll(
-          Arrays.asList(
-            new Role(0, ERole.CUSTOMER),
-            new Role(1, ERole.LIBRARIAN)
-          )
-        );
-    } else {
-      return null;
-    }
-  }
+  public ApplicationRunner initDatabase(
+      UserRepository userRepository,
+      RoleRepository roleRepository,
+      ProfileStateRepository stateRepository) {
+    if (userRepository.count() == 0 && roleRepository.count() == 0 && stateRepository.count() == 0) {
+      return args -> {
 
-  @Bean
-  public ApplicationRunner initProfileState(ProfileStateRepository repository) {
-    if (repository.count() == 0) {
-      return args ->
-        repository.saveAll(
-          Arrays.asList(
-            new ProfileState(0, EProfileState.WAITING),
-            new ProfileState(1, EProfileState.NOT_CONFIRMED),
-            new ProfileState(2, EProfileState.CONFIRMED),
-            new ProfileState(3, EProfileState.BANNED)
-          )
-        );
-    } else {
-      return null;
-    }
-  }
+        Role role = new Role(1L, ERole.LIBRARIAN); 
+        roleRepository.saveAll(
+            Arrays.asList(
+                new Role(0L, ERole.CUSTOMER),
+                role));
 
-  @Bean
-  public ApplicationRunner initUsers(
-    UserRepository repository,
-    RoleRepository roleRepository,
-    ProfileStateRepository stateRepository
-  ) {
-    if (repository.count() == 0) {
-      Role role = roleRepository.findItemByName(ERole.LIBRARIAN);
-      ProfileState state = stateRepository.findItemByName(
-        EProfileState.CONFIRMED
-      );
+        ProfileState state = new ProfileState(2, EProfileState.CONFIRMED);
+        stateRepository.saveAll(
+            Arrays.asList(
+                new ProfileState(0, EProfileState.WAITING),
+                new ProfileState(1, EProfileState.NOT_CONFIRMED),
+                state,
+                new ProfileState(3, EProfileState.BANNED)));
 
-      return args ->
-        repository.save(
-          new User(
-            "admin",
-            "admin12345",
-            "Admin",
-            "Admin",
-            "000000/0000",
-            "Not defined",
-            state,
-            role
-          ).encodePassword()
-        );
+        userRepository.save(
+            new User(
+                "admin",
+                "admin12345",
+                "Admin",
+                "Admin",
+                "000000/0000",
+                "Not defined",
+                state,
+                role).encodePassword());
+
+      };
     } else {
       return null;
     }

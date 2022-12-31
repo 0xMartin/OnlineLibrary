@@ -31,29 +31,31 @@ public class AdminController {
   @Autowired
   protected BorrowService borrowService;
 
-  //###########################################################################################################
+  // ###########################################################################################################
   // DEFAULT
-  //###########################################################################################################
+  // ###########################################################################################################
 
   /**
-   * Zakladni view (notifikace a jejich potvrzovani, vypujcene knihy, odkazy na spravu uzivatelu a knih)
-   * @param username Uzivatelske jmeno uzivatele jehoz ucet bude potvrzen/zamitnut
+   * Zakladni view (notifikace a jejich potvrzovani, vypujcene knihy, odkazy na
+   * spravu uzivatelu a knih)
+   * 
+   * @param username  Uzivatelske jmeno uzivatele jehoz ucet bude
+   *                  potvrzen/zamitnut
    * @param confirmed True:Potvrzen/False:Zamitrnut
    * @return Nazev view
    */
   @GetMapping
   public String home(
-    Model model,
-    @RequestParam(required = false) String username,
-    @RequestParam(required = false) Boolean confirmed
-  ) {
+      Model model,
+      @RequestParam(required = false) String username,
+      @RequestParam(required = false) Boolean confirmed) {
     try {
-      // pokud je specifikovano uzivatelske jmeno a stav potvrzeni => provede se zmena stavu uctu
+      // pokud je specifikovano uzivatelske jmeno a stav potvrzeni => provede se zmena
+      // stavu uctu
       if (username != null && confirmed != null) {
         this.userService.setProfileState(
             username,
-            confirmed ? EProfileState.CONFIRMED : EProfileState.NOT_CONFIRMED
-          );
+            confirmed ? EProfileState.CONFIRMED : EProfileState.NOT_CONFIRMED);
       }
       // notifikace -> uzivatele, kteri cekaji na schvaleni
       List<User> users = userService.findUsersWithWaitingState();
@@ -64,12 +66,13 @@ public class AdminController {
     return AppRequestMapping.VIEW_PREFIX + "/admin/admin";
   }
 
-  //###########################################################################################################
+  // ###########################################################################################################
   // SPRAVA UZIVATELU
-  //###########################################################################################################
+  // ###########################################################################################################
 
   /**
    * Navrati view se spravou pro uzivatele
+   * 
    * @param model ViewModel
    * @return Nazev view
    */
@@ -82,18 +85,18 @@ public class AdminController {
 
   /**
    * Zobrazi view pro uzivatele a zaroven odstrani specifikovaneho uzivatele
-   * @param model ViewModel
+   * 
+   * @param model    ViewModel
    * @param username Uzivatelske jmeno uzivatele, ktery bude odstranen
    * @return Nazev view
    */
-  @GetMapping("/usersDelete")
-  public String usersDelete(Model model, @RequestParam String username) {
+  @GetMapping("/userDelete")
+  public String userDelete(Model model, @RequestParam String username) {
     try {
       this.userService.removeUser(username);
       model.addAttribute(
-        AppRequestMapping.RESPONSE_SUCCESS,
-        String.format("User '%s' successfully removed", username)
-      );
+          AppRequestMapping.RESPONSE_SUCCESS,
+          String.format("User '%s' successfully removed", username));
     } catch (Exception e) {
       List<User> users = this.userService.users();
       model.addAttribute("USERS", users);
@@ -107,28 +110,27 @@ public class AdminController {
   }
 
   /**
-   * Zobrazi view pro uzivatele a zaroven zabanuje/odbanuje specifikovaneho uzivatele
-   * @param model ViewModel
+   * Zobrazi view pro uzivatele a zaroven zabanuje/odbanuje specifikovaneho
+   * uzivatele
+   * 
+   * @param model    ViewModel
    * @param username Uzivatelske jmeno uzivatele, ktery bude zabanovan
-   * @param ban True -> zabanuje, False -> odbanuje
+   * @param ban      True -> zabanuje, False -> odbanuje
    * @return Nazev view
    */
   @GetMapping("/setUserState")
   public String setUserState(
-    Model model,
-    @RequestParam String username,
-    @RequestParam EProfileState state
-  ) {
+      Model model,
+      @RequestParam String username,
+      @RequestParam EProfileState state) {
     try {
       this.userService.setProfileState(username, state);
       model.addAttribute(
-        AppRequestMapping.RESPONSE_SUCCESS,
-        String.format(
-          "User '%s' profile state successfully set on %s",
-          username,
-          state.toString()
-        )
-      );
+          AppRequestMapping.RESPONSE_SUCCESS,
+          String.format(
+              "User '%s' profile state successfully set on %s",
+              username,
+              state.toString()));
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
@@ -140,6 +142,7 @@ public class AdminController {
 
   /**
    * Navrati view pro vytvoreni noveho uzivatle
+   * 
    * @param model ViweModel
    * @return Nazev view
    */
@@ -149,27 +152,24 @@ public class AdminController {
   }
 
   /**
-   * Navrti view pro vytvoreni noveho uzivatele a vytvari noveho uzivatele dle predanych paramteru
+   * Navrti view pro vytvoreni noveho uzivatele a vytvari noveho uzivatele dle
+   * predanych paramteru
+   * 
    * @param model ViewModel
-   * @param user Novy uzivatel
+   * @param user  Novy uzivatel
    * @return Nazev view
    */
-  @PostMapping(
-    path = "createUser",
-    consumes = "application/x-www-form-urlencoded"
-  )
+  @PostMapping(path = "createUser", consumes = "application/x-www-form-urlencoded")
   public String createUser(Model model, User user) {
     try {
       // vytvori a automaticky potvrdi uzivatele
       this.userService.createUser(user);
       this.userService.setProfileState(
           user.getUsername(),
-          EProfileState.CONFIRMED
-        );
+          EProfileState.CONFIRMED);
       model.addAttribute(
-        AppRequestMapping.RESPONSE_SUCCESS,
-        String.format("%s created successfully", user.getUsername())
-      );
+          AppRequestMapping.RESPONSE_SUCCESS,
+          String.format("%s created successfully", user.getUsername()));
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
@@ -178,7 +178,8 @@ public class AdminController {
 
   /**
    * Navrati view pro editaci uzivatele
-   * @param model ViewModel
+   * 
+   * @param model    ViewModel
    * @param username Uzivatelske jmeno uzivatel, ktery bude editovan
    * @return Navez view
    */
@@ -195,21 +196,18 @@ public class AdminController {
 
   /**
    * Navrati view pro editaci uzivatele a provede zmeny uzivatele
-   * @param model ViewModel
+   * 
+   * @param model    ViewModel
    * @param username Uzivatelske jmeno uzivatele jehoz parametry budou pozmeneny
-   * @param user Nove paramtery uzivatele
+   * @param user     Nove paramtery uzivatele
    * @return Nazev View
    */
-  @PostMapping(
-    path = "editUser",
-    consumes = "application/x-www-form-urlencoded"
-  )
+  @PostMapping(path = "editUser", consumes = "application/x-www-form-urlencoded")
   public String editUser(
-    Model model,
-    @RequestParam String username,
-    User user,
-    EProfileState userState
-  ) {
+      Model model,
+      @RequestParam String username,
+      User user,
+      EProfileState userState) {
     try {
       User n = this.userService.editUser(username, user);
       this.userService.setProfileState(username, EProfileState.CONFIRMED);
@@ -217,21 +215,21 @@ public class AdminController {
       model.addAttribute("USER", n);
 
       model.addAttribute(
-        AppRequestMapping.RESPONSE_SUCCESS,
-        "Changed successfully"
-      );
+          AppRequestMapping.RESPONSE_SUCCESS,
+          "Changed successfully");
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
     return AppRequestMapping.VIEW_PREFIX + "/admin/edit_user";
   }
 
-  //###########################################################################################################
+  // ###########################################################################################################
   // SPRAVA KNIH
-  //###########################################################################################################
+  // ###########################################################################################################
 
   /**
    * Navrati view se spravou pro knihy
+   * 
    * @param model
    * @return Navez view
    */
@@ -243,6 +241,7 @@ public class AdminController {
 
   /**
    * Navrati view pro vytvoreni noveh knihy
+   * 
    * @param model ViewModel
    * @return Navez view
    */
@@ -252,45 +251,112 @@ public class AdminController {
   }
 
   /**
-   * Navrati view pro vytvoreni noveh knihy a zaroven vytvori knihu dle predanych dat
+   * Navrati view pro vytvoreni noveh knihy a zaroven vytvori knihu dle predanych
+   * dat
+   * 
    * @param model ViewModel
-   * @param book Parametry nove knihy
+   * @param book  Parametry nove knihy
    * @param image Obrazek nove knihy
    * @return Navez view
    */
-  @PostMapping(
-    path = "/createBook",
-    consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-  )
+  @PostMapping(path = "/createBook", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public String createBook(
-    Model model,
-    @RequestParam("bookImage") MultipartFile bookImage,
-    @RequestParam(name = "name") String name,
-    @RequestParam(name = "author") String author,
-    @RequestParam(name = "pageCount") Long pageCount,
-    @RequestParam(name = "yearOfPublication") Long yearOfPublication,
-    @RequestParam(name = "available") Long available
-  ) {
+      Model model,
+      @RequestParam("bookImage") MultipartFile bookImage,
+      @RequestParam(name = "name") String name,
+      @RequestParam(name = "author") String author,
+      @RequestParam(name = "pageCount") Long pageCount,
+      @RequestParam(name = "yearOfPublication") Long yearOfPublication,
+      @RequestParam(name = "available") Long available) {
     try {
       Book book = new Book(
-        0,
-        name,
-        author,
-        pageCount,
-        yearOfPublication,
-        "",
-        available,
-        0
-      );
+          0L,
+          name,
+          author,
+          pageCount,
+          yearOfPublication,
+          "",
+          available,
+          0L);
       this.bookService.createBook(book, bookImage);
 
       model.addAttribute(
-        AppRequestMapping.RESPONSE_SUCCESS,
-        "Book successfully created"
-      );
+          AppRequestMapping.RESPONSE_SUCCESS,
+          "Book successfully created");
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
     return AppRequestMapping.VIEW_PREFIX + "/admin/create_book";
   }
+
+  /**
+   * Navrati view pro editaci knihy
+   * 
+   * @param model ViewModel
+   * @param id    ID knihy
+   * @return Navez view
+   */
+  @GetMapping("editBook")
+  public String editBook(Model model, @RequestParam Long id) {
+    try {
+      Book b = this.bookService.findBook(id);
+      model.addAttribute("BOOK", b);
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/admin/edit_book";
+  }
+
+  /**
+   * Navrati view pro editaci uzivatele a provede zmeny knihy
+   * 
+   * @param model ViewModel
+   * @param id    ID knihy jejiz parametry budou pozmeneny
+   * @param book  Nove paramtery knihy
+   * @return Nazev View
+   */
+  @PostMapping(path = "editBook", consumes = "application/x-www-form-urlencoded")
+  public String editBook(
+      Model model,
+      @RequestParam Long id,
+      Book book) {
+    try {
+      Book b = this.bookService.updateBook(id, book);
+      model.addAttribute("BOOK", b);
+
+      model.addAttribute(
+          AppRequestMapping.RESPONSE_SUCCESS,
+          "Changed successfully");
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/admin/edit_book";
+  }
+
+  /**
+   * Zobrazi view pro knihy a zaroven odstrani specifikovannou knihu
+   * 
+   * @param model ViewModel
+   * @param id    ID knihy, ktera bude odstranena
+   * @return Nazev view
+   */
+  @GetMapping("/bookDelete")
+  public String bookDelete(Model model, @RequestParam Long id) {
+    try {
+      this.bookService.removeBook(id);
+      model.addAttribute(
+          AppRequestMapping.RESPONSE_SUCCESS,
+          String.format("User '%s' successfully removed", id));
+    } catch (Exception e) {
+      List<Book> books = this.bookService.books();
+      model.addAttribute("BOOKS", books);
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+
+    List<Book> books = this.bookService.books();
+    model.addAttribute("BOOKS", books);
+
+    return AppRequestMapping.VIEW_PREFIX + "/admin/books";
+  }
+
 }

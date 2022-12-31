@@ -6,41 +6,47 @@
     <div class="container">
 
         <div class="d-flex justify-content-start">
-            <h1>Edit user</h1>
+            <h1>Edit book</h1>
             <button type="button" class="btn btn-secondary my-2 ml-5"
-                th:onclick="window.location.href='/admin/users'">Back</button>
+                th:onclick="window.location.href='/admin/books'">Back</button>
         </div>
-
-        <form th:if="${USER != null}" id="form" th:action="'editUser?username=' + ${USER.username}" method='POST' autocomplete="off">
+        <form th:if="${BOOK != null}" id="form" th:action="'editBook?id=' + ${BOOK.id}" method='POST' autocomplete="off">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" name='name' class="form-control" id="name" placeholder="Enter Name"
-                            th:value="${USER.name}">
+                            th:value="${BOOK.name}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="surname">Surname</label>
-                        <input type="text" name='surname' class="form-control" id="surname" placeholder="Enter Surname"
-                            th:value="${USER.surname}">
+                        <label for="surname">Author</label>
+                        <input type="text" name='author' class="form-control" id="author" placeholder="Enter Author"
+                            th:value="${BOOK.author}">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="personalID">Personal ID</label>
-                        <input type="text" name='personalID' class="form-control" id="personalID"
-                            placeholder="Enter Person ID" th:value="${USER.personalID}">
+                        <label for="personalID">Page Count</label>
+                        <input type="number" name='pageCount' class="form-control" id="pageCount"
+                            placeholder="Enter Page Count" th:value="${BOOK.pageCount}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="address">Address</label>
-                        <input type="text" name='address' class="form-control" id="address" placeholder="Enter Address"
-                            th:value="${USER.address}">
+                        <label for="address">Year Of Publication</label>
+                        <input type="number" name='yearOfPublication' class="form-control" id="yearOfPublication" placeholder="Enter Address"
+                            th:value="${BOOK.yearOfPublication}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address">Available</label>
+                        <input type="number" name='available' class="form-control" id="available" placeholder="Enter Address"
+                            th:value="${BOOK.available}">
                     </div>
                 </div>
             </div>

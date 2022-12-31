@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class ProfileState {
 
   @Id
-  private long id;
+  private Long id;
 
   /**
    * Nazev stavu, ve kterem se aktualne profil uzivatele nachazi

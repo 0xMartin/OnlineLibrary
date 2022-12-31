@@ -22,6 +22,7 @@ public class BookService {
 
   /**
    * Najde knizku v databazi podle jejiho ID
+   * 
    * @param id ID hledane knihy
    * @return Knihy
    * @throws Exception
@@ -36,6 +37,7 @@ public class BookService {
 
   /**
    * Navrati seznam vsech knih z databaze
+   * 
    * @return Seznam vsech knih
    */
   public List<Book> books() {
@@ -43,25 +45,27 @@ public class BookService {
   }
 
   /**
-   * V databazi vyhleda uzivatele, kteri splnuji specifikovane pozadavky vyhledavani
-   * @param name Jmeno knihy
-   * @param author Autor knihy
+   * V databazi vyhleda knihy, kteri splnuji specifikovane pozadavky vyhledavani
+   * 
+   * @param name              Jmeno knihy
+   * @param author            Autor knihy
    * @param yearOfPublication Rok vydani knihy
-   * @param sortedBy Razeni podle parametru (negativni cislo = bez razeni, 0 - name, 1 - author, ...)
+   * @param sortedBy          Razeni podle parametru (negativni cislo = bez
+   *                          razeni, 0 - name, 1 - author, ...)
    * @return Filtrovany seznam knih
    */
-  public List<Book> findUsers(
-    String name,
-    String author,
-    long yearOfPublication,
-    int sortedBy
-  ) {
+  public List<Book> findBooks(
+      String name,
+      String author,
+      long yearOfPublication,
+      int sortedBy) {
     return null;
   }
 
   /**
    * Vytvori novou knihu
-   * @param book Nova kniha
+   * 
+   * @param book  Nova kniha
    * @param image Obrazek knihy
    * @throws Exception
    */
@@ -86,7 +90,7 @@ public class BookService {
     String imageUrl = this.imageService.uploadImage(image);
 
     book.setId(this.bookRepository.count());
-    book.setBorrowed(0);
+    book.setBorrowed(0L);
     book.setImage(imageUrl);
 
     this.bookRepository.save(book);
@@ -94,19 +98,54 @@ public class BookService {
 
   /**
    * Upravy parametry knihy
-   * @param id ID knihy v databazi, ktera bude upravovana
+   * 
+   * @param id   ID knihy v databazi, ktera bude upravovana
    * @param book Nove parametry knihy
    * @return Nova kniha
    * @throws Exception
    */
   public Book updateBook(long id, Book book) throws Exception {
-    return null;
+    if (book == null) {
+      throw new Exception("Book is not defined");
+    }
+
+    if (book.getName().length() == 0) {
+      throw new Exception("Name is not defined");
+    }
+    if (book.getAuthor().length() == 0) {
+      throw new Exception("Author is not defined");
+    }
+    if (book.getPageCount() <= 0) {
+      throw new Exception("Page count cant be negative or zero");
+    }
+    if (book.getYearOfPublication() <= 0) {
+      throw new Exception("Year cant be negative or zero");
+    }
+    if (book.getAvailable() <= 0) {
+      throw new Exception("Available count cant be negative or zero");
+    }
+
+    Book book_Db = this.findBook(id);
+    book_Db.setName(book.getName());
+    book_Db.setAuthor(book.getAuthor());
+    book_Db.setPageCount(book.getPageCount());
+    book_Db.setYearOfPublication(book.getYearOfPublication());
+    book_Db.setAvailable(book.getAvailable());
+
+    // ulozeni zmen v databazi
+    this.bookRepository.save(book_Db);
+
+    return book_Db;
   }
 
   /**
    * Odstrani z databaze knihu
+   * 
    * @param id ID knihy, ktera bude odstranena
    * @throws Exception
    */
-  public void deleteBook(long id) throws Exception {}
+  public void removeBook(Long id) throws Exception {
+    Book book = this.findBook(id);
+    this.bookRepository.delete(book);
+  }
 }

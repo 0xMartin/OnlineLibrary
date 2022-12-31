@@ -55,11 +55,11 @@
 <th:block layout:fragment="page_scripts">
     <script>
         function editBook(id) {
-            window.location.href = '/admin/editBook?id=' + username;
+            window.location.href = '/admin/editBook?id=' + id;
         }
 
         function deleteBook(id) {
-            window.location.href = '/admin/booksDelete?id=' + username;
+            window.location.href = '/admin/bookDelete?id=' + id;
         }
     </script>
 </th:block>

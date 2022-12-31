@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Borrow {
 
   @Id
-  private long id;
+  private Long id;
 
   /**
    * Za kolik dni bude vypujcka knihy expirovat (od data

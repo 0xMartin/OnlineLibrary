@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Role {
 
   @Id
-  private long id;
+  private Long id;
 
   /**
    * Nazev uzivatelske role
@@ -27,7 +27,7 @@ public class Role {
    */
   public Role() {}
 
-  public Role(long id, ERole name) {
+  public Role(Long id, ERole name) {
     this.id = id;
     this.name = name;
   }
