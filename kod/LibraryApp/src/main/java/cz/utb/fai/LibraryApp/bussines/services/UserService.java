@@ -31,6 +31,9 @@ public class UserService {
   @Autowired
   protected ProfileStateRepository profileStateRepository;
 
+  @Autowired
+  protected BorrowRepository borrowRepository;
+
   /**
    * Navrati vsechny informace o aktualne prihlasenem uzivateli (profil uzivatele)
    * @return User
@@ -218,7 +221,6 @@ public class UserService {
   public void removeUser(String username) throws Exception {
     User user = this.findUser(username);
 
-    //String.format("Failed to remove '%s'", username)
     // vraceni knih zpatky (dekrementuje pocet vypujcenych knih)
     user
       .getBorrows()

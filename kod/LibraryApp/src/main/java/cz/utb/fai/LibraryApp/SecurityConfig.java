@@ -69,6 +69,8 @@ public class SecurityConfig {
       .permitAll()
       .antMatchers(AppRequestMapping.HOME + "/**")
       .permitAll()
+      .antMatchers(AppRequestMapping.IMAGE + "/**")
+      .permitAll()
       .antMatchers(AppRequestMapping.PROFILE + "/**")
       .hasAnyRole(ERole.CUSTOMER.toString(), ERole.LIBRARIAN.toString())
       .antMatchers(AppRequestMapping.ADMIN + "/**")

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div th:if="${BOOK != null}">
+            <div class="row py-4">
+                <div class="col-sm-5 px-2">
+                    <img class="card-img-top" th:src="'/image?id=' + ${BOOK.image}">
+                </div>
+                <div class="col-sm-7 px-4">
+                    <div class="d-flex justify-content-between flex-column h-100">
+                        <div>
+                            <h1 th:text="${BOOK.name}"></h1>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Author</b></td>
+                                        <td th:text="${BOOK.author}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Year Of Publication</b></td>
+                                        <td th:text="${BOOK.yearOfPublication}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Page Count</b></td>
+                                        <td th:text="${BOOK.pageCount}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Total Count</b></td>
+                                        <td th:text="${BOOK.available}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Available</b></td>
+                                        <td th:text="${BOOK.available} - ${BOOK.borrowed}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <button type="button" class="btn btn-secondary py-2 w-100"
+                                    th:onclick="window.location.href='/home'">Back</button>
+                            </div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <button type="button" class="btn btn-success py-2 w-100"
+                                    th:onclick="borrowBook([[${BOOK.id}]])">Borrow Book</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        function borrowBook(id) {
+            window.location.href = '/profile/borrowBook?id=' + id;
+        }
+    </script>
+</th:block>
+
+</html>

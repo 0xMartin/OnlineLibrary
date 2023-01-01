@@ -19,7 +19,7 @@ public class Borrow {
    * vytvoreni vypujcky)
    */
   @Field("expiration")
-  private long expiration;
+  private Long expiration;
 
   /**
    * Datum vypujceni knihy
@@ -31,7 +31,7 @@ public class Borrow {
    * Stav o tom zda kniha byla jiz vracena
    */
   @Field("returned")
-  private boolean returned;
+  private Boolean returned;
 
   /**
    * Uzivatel, ktery si knihu pujcil
@@ -64,7 +64,7 @@ public class Borrow {
    * @param book       Knihy, kterou si uzivatel vypujcil
    */
   public Borrow(
-    long id,
+    Long id,
     long expiration,
     Date date,
     boolean returned,

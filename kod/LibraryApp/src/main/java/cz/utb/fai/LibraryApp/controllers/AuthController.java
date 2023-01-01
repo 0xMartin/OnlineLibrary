@@ -20,6 +20,7 @@ public class AuthController {
 
   /**
    * View pro login uzivatele
+   * 
    * @return Nazev view
    */
   @GetMapping("/login")
@@ -29,6 +30,7 @@ public class AuthController {
 
   /**
    * View pro registraci uzivatele
+   * 
    * @return Nazev view
    */
   @GetMapping("/register")
@@ -38,8 +40,9 @@ public class AuthController {
 
   /**
    * View pro registraci uzivatele
+   * 
    * @param model ViewModel
-   * @param user User
+   * @param user  User
    * @return Nazev view
    */
   @PostMapping(path = "/register", consumes = "application/x-www-form-urlencoded")

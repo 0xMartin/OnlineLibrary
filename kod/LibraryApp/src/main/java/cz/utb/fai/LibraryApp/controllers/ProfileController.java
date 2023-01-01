@@ -1,7 +1,11 @@
 package cz.utb.fai.LibraryApp.controllers;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
+import cz.utb.fai.LibraryApp.GlobalConfig;
+import cz.utb.fai.LibraryApp.bussines.services.BookService;
+import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
+import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,19 +22,26 @@ public class ProfileController {
   @Autowired
   protected UserService userService;
 
+  @Autowired
+  protected BookService bookService;
+
+  @Autowired
+  protected BorrowService borrowService;
+
   /**
    * View s profilem uzivatele (parametry uzivatele + historie vsech vypujcek)
-   * @param model ViewModel
-   * @param page Cislo stranky s vypujckama knizek (stranky po 8 zaznamech)
+   * 
+   * @param model        ViewModel
+   * @param page         Cislo stranky s vypujckama knizek (stranky po 8
+   *                     zaznamech)
    * @param borrowedOnly Zobrazovat jen aktualne vypujcene knihy v seznamu
    * @return Nazev View
    */
   @GetMapping
   public String profile(
-    Model model,
-    @RequestParam(required = false) Long page,
-    @RequestParam(required = false) Boolean borrowedOnly
-  ) {
+      Model model,
+      @RequestParam(required = false) Long page,
+      @RequestParam(required = false) Boolean borrowedOnly) {
     try {
       User u = this.userService.profile();
       model.addAttribute("USER", u);
@@ -42,6 +53,7 @@ public class ProfileController {
 
   /**
    * View pro editace parametru uzivatele
+   * 
    * @param model ViewModel
    * @return Nazev View
    */
@@ -58,8 +70,9 @@ public class ProfileController {
 
   /**
    * Provede zmeny v porfilu
+   * 
    * @param model ViewModel
-   * @param user Nove paramtery profilu uzivatele
+   * @param user  Nove paramtery profilu uzivatele
    * @return Nazev View
    */
   @PostMapping(path = "edit", consumes = "application/x-www-form-urlencoded")
@@ -71,11 +84,9 @@ public class ProfileController {
       User n = this.userService.editUser(u.getUsername(), user);
       model.addAttribute("USER", n);
 
-
       model.addAttribute(
-        AppRequestMapping.RESPONSE_SUCCESS,
-        "Changed successfully"
-      );
+          AppRequestMapping.RESPONSE_SUCCESS,
+          "Changed successfully");
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
@@ -84,6 +95,7 @@ public class ProfileController {
 
   /**
    * View pro zmenu hesla
+   * 
    * @return Nazev View
    */
   @GetMapping("changePassword")
@@ -93,29 +105,47 @@ public class ProfileController {
 
   /**
    * Zmeni heslo uzivatele
-   * @param model ViewModel
+   * 
+   * @param model       ViewModel
    * @param currentPass Aktualni heslo
-   * @param newPass Nove heslo
+   * @param newPass     Nove heslo
    * @return Nazev View
    */
-  @PostMapping(
-    path = "changePassword",
-    consumes = "application/x-www-form-urlencoded"
-  )
+  @PostMapping(path = "changePassword", consumes = "application/x-www-form-urlencoded")
   public String changePassword(
-    Model model,
-    String currentPass,
-    String newPass
-  ) {
+      Model model,
+      String currentPass,
+      String newPass) {
     try {
       this.userService.changePassword(currentPass, newPass);
       model.addAttribute(
-        AppRequestMapping.RESPONSE_SUCCESS,
-        "Password changed successfully"
-      );
+          AppRequestMapping.RESPONSE_SUCCESS,
+          "Password changed successfully");
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
     return AppRequestMapping.VIEW_PREFIX + "/profile/change_password";
   }
+
+  /**
+   * Aktulane prihlaseny uzivatel si na svuj profil vypujci zvolenou knihu
+   * 
+   * @param model ViewModel
+   * @param id    ID knihy, ktera bude vypujcena
+   * @return Nazev View
+   */
+  @GetMapping("borrowBook")
+  public String borrowBook(Model model, @RequestParam Long id) {
+    try {
+      Book b = this.bookService.findBook(id);
+      this.borrowService.borrowBook(b);
+
+      model.addAttribute(AppRequestMapping.RESPONSE_SUCCESS,
+          String.format("Book \"%s\" borrowed for %d days", b.getName(), GlobalConfig.BORROW_DAY_COUNT));
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/profile/borrow_book";
+  }
+
 }

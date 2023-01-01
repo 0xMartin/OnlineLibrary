@@ -6,7 +6,23 @@
     <div class="container">
         <h1>Book catalog</h1>
         <div>
-    
+            <th:block th:each="book : ${BOOKS}">
+                <!--Book Card-->
+                <div class="col-md-3 pb-4">
+                    <div class="card p-2">
+                        <img class="card-img-top" th:src="'/image?id=' + ${book.image}">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${book.name}"></h4>
+                            <p class="card-text"><b>Author: </b> <span th:text="${book.author}"></span></p>
+                            <p class="card-text"><b>Year: </b> <span th:text="${book.yearOfPublication}"></span></p>
+                            <div class="d-flex justify-content-between">
+                                <button th:onclick="showInfo([[${book.id}]])" class="btn btn-primary"
+                                    style="width: 45%;">Info</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
         </div>
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-secondary m-1">&#60;</button>
@@ -16,6 +32,35 @@
             <button type="button" class="btn btn-secondary m-1">&#62;</button>
         </div>
     </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        // zobrazi info o vybrane knize
+        function showInfo(id) {
+            window.location.href = '/home/info?id=' + id;
+        }
+
+        // zobrazi predchozi stranu v navracenem obsahu
+        function page_previes() {
+
+        }
+
+        // zobrazi dalsi stranu v navracenem obsahu
+        function page_next() {
+
+        }
+
+        // zobrazi konkretni stranu v navracenem obsahu
+        function page_set(number) {
+
+        }
+
+        // vyhleda knihy (aplikuje vyhledavaci filtr)
+        function page_search() {
+
+        }
+    </script>
 </th:block>
 
 </html>
