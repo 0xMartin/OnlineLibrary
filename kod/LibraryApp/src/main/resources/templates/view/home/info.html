@@ -53,8 +53,12 @@
                             <div class="col-sm-4"></div>
                             <div class="col-sm-4">
                                 <button type="button" class="btn btn-success py-2 w-100"
-                                    th:if="${!USER.state.name.toString().equals('WAITING')}"
+                                    th:if="${USER.state.name.toString().equals('CONFIRMED') && (BOOK.available - BOOK.borrowed) > 0}"
                                     th:onclick="borrowBook([[${BOOK.id}]])">Borrow Book</button>
+                                <div class="alert alert-danger" role="alert"
+                                    th:if="${(BOOK.available - BOOK.borrowed) <= 0}">
+                                    Not available
+                                </div>
                             </div>
                         </div>
                     </div>

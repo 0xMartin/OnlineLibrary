@@ -71,7 +71,7 @@
                                 <h4 class="card-title" th:text="${borrow.book.name}"></h4>
                                 <p class="card-text"><b>Date: </b> <span th:text="${borrow.date}"></span></p>
                                 <p class="card-text text-danger"><b>Remaining days: </b> <span
-                                        th:text="${borrow.end.getDate() - new java.util.Date().getDate()}"></span></p>
+                                        th:text="${borrow.expireAt.getDate() - new java.util.Date().getDate()}"></span></p>
                                 <div class="d-flex justify-content-between">
                                     <button th:onclick="showInfo([[${borrow.book.id}]])" class="btn btn-primary"
                                         style="width: 45%;">Info</button>

@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+
 @Document("Borrows")
 @Data
 public class Borrow {
@@ -20,51 +21,51 @@ public class Borrow {
    * Datum vypujceni knihy
    */
   @Field("date")
-  @Indexed(expireAfterSeconds = 12000) //(int) GlobalConfig.BORROW_DAY_COUNT
+  // @Indexed(name = "date", expireAfterSeconds = 30)
   private Date date;
 
   /**
    * Datum kdy expiruje vypujka knihy
    */
-  @Field("end")
-  private Date end;
+  @Indexed(name = "expireAt", expireAfterSeconds = 0)
+  private Date expireAt;
 
   /**
    * Uzivatel, ktery si knihu pujcil
    */
   @Field("user_id")
-  @DocumentReference(lazy = true)
+  @DocumentReference(lazy = false)
   private User user;
 
   /**
    * Knihy, kterou si uzivatel vypujcil
    */
   @Field("book_id")
-  @DocumentReference(lazy=false)
+  @DocumentReference(lazy = false)
   private Book book;
 
   /**
    * Defaultni konstruktor
    */
-  public Borrow() {}
+  public Borrow() {
+  }
 
   /**
    * Vytvori instanci reprezentujici vypujceni knihy
    *
-   * @param id         ID vypujceni
-   *                   vytvoreni vypujcky)
-   * @param date       Datum vytvoreni vypujcky knihy
-   * @param dayCount   Na kolik dni bude kniha vypujcena
-   * @param user       Uzivatel, ktery si knihu vypujcil
-   * @param book       Knihy, kterou si uzivatel vypujcil
+   * @param id      ID vypujceni
+   *                vytvoreni vypujcky)
+   * @param date    Datum vytvoreni vypujcky knihy
+   * @param seconds Na kolik sekund bude kniha vypujcena
+   * @param user    Uzivatel, ktery si knihu vypujcil
+   * @param book    Knihy, kterou si uzivatel vypujcil
    */
   public Borrow(
-    Long id,
-    Date date,
-    long dayCount,
-    User user,
-    Book book
-  ) {
+      Long id,
+      Date date,
+      long seconds,
+      User user,
+      Book book) {
     this.id = id;
     this.date = date;
     this.user = user;
@@ -72,7 +73,7 @@ public class Borrow {
 
     Calendar cal = Calendar.getInstance();
     cal.setTime(this.date);
-    cal.add(Calendar.DATE, (int) dayCount);
-    this.end = cal.getTime();
+    cal.add(Calendar.SECOND, (int) seconds);
+    this.expireAt = cal.getTime();
   }
 }

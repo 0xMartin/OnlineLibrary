@@ -53,10 +53,14 @@ public class BorrowService {
      * Akutualne prihlaseny uzivatel si vypujci knihu
      * 
      * @param book - Kniha kterou si vyupujci
-     * @return True -> vypujceni probehlo uspesne
+     * @return Borrow
      * @throws Exception
      */
-    public void borrowBook(Book book) throws Exception {
+    public Borrow borrowBook(Book book) throws Exception {
+        if(book == null) {
+            throw new Exception("Book is undefined");
+        }
+
         User profile = this.userService.profile();
 
         List<Borrow> borrows = profile.getBorrows();
@@ -67,7 +71,6 @@ public class BorrowService {
                     throw new Exception("It is not possible to borrow the same book twice");
                 }
             }
-
             // overeni poctu vypujcenych knih
             if (borrows.size() >= GlobalConfig.MAX_BORROWED_BOOKS) {
                 throw new Exception("The limit of borrowed books has been exceeded");
@@ -82,10 +85,21 @@ public class BorrowService {
         Borrow b = new Borrow(
                 (Long) this.borrowRepository.count(),
                 new java.util.Date(),
-                GlobalConfig.BORROW_DAY_COUNT,
+                20, /* GlobalConfig.BORROW_DAY_COUNT * 24 * 3600 */
                 profile,
                 book);
         this.borrowRepository.save(b);
+        return b;
+    }
+
+    /**
+     * Vrati vypujcenou knihu zpet do knihovny
+     * 
+     * @param borrowID - ID Vypujcky knihy
+     * @throws Exception
+     */
+    public void returnBook(long borrowID) throws Exception {
+        Borrow b = this.findBorrow(borrowID);
     }
 
 }

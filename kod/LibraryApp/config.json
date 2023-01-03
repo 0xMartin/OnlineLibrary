@@ -1,6 +1,7 @@
 {
+    "BORROW_DAY_COUNT": 6,
     "MAX_BORROWED_BOOKS": 6,
     "MAX_ADMIN_COUNT": 1,
-    "BORROW_DAY_COUNT": 6,
-    "MIN_PASSWORD_LENGTH": 8
+    "MIN_PASSWORD_LENGTH": 8,
+    "IMAGE_UPLOAD_DIR": "images"
 }

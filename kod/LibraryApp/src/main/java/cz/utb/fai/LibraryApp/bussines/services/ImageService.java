@@ -10,17 +10,13 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import cz.utb.fai.LibraryApp.GlobalConfig;
+
 /**
  * Servis, ktery umoznuje pracovat s obrazky na disku
  */
 @Service
 public class ImageService {
-
-  /**
-   * Nazev adresare do ktereho se budou uploadovat obrazky (cesta k adresari se
-   * bere relativne k .jar webove app)
-   */
-  public static final String UPLOAD_DIRECTORY = "images";
 
   /**
    * Uploaduje obrazek na disk do predem urceneho adresare
@@ -47,7 +43,7 @@ public class ImageService {
 
     UUID uuid = UUID.randomUUID();
     String nameOfImage = uuid.toString() + "." + extension;
-    Path path = Paths.get(ImageService.UPLOAD_DIRECTORY, nameOfImage);
+    Path path = Paths.get(GlobalConfig.IMAGE_UPLOAD_DIR, nameOfImage);
 
     Files.write(path, image.getBytes());
     return nameOfImage;
@@ -60,7 +56,7 @@ public class ImageService {
    * @throws IOException
    */
   public void deletaImage(String imgID) throws IOException {
-    Path path = Paths.get(ImageService.UPLOAD_DIRECTORY, imgID);
+    Path path = Paths.get(GlobalConfig.IMAGE_UPLOAD_DIR, imgID);
     Files.deleteIfExists(path);
   }
 
@@ -75,7 +71,7 @@ public class ImageService {
     if (dirTraversalCheck(imgID)) {
       return null;
     }
-    Path path = Paths.get(ImageService.UPLOAD_DIRECTORY, imgID);
+    Path path = Paths.get(GlobalConfig.IMAGE_UPLOAD_DIR, imgID);
     return Files.readAllBytes(path);
   }
 
@@ -88,8 +84,8 @@ public class ImageService {
    */
   private boolean dirTraversalCheck(String path) throws IOException {
     String normalized_path = Paths.get(path).normalize().toString();
-    File file = new File(ImageService.UPLOAD_DIRECTORY, normalized_path);
-    File uploadDir = new File(ImageService.UPLOAD_DIRECTORY);
+    File file = new File(GlobalConfig.IMAGE_UPLOAD_DIR, normalized_path);
+    File uploadDir = new File(GlobalConfig.IMAGE_UPLOAD_DIR);
     return !file.getCanonicalPath().startsWith(uploadDir.getCanonicalPath());
   }
 

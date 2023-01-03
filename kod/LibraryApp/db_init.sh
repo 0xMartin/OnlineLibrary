@@ -1,6 +1,7 @@
-
+# databaze pro aplikaci
 use libraryapp
 
+# vytvoreni uzivatele ktery bude v databazi provadet zmeny
 db.createUser(
   {
     user: "LibraryUser",

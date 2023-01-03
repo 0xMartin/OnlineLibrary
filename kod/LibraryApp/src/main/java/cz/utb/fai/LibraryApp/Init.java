@@ -14,11 +14,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.AbstractApplicationContext;
 
 /**
  * Zajistuje inicializaci aplikace
@@ -28,9 +26,6 @@ public class Init {
 
   private static final Logger logger = LoggerFactory.getLogger(Init.class);
 
-  @Autowired
-  private AbstractApplicationContext context;
-
   @Bean
   public static void loadConfigFromFile() {
     try {
@@ -38,6 +33,12 @@ public class Init {
       JSONObject obj = null;
 
       obj = (JSONObject) parser.parse(new FileReader("config.json"));
+
+      Long BORROW_DAY_COUNT = (Long) obj.get("BORROW_DAY_COUNT");
+      if (BORROW_DAY_COUNT != null) {
+        GlobalConfig.MAX_BORROWED_BOOKS = (long) BORROW_DAY_COUNT.longValue();
+        logger.info("BORROW_DAY_COUNT set on: " + BORROW_DAY_COUNT);
+      }
 
       Long MAX_BORROWED_BOOKS = (Long) obj.get("MAX_BORROWED_BOOKS");
       if (MAX_BORROWED_BOOKS != null) {
@@ -49,6 +50,12 @@ public class Init {
       if (MIN_PASSWORD_LENGTH != null) {
         GlobalConfig.MIN_PASSWORD_LENGTH = (long) MIN_PASSWORD_LENGTH.longValue();
         logger.info("MIN_PASSWORD_LENGTH set on: " + MIN_PASSWORD_LENGTH);
+      }
+
+      String IMAGE_UPLOAD_DIR = (String) obj.get("IMAGE_UPLOAD_DIR");
+      if (IMAGE_UPLOAD_DIR != null) {
+        GlobalConfig.IMAGE_UPLOAD_DIR = IMAGE_UPLOAD_DIR;
+        logger.info("IMAGE_UPLOAD_DIR set on: " + IMAGE_UPLOAD_DIR);
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -92,12 +99,6 @@ public class Init {
     } else {
       return null;
     }
-  }
-
-  @Bean
-  public void registerListeners() {
-    //BorrowExpirationListener listener = BeanFactory.createBean(BorrowExpirationListener.class);
-    //context.addApplicationListener(listener);
   }
 
 }
