@@ -26,7 +26,7 @@
             </li>
 
             <!-- Admin (only for user with role librarian = ADMIN) -->
-            <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+            <li sec:authorize="isAuthenticated() && hasRole('ROLE_LIBRARIAN')" class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false"
                     th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin') ? 'active':''}">

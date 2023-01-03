@@ -80,7 +80,7 @@ public class SecurityConfig {
       .and()
       .formLogin()
       .loginPage("/auth/login")
-      .defaultSuccessUrl("/home", true)
+      .defaultSuccessUrl("/auth/checkProfile", true)
       .failureUrl("/auth/login?error=true")
       .permitAll()
       .and()

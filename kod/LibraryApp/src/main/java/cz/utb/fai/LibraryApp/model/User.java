@@ -70,7 +70,7 @@ public class User {
   /**
    * Seznam vsech vypujcek knih
    */
-  @DocumentReference(lazy = true)
+  @DocumentReference(lazy = false, lookup="{'user_id': ?#{#self._id} }")
   private List<Borrow> borrows;
 
   /**

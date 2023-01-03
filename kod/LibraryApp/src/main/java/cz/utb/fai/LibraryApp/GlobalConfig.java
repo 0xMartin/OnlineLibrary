@@ -3,6 +3,14 @@ package cz.utb.fai.LibraryApp;
 public class GlobalConfig {
 
   /**
+   * douba, na kterou si uzivatel pujcuje knihu (po uplynuti se kniha automaticky
+   * vrati)
+   * [DNY]
+   */
+  public static final long BORROW_DAY_COUNT = 6;
+
+
+  /**
    * maximalni pocet knih, ktere si uzivatel muze vypujcit (zmena nebudou
    * provedeny na jiz vypujcene knihy)
    * [POCET KNIH]
@@ -10,15 +18,9 @@ public class GlobalConfig {
   public static long MAX_BORROWED_BOOKS = 6;
 
   /**
-   * douba, na kterou si uzivatel pujcuje knihu (po uplynuti se kniha automaticky
-   * vrati)
-   * [DNY]
-   */
-  public static long BORROW_DAY_COUNT = 6;
-
-  /**
    * minimalni delka hesla
    * [pocet znaku]
    */
   public static long MIN_PASSWORD_LENGTH = 8;
+   
 }

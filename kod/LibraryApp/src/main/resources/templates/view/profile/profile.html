@@ -6,6 +6,19 @@
     <div class="container">
         <h1>Profile</h1>
 
+        <div th:if="${USER.state.name.toString().equals('CONFIRMED')}" class="alert alert-success m-2" role="alert">
+            The account is confirmed
+        </div>
+        <div th:if="${USER.state.name.toString().equals('NOT_CONFIRMED')}" class="alert alert-danger m-2" role="alert">
+            The account is not confirmed
+        </div>
+        <div th:if="${USER.state.name.toString().equals('WAITING')}" class="alert alert-warning m-2" role="alert">
+            The account is waiting for confirmation
+        </div>
+        <div th:if="${USER.state.name.toString().equals('BANNED')}" class="alert alert-danger m-2" role="alert">
+            The account is banned
+        </div>
+
         <div class="row">
             <!-- User info -->
             <div class="col-8">
@@ -41,32 +54,10 @@
         <!-- Borrowed books -->
         <div class="d-flex justify-content-between my-2">
             <h3 class="pr-5 my-0">Borrowed books</h3>
-            <div class="d-flex justify-content-center">
-                <div class="form-check pr-2 d-flex align-items-center">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Only currently borrowed
-                    </label>
-                </div>
-                <button type="button" class="btn btn-primary pr-2">Reload</button>
-            </div>
         </div>
         <div class="row border border-secondary rounded p-3 mb-5">
             <th:block th:each="i: ${#numbers.sequence(0, 7)}">
-                <!--Book Card-->
-                <div class="col-md-3 pb-4">
-                    <div class="card p-2">
-                        <img class="card-img-top" src="./images/img1.png">
-                        <div class="card-body">
-                            <h5 class="card-title">Kniha 1</h5>
-                            <p class="card-text"><b>Remaining days</b> 6 days</p>
-                            <div class="d-flex justify-content-between">
-                                <a href="#" class="btn btn-primary" style="width: 45%;">Info</a>
-                                <a href="#" class="btn btn-danger" style="width: 45%;">Return</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </th:block>
             <div class="col-md-12">
                 <hr>

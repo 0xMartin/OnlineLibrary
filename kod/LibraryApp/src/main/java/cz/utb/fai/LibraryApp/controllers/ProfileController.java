@@ -2,6 +2,7 @@ package cz.utb.fai.LibraryApp.controllers;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
 import cz.utb.fai.LibraryApp.GlobalConfig;
+import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
 import cz.utb.fai.LibraryApp.bussines.services.BookService;
 import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
@@ -29,6 +30,17 @@ public class ProfileController {
   protected BorrowService borrowService;
 
   /**
+   * Overi zda je profil uzivatel overen
+   * 
+   * @throws Exception
+   */
+  private void chechProfileState() throws Exception {
+    if (this.userService.profile().getState().getName() != EProfileState.CONFIRMED) {
+      throw new Exception("Your account is not confirmed");
+    }
+  }
+
+  /**
    * View s profilem uzivatele (parametry uzivatele + historie vsech vypujcek)
    * 
    * @param model        ViewModel
@@ -45,6 +57,7 @@ public class ProfileController {
     try {
       User u = this.userService.profile();
       model.addAttribute("USER", u);
+      model.addAttribute("BORROWS", u.getBorrows());
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
@@ -78,6 +91,8 @@ public class ProfileController {
   @PostMapping(path = "edit", consumes = "application/x-www-form-urlencoded")
   public String edit(Model model, User user) {
     try {
+      this.chechProfileState();
+
       User u = this.userService.profile();
       model.addAttribute("USER", u);
 
@@ -117,6 +132,8 @@ public class ProfileController {
       String currentPass,
       String newPass) {
     try {
+      this.chechProfileState();
+
       this.userService.changePassword(currentPass, newPass);
       model.addAttribute(
           AppRequestMapping.RESPONSE_SUCCESS,
@@ -137,6 +154,8 @@ public class ProfileController {
   @GetMapping("borrowBook")
   public String borrowBook(Model model, @RequestParam Long id) {
     try {
+      this.chechProfileState();
+
       Book b = this.bookService.findBook(id);
       this.borrowService.borrowBook(b);
 

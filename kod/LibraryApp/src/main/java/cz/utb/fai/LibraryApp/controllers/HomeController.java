@@ -2,6 +2,7 @@ package cz.utb.fai.LibraryApp.controllers;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
 import cz.utb.fai.LibraryApp.bussines.services.BookService;
+import cz.utb.fai.LibraryApp.bussines.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(value = AppRequestMapping.HOME)
 public class HomeController {
+
+  @Autowired
+  protected UserService userService;
 
   @Autowired
   protected BookService bookService;
@@ -39,6 +43,7 @@ public class HomeController {
   @GetMapping("/info")
   public String info(Model model, @RequestParam Long id) {
     try {
+      model.addAttribute("USER", this.userService.profile());
       model.addAttribute("BOOK", this.bookService.findBook(id));
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());

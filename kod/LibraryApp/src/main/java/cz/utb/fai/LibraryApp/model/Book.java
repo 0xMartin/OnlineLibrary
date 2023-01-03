@@ -62,7 +62,7 @@ public class Book {
   /**
    * Seznam vsech vypujcek teto knihy
    */
-  @DocumentReference(lazy = true)
+  @DocumentReference(lazy = false, lookup="{'book_id': ?#{#self._id} }")
   private List<Borrow> borrows;
 
   /**

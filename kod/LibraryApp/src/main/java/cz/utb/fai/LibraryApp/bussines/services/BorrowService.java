@@ -1,6 +1,5 @@
 package cz.utb.fai.LibraryApp.bussines.services;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,16 +10,24 @@ import cz.utb.fai.LibraryApp.GlobalConfig;
 import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.Borrow;
 import cz.utb.fai.LibraryApp.model.User;
+import cz.utb.fai.LibraryApp.repository.BookRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowRepository;
+import cz.utb.fai.LibraryApp.repository.UserRepository;
 
 @Service
 public class BorrowService {
 
     @Autowired
+    protected BorrowRepository borrowRepository;
+
+    @Autowired
     protected UserService userService;
 
     @Autowired
-    protected BorrowRepository borrowRepository;
+    protected UserRepository userRepository;
+
+    @Autowired
+    protected BookRepository bookRepository;
 
     /**
      * Najde vypujcku knihy v databazi podle jejiho ID
@@ -53,22 +60,35 @@ public class BorrowService {
      * @return True -> vypujceni probehlo uspesne
      * @throws Exception
      */
-    public boolean borrowBook(Book book) throws Exception {
+    public void borrowBook(Book book) throws Exception {
         User profile = this.userService.profile();
 
-        java.util.Date utilDate = new java.util.Date();
+        List<Borrow> borrows = profile.getBorrows();
+        if (borrows != null) {
+            // overeni zda vypojcena knihy jiz neni timto uzivatelem vypujcena
+            for (Borrow b : borrows) {
+                if (b.getBook().getId().longValue() == book.getId().longValue()) {
+                    throw new Exception("It is not possible to borrow the same book twice");
+                }
+            }
 
+            // overeni poctu vypujcenych knih
+            if (borrows.size() >= GlobalConfig.MAX_BORROWED_BOOKS) {
+                throw new Exception("The limit of borrowed books has been exceeded");
+            }
+        }
+
+        // inkrementuje pocet vypujcenych knih
+        book.setBorrowed(book.getBorrowed() + 1);
+        this.bookRepository.save(book);
+
+        // vytvori vypujcku knihy
         Borrow b = new Borrow(
                 (Long) this.borrowRepository.count(),
-                GlobalConfig.BORROW_DAY_COUNT * 24 * 3600,
-                new Date(utilDate.getTime()),
-                false,
+                new java.util.Date(),
                 profile,
                 book);
-
         this.borrowRepository.save(b);
-
-        return true;
     }
 
 }
