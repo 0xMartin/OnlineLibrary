@@ -12,7 +12,6 @@ import cz.utb.fai.LibraryApp.model.Borrow;
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.BookRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowRepository;
-import cz.utb.fai.LibraryApp.repository.UserRepository;
 
 @Service
 public class BorrowService {
@@ -22,9 +21,6 @@ public class BorrowService {
 
     @Autowired
     protected UserService userService;
-
-    @Autowired
-    protected UserRepository userRepository;
 
     @Autowired
     protected BookRepository bookRepository;
@@ -86,6 +82,7 @@ public class BorrowService {
         Borrow b = new Borrow(
                 (Long) this.borrowRepository.count(),
                 new java.util.Date(),
+                GlobalConfig.BORROW_DAY_COUNT,
                 profile,
                 book);
         this.borrowRepository.save(b);

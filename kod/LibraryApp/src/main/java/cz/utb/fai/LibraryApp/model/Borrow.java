@@ -1,5 +1,6 @@
 package cz.utb.fai.LibraryApp.model;
 
+import java.util.Calendar;
 import java.util.Date;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -23,10 +24,16 @@ public class Borrow {
   private Date date;
 
   /**
+   * Datum kdy expiruje vypujka knihy
+   */
+  @Field("end")
+  private Date end;
+
+  /**
    * Uzivatel, ktery si knihu pujcil
    */
   @Field("user_id")
-  @DocumentReference(lazy = false)
+  @DocumentReference(lazy = true)
   private User user;
 
   /**
@@ -47,12 +54,14 @@ public class Borrow {
    * @param id         ID vypujceni
    *                   vytvoreni vypujcky)
    * @param date       Datum vytvoreni vypujcky knihy
+   * @param dayCount   Na kolik dni bude kniha vypujcena
    * @param user       Uzivatel, ktery si knihu vypujcil
    * @param book       Knihy, kterou si uzivatel vypujcil
    */
   public Borrow(
     Long id,
     Date date,
+    long dayCount,
     User user,
     Book book
   ) {
@@ -60,5 +69,10 @@ public class Borrow {
     this.date = date;
     this.user = user;
     this.book = book;
+
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(this.date);
+    cal.add(Calendar.DATE, (int) dayCount);
+    this.end = cal.getTime();
   }
 }

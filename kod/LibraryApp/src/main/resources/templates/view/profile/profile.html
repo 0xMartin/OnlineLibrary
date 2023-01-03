@@ -52,26 +52,53 @@
         </div>
 
         <!-- Borrowed books -->
-        <div class="d-flex justify-content-between my-2">
-            <h3 class="pr-5 my-0">Borrowed books</h3>
-        </div>
-        <div class="row border border-secondary rounded p-3 mb-5">
-            <th:block th:each="i: ${#numbers.sequence(0, 7)}">
-                
-            </th:block>
-            <div class="col-md-12">
-                <hr>
-                <div class="d-flex justify-content-center w-100">
-                    <button type="button" class="btn btn-secondary m-1">&#60;</button>
-                    <button type="button" class="btn btn-primary m-1">1</button>
-                    <button type="button" class="btn btn-secondary m-1">2</button>
-                    <button type="button" class="btn btn-secondary m-1">3</button>
-                    <button type="button" class="btn btn-secondary m-1">&#62;</button>
+        <div class="container-fluid py-2">
+            <h3 class="pr-5 my-0 bg-dark text-white p-2 rounded-top">Borrowed books</h3>
+            <div class="d-flex flex-row flex-nowrap overflow-auto border border-secondary rounded-bottom p-3 mb-5">
+                <!--Info text = no books-->
+                <div class="col-md-12" th:if="${BORROWS.size() == 0}">
+                    <div class="d-flex justify-content-center">
+                        <h3 class="text-info py-5">You have not borrowed books</h3>
+                    </div>
                 </div>
+                <!--Books-->
+                <th:block th:each="borrow : ${BORROWS}">
+                    <!--Book Card-->
+                    <div class="col-md-3 pb-4">
+                        <div class="card p-2">
+                            <img class="card-img-top" th:src="'/image?id=' + ${borrow.book.image}">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="${borrow.book.name}"></h4>
+                                <p class="card-text"><b>Date: </b> <span th:text="${borrow.date}"></span></p>
+                                <p class="card-text text-danger"><b>Remaining days: </b> <span
+                                        th:text="${borrow.end.getDate() - new java.util.Date().getDate()}"></span></p>
+                                <div class="d-flex justify-content-between">
+                                    <button th:onclick="showInfo([[${borrow.book.id}]])" class="btn btn-primary"
+                                        style="width: 45%;">Info</button>
+                                    <button th:onclick="returnBook([[${borrow.book.id}]])" class="btn btn-warning"
+                                        style="width: 45%;">Return</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
             </div>
         </div>
 
     </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        // zobrazi info o vybrane knize
+        function showInfo(id) {
+            window.location.href = '/home/info?id=' + id;
+        }
+
+        // vrati cypujcenou knihu
+        function returnBook(id) {
+        }
+    </script>
 </th:block>
 
 </html>
