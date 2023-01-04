@@ -2,6 +2,8 @@ package cz.utb.fai.LibraryApp.bussines.services;
 
 import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.repository.BookRepository;
+import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class BookService {
 
   @Autowired
   protected BookRepository bookRepository;
+
+  @Autowired
+  protected BorrowHistoryRepository borrowHistoryRepository;
 
   @Autowired
   protected ImageService imageService;
@@ -90,7 +95,6 @@ public class BookService {
     String imageUrl = this.imageService.uploadImage(image);
 
     book.setId(this.bookRepository.count());
-    book.setBorrowed(0L);
     book.setImage(imageUrl);
 
     this.bookRepository.save(book);
@@ -146,6 +150,12 @@ public class BookService {
    */
   public void removeBook(Long id) throws Exception {
     Book book = this.findBook(id);
+
+    // pokud ma nekdo vypujcenou knihu neni ji mozne odstranit
+    if(!book.getBorrows().isEmpty()) {
+      throw new Exception("Someone has borrowed this book"); 
+    }
+
     this.bookRepository.delete(book);
   }
 }

@@ -40,7 +40,7 @@
                                     </tr>
                                     <tr>
                                         <td><b>Available</b></td>
-                                        <td th:text="${BOOK.available} - ${BOOK.borrowed}"></td>
+                                        <td th:text="${BOOK.available} - ${BOOK.borrows.size()}"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -53,10 +53,10 @@
                             <div class="col-sm-4"></div>
                             <div class="col-sm-4">
                                 <button type="button" class="btn btn-success py-2 w-100"
-                                    th:if="${USER.state.name.toString().equals('CONFIRMED') && (BOOK.available - BOOK.borrowed) > 0}"
+                                    th:if="${USER.state.name.toString().equals('CONFIRMED') && (BOOK.available - BOOK.borrows.size()) > 0}"
                                     th:onclick="borrowBook([[${BOOK.id}]])">Borrow Book</button>
                                 <div class="alert alert-danger" role="alert"
-                                    th:if="${(BOOK.available - BOOK.borrowed) <= 0}">
+                                    th:if="${(BOOK.available - BOOK.borrows.size()) <= 0}">
                                     Not available
                                 </div>
                             </div>

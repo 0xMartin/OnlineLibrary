@@ -3,6 +3,7 @@ package cz.utb.fai.LibraryApp.model;
 import java.util.List;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Book {
 
   @Id
+  @Indexed(unique=true)
   private Long id;
 
   /**
@@ -54,15 +56,9 @@ public class Book {
   private Long available;
 
   /**
-   * Aktualni pocet vypujcenych kusu teto knihy
-   */
-  @Field("borrowed")
-  private Long borrowed;
-
-  /**
    * Seznam vsech vypujcek teto knihy
    */
-  @DocumentReference(lazy = false, lookup="{'book_id': ?#{#self._id} }")
+  @DocumentReference(lazy = false, lookup="{'book_id': ?#{#self._id}}")
   private List<Borrow> borrows;
 
   /**
@@ -80,7 +76,6 @@ public class Book {
    * @param yearOfPublication Rok vydani knihy
    * @param image             Obrazek knihy
    * @param available         Pocet dostupnych knih v knihovne
-   * @param borrowed          Aktualni pocet vypujcenych kusu teto knihy
    */
   public Book(
     Long id,
@@ -89,8 +84,7 @@ public class Book {
     Long pageCount,
     Long yearOfPublication,
     String image,
-    Long available,
-    Long borrowed
+    Long available
   ) {
     this.id = id;
     this.name = name;
@@ -99,21 +93,6 @@ public class Book {
     this.yearOfPublication = yearOfPublication;
     this.image = image;
     this.available = available;
-    this.borrowed = borrowed;
-  }
-
-  /**
-   * Inkrementuje pocet vypujcenych knih
-   */
-  public void incrementBorrowed() {
-    this.borrowed = Math.min(this.available, this.borrowed + 1);
-  }
-
-  /**
-   * Dekrementuje pocet vypujcenych knih
-   */
-  public void decrementBorrowed() {
-    this.borrowed = Math.max(0, this.borrowed - 1);
   }
   
 }

@@ -222,11 +222,9 @@ public class UserService {
     User user = this.findUser(username);
 
     // vraceni knih zpatky (dekrementuje pocet vypujcenych knih)
-    user
-      .getBorrows()
-      .forEach(b -> {
-        b.getBook().decrementBorrowed();
-      });
+    user.getBorrows().forEach((b) -> {
+        
+    });
 
     this.userRepository.delete(user);
   }

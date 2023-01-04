@@ -74,6 +74,12 @@ public class User {
   private List<Borrow> borrows;
 
   /**
+   * Historie vsech vypujcenych knih
+   */
+  @DocumentReference(lazy = false, lookup="{'user_id': ?#{#self._id} }")
+  private List<BorrowHistory> borrowhistory;
+
+  /**
    * Defaultni konstruktor
    */
   public User() {}

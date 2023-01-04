@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import cz.utb.fai.LibraryApp.GlobalConfig;
 import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.Borrow;
+import cz.utb.fai.LibraryApp.model.BorrowHistory;
 import cz.utb.fai.LibraryApp.model.User;
-import cz.utb.fai.LibraryApp.repository.BookRepository;
+import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowRepository;
 
 @Service
@@ -20,10 +21,10 @@ public class BorrowService {
     protected BorrowRepository borrowRepository;
 
     @Autowired
-    protected UserService userService;
+    protected BorrowHistoryRepository borrowHistoryRepository;
 
     @Autowired
-    protected BookRepository bookRepository;
+    protected UserService userService;
 
     /**
      * Najde vypujcku knihy v databazi podle jejiho ID
@@ -57,7 +58,7 @@ public class BorrowService {
      * @throws Exception
      */
     public Borrow borrowBook(Book book) throws Exception {
-        if(book == null) {
+        if (book == null) {
             throw new Exception("Book is undefined");
         }
 
@@ -77,10 +78,6 @@ public class BorrowService {
             }
         }
 
-        // inkrementuje pocet vypujcenych knih
-        book.setBorrowed(book.getBorrowed() + 1);
-        this.bookRepository.save(book);
-
         // vytvori vypujcku knihy
         Borrow b = new Borrow(
                 (Long) this.borrowRepository.count(),
@@ -89,6 +86,10 @@ public class BorrowService {
                 profile,
                 book);
         this.borrowRepository.save(b);
+
+        // zapise vypujcku do historie
+        this.borrowHistoryRepository.save(new BorrowHistory(this.borrowHistoryRepository.count(), b));
+
         return b;
     }
 

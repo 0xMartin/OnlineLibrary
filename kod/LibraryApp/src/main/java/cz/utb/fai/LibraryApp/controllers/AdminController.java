@@ -276,8 +276,7 @@ public class AdminController {
           pageCount,
           yearOfPublication,
           "",
-          available,
-          0L);
+          available);
       this.bookService.createBook(book, bookImage);
 
       model.addAttribute(

@@ -1,6 +1,5 @@
 package cz.utb.fai.LibraryApp.model;
 
-import java.util.Calendar;
 import java.util.Date;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -9,10 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-
-@Document("Borrows")
+@Document("BorrowsHistory")
 @Data
-public class Borrow {
+public class BorrowHistory {
 
   @Id
   @Indexed(unique=true)
@@ -23,12 +21,6 @@ public class Borrow {
    */
   @Field("date")
   private Date date;
-
-  /**
-   * Datum kdy expiruje vypujka knihy
-   */
-  @Indexed(name = "expireAt", expireAfterSeconds = 0)
-  private Date expireAt;
 
   /**
    * Uzivatel, ktery si knihu pujcil
@@ -47,11 +39,11 @@ public class Borrow {
   /**
    * Defaultni konstruktor
    */
-  public Borrow() {
+  public BorrowHistory() {
   }
 
   /**
-   * Vytvori instanci reprezentujici vypujceni knihy
+   * Vytvori instanci reprezentujici historii vypujceni knihy
    *
    * @param id      ID vypujceni
    *                vytvoreni vypujcky)
@@ -60,7 +52,7 @@ public class Borrow {
    * @param user    Uzivatel, ktery si knihu vypujcil
    * @param book    Knihy, kterou si uzivatel vypujcil
    */
-  public Borrow(
+  public BorrowHistory(
       Long id,
       Date date,
       long seconds,
@@ -70,10 +62,19 @@ public class Borrow {
     this.date = date;
     this.user = user;
     this.book = book;
-
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(this.date);
-    cal.add(Calendar.SECOND, (int) seconds);
-    this.expireAt = cal.getTime();
   }
+
+  /**
+   * Vytvori instanci reprezentujici historii vypujceni knihy
+   * 
+   * @param id     - ID vypujcky
+   * @param borrow - Odkaz na vypujcku knihy ze ktere bude tato instance inicializovana
+   */
+  public BorrowHistory(Long id, Borrow borrow) {
+    this.id = id;
+    this.date = borrow.getDate();
+    this.user = borrow.getUser();
+    this.book = borrow.getBook();
+  }
+
 }

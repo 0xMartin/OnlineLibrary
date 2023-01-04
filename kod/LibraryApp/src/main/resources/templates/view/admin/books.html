@@ -33,7 +33,7 @@
                         <td th:text="${book.pageCount}"></td>
                         <td th:text="${book.yearOfPublication}"></td>
                         <td th:text="${book.available}"></td>
-                        <td th:text="${book.borrowed}"></td>
+                        <td th:text="${book.borrows.size()}"></td>
                         <td><button type="button" class="btn btn-primary"
                                 th:onclick="editBook([[${book.id}]])">Edit</button></td>
                         <td><button type="button" class="btn btn-danger"

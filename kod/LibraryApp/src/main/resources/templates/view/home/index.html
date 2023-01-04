@@ -8,9 +8,9 @@
         <div class="row">
             <th:block th:each="book : ${BOOKS}">
                 <!--Book Card-->
-                <div class="col-md-3 pb-4">
+                <div class="col-md-4 pb-4">
                     <div class="card p-2">
-                        <img class="card-img-top" th:src="'/image?id=' + ${book.image}">
+                        <img class="card-img-top px-4" th:src="'/image?id=' + ${book.image}">
                         <div class="card-body">
                             <h4 class="card-title" th:text="${book.name}"></h4>
                             <p class="card-text"><b>Author: </b> <span th:text="${book.author}"></span></p>
