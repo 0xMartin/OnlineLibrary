@@ -30,11 +30,16 @@ public class BorrowHistory {
   private User user;
 
   /**
-   * Knihy, kterou si uzivatel vypujcil
+   * Info o vypujcene knize (nepouziva se Book aby bylo mozne historii zobrazovat i po odstraneni knihy)
    */
   @Field("book_id")
-  @DocumentReference(lazy = false)
-  private Book book;
+  private Long book_id;
+
+  @Field("book_name")
+  private String book_name;
+
+  @Field("book_author")
+  private String book_author;
 
   /**
    * Defaultni konstruktor
@@ -61,7 +66,9 @@ public class BorrowHistory {
     this.id = id;
     this.date = date;
     this.user = user;
-    this.book = book;
+    this.book_id = book.getId();
+    this.book_name = book.getName();
+    this.book_author = book.getAuthor();
   }
 
   /**
@@ -74,7 +81,11 @@ public class BorrowHistory {
     this.id = id;
     this.date = borrow.getDate();
     this.user = borrow.getUser();
-    this.book = borrow.getBook();
+    
+    Book book = borrow.getBook();
+    this.book_id = book.getId();
+    this.book_name = book.getName();
+    this.book_author = book.getAuthor();
   }
 
 }

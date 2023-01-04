@@ -7,7 +7,13 @@ import cz.utb.fai.LibraryApp.bussines.services.BookService;
 import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.Book;
+import cz.utb.fai.LibraryApp.model.BorrowHistory;
 import cz.utb.fai.LibraryApp.model.User;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,8 +62,19 @@ public class ProfileController {
       @RequestParam(required = false) Boolean borrowedOnly) {
     try {
       User u = this.userService.profile();
+      // profil prihlaseneho uzivatele
       model.addAttribute("USER", u);
-      model.addAttribute("BORROWS", u.getBorrows());
+      // historie vypujcek knih => serazeni + odebere z historie aktualne pujcene knihy
+      List<BorrowHistory> history = u.getBorrowhistory();
+      Collections.reverse(history);
+      Iterator<BorrowHistory> ite = history.iterator();
+      while (ite.hasNext()) {
+        BorrowHistory bh = ite.next();
+        if (u.getBorrows().stream().anyMatch((b) -> { return b.getBook().getId() == bh.getBook_id();})) {
+          ite.remove();
+        }
+      }
+      model.addAttribute("BORROW_HISTORY", history);
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }

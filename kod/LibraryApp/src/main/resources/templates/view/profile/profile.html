@@ -89,20 +89,28 @@
         <!-- Borrowed books history -->
         <div class="container-fluid py-2">
             <h3 class="pr-5 my-0 bg-dark text-white p-2 rounded-top">Borrow History</h3>
-            <ul class="list-group list-group-flush overflow-auto border border-secondary rounded-bottom p-3 mb-5"
+            <ul class="list-group list-group-flush overflow-auto border border-secondary rounded-bottom py-3 mb-5"
                 style="max-height: 40vh;">
                 <!--Info text = no books-->
-                <div class="col-md-12" th:if="${USER.borrowhistory.size() == 0}">
+                <div class="col-md-12" th:if="${BORROW_HISTORY.size() == 0}">
                     <div class="d-flex justify-content-center">
-                        <li class="list-group-item text-info py-5" th:text="${bh.book.name}">Empty</li>
+                        <h3 class="list-group-item text-info py-5">Empty</h3>
                     </div>
                 </div>
-                <th:block th:each="bh : ${USER.borrowhistory}">
+                <th:block th:each="bh : ${BORROW_HISTORY}">
                     <li class="list-group-item">
-                        <span th:text="${bh.book.name}"></span>
-                        <span th:text="${bh.date}"></span>
-                        <button th:onclick="showInfo([[${bh.book.id}]])" class="btn btn-primary"
-                            style="width: 45%;">Info</button>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <span class="text-primary font-weight-bold" th:text="${bh.book_name}"></span>
+                            </div>
+                            <div class="col-sm-5">
+                                <span class="text-info" th:text="${bh.date}"></span>
+                            </div>
+                            <div class="col-sm-2">
+                                <button th:onclick="showInfo([[${bh.book_id}]])"
+                                    class="btn btn-primary px-5 w-100">Info</button>
+                            </div>
+                        </div>
                     </li>
                 </th:block>
             </ul>
