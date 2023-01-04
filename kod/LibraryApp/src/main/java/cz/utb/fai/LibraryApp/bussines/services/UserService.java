@@ -34,14 +34,18 @@ public class UserService {
   @Autowired
   protected BorrowRepository borrowRepository;
 
+  @Autowired
+  protected BorrowHistoryRepository borrowHistoryRepository;
+
   /**
    * Navrati vsechny informace o aktualne prihlasenem uzivateli (profil uzivatele)
+   * 
    * @return User
    */
   public User profile() throws Exception {
     Authentication authentication = SecurityContextHolder
-      .getContext()
-      .getAuthentication();
+        .getContext()
+        .getAuthentication();
     if (!(authentication instanceof AnonymousAuthenticationToken)) {
       String currentPrincipalName = authentication.getName();
       Optional<User> user = this.userRepository.findById(currentPrincipalName);
@@ -57,6 +61,7 @@ public class UserService {
 
   /**
    * V datatbazi najde uzivatele s konkretnim ID
+   * 
    * @param username Uzivatelske jmeno
    * @return User
    */
@@ -70,6 +75,7 @@ public class UserService {
 
   /**
    * Navrati vsechny uzivatle
+   * 
    * @return List<User>
    */
   public List<User> users() {
@@ -77,43 +83,47 @@ public class UserService {
   }
 
   /**
-   * V databazi vyhleda uzivatele, kteri splnuji specifikovane pozadavky vyhledavani
-   * @param name Jmeno uzivatele
-   * @param surname Prijmeni uzivatele
-   * @param address Adresa uzivatele
+   * V databazi vyhleda uzivatele, kteri splnuji specifikovane pozadavky
+   * vyhledavani
+   * 
+   * @param name       Jmeno uzivatele
+   * @param surname    Prijmeni uzivatele
+   * @param address    Adresa uzivatele
    * @param personalID Rodne cislo uzivatle
-   * @param sortedBy Razeni podle parametru (negativni cislo = bez razeni, 0 - name, 1 - surname, ...)
+   * @param sortedBy   Razeni podle parametru (negativni cislo = bez razeni, 0 -
+   *                   name, 1 - surname, ...)
    * @return List<User>
    */
   public List<User> findUsers(
-    String name,
-    String surname,
-    String address,
-    String personalID,
-    int sortedBy
-  ) {
+      String name,
+      String surname,
+      String address,
+      String personalID,
+      int sortedBy) {
     return null;
   }
 
   /**
    * Navrati vsechny uzivatele jejihz profil ma stav WAITING
+   * 
    * @return List<User>
    */
   public List<User> findUsersWithWaitingState() throws Exception {
-    ProfileState state =
-      this.profileStateRepository.findItemByName(EProfileState.WAITING);
+    ProfileState state = this.profileStateRepository.findItemByName(EProfileState.WAITING);
     if (state == null) {
       throw new Exception("WAITING state not exists");
     }
     long id = state.getId();
     return this.userRepository.findAll()
-      .stream()
-      .filter(u -> u.getState().getId() == id)
-      .toList();
+        .stream()
+        .filter(u -> u.getState().getId() == id)
+        .toList();
   }
 
   /**
-   * Vytvori uzivatele. Uzivatel bude po vlozeni nepotvrzen se stavem WAITING (cekajici na potvrzeni).
+   * Vytvori uzivatele. Uzivatel bude po vlozeni nepotvrzen se stavem WAITING
+   * (cekajici na potvrzeni).
+   * 
    * @param user Novy uzivatel
    */
   public void createUser(User user) throws Exception {
@@ -138,17 +148,14 @@ public class UserService {
     }
     if (user.getPassword().length() < GlobalConfig.MIN_PASSWORD_LENGTH) {
       throw new Exception(
-        "Minimum password length is " + GlobalConfig.MIN_PASSWORD_LENGTH
-      );
+          "Minimum password length is " + GlobalConfig.MIN_PASSWORD_LENGTH);
     }
 
     if (this.userRepository.findById(user.getUsername()).isPresent()) {
       throw new Exception(
-        String.format(
-          "User with %s username already exists",
-          user.getUsername()
-        )
-      );
+          String.format(
+              "User with %s username already exists",
+              user.getUsername()));
     }
 
     Role role = roleRepository.findItemByName(ERole.CUSTOMER);
@@ -158,8 +165,7 @@ public class UserService {
     user.setRole(role);
 
     ProfileState state = profileStateRepository.findItemByName(
-      EProfileState.WAITING
-    );
+        EProfileState.WAITING);
     if (state == null) {
       throw new Exception("Profile state setup error");
     }
@@ -171,8 +177,9 @@ public class UserService {
 
   /**
    * Editace parametru uzivatele. Neni mozne menit heselo a username
+   * 
    * @param username Uzivatelske jmeno
-   * @param user Nove parametry uzivatele
+   * @param user     Nove parametry uzivatele
    * @return Nove uzivatelske data
    */
   public User editUser(String username, User user) throws Exception {
@@ -199,10 +206,9 @@ public class UserService {
     user_Db.setAddress(user.getAddress());
     user_Db.setPersonalID(user.getPersonalID());
 
-    //state
+    // state
     if (user_Db.getRole().getName() != ERole.LIBRARIAN) {
-      ProfileState state =
-        this.profileStateRepository.findItemByName(EProfileState.WAITING);
+      ProfileState state = this.profileStateRepository.findItemByName(EProfileState.WAITING);
       if (state == null) {
         throw new Exception("WAITING state not found");
       }
@@ -216,34 +222,41 @@ public class UserService {
 
   /**
    * Odstrani uzivatele s databaze
+   * 
    * @param username Uzivatelske jmeno
    */
   public void removeUser(String username) throws Exception {
     User user = this.findUser(username);
 
-    // vraceni knih zpatky (dekrementuje pocet vypujcenych knih)
-    user.getBorrows().forEach((b) -> {
-        
-    });
+    // odstrani vypujcky knihy
+    if (!user.getBorrows().isEmpty()) {
+      this.borrowRepository.deleteAll(user.getBorrows());
+    }
 
+    // odstraneni historie uzivatele
+    if (!user.getBorrowhistory().isEmpty()) {
+      this.borrowHistoryRepository.deleteAll(user.getBorrowhistory());
+    }
+
+    // odstrani uzivatele
     this.userRepository.delete(user);
   }
 
   /**
    * Zmeni heslo uzivatele
+   * 
    * @param currentPass Aktualni heslo
-   * @param newPass Nove heslo
+   * @param newPass     Nove heslo
    */
   public void changePassword(String currentPass, String newPass)
-    throws Exception {
+      throws Exception {
     User profile = this.profile();
     if (!SecurityConfig.encoder().matches(currentPass, profile.getPassword())) {
       throw new Exception("Current password does not match");
     }
     if (newPass.length() < GlobalConfig.MIN_PASSWORD_LENGTH) {
       throw new Exception(
-        "Minimum password length is " + GlobalConfig.MIN_PASSWORD_LENGTH
-      );
+          "Minimum password length is " + GlobalConfig.MIN_PASSWORD_LENGTH);
     }
     profile.setPassword(newPass);
     profile.encodePassword();
@@ -252,11 +265,12 @@ public class UserService {
 
   /**
    * Nastaveni stavu profilu (WAITING, NOT_CONFIRMED, CONFIRMED, BANNED)
+   * 
    * @param username Uzivatelske jmeno
-   * @param state Stav
+   * @param state    Stav
    */
   public void setProfileState(String username, EProfileState state)
-    throws Exception {
+      throws Exception {
     User user = this.findUser(username);
 
     if (this.profile().getUsername().equals(username)) {
