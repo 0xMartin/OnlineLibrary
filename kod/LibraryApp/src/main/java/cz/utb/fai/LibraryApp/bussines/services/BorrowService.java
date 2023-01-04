@@ -1,5 +1,6 @@
 package cz.utb.fai.LibraryApp.bussines.services;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,7 +83,7 @@ public class BorrowService {
         Borrow b = new Borrow(
                 (Long) this.borrowRepository.count(),
                 new java.util.Date(),
-                20, /* GlobalConfig.BORROW_DAY_COUNT * 24 * 3600 */
+                120, /* GlobalConfig.BORROW_DAY_COUNT * 24 * 3600 */
                 profile,
                 book);
         this.borrowRepository.save(b);
@@ -99,8 +100,17 @@ public class BorrowService {
      * @param borrowID - ID Vypujcky knihy
      * @throws Exception
      */
-    public void returnBook(long borrowID) throws Exception {
-        Borrow b = this.findBorrow(borrowID);
+    public Borrow returnBook(long borrowID) throws Exception {
+        User profile = this.userService.profile();
+        Iterator<Borrow> it = profile.getBorrows().iterator();
+        while(it.hasNext()) {
+            Borrow b = it.next();
+            if(b.getId().longValue() == borrowID) {
+                this.borrowRepository.delete(b);
+                return b;
+            }
+        }
+        throw new Exception(String.format("Borrow [%d] not found in your profile", borrowID));
     }
 
 }

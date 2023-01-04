@@ -76,7 +76,7 @@
                                 <div class="d-flex justify-content-between">
                                     <button th:onclick="showInfo([[${borrow.book.id}]])" class="btn btn-primary"
                                         style="width: 45%;">Info</button>
-                                    <button th:onclick="returnBook([[${borrow.book.id}]])" class="btn btn-warning"
+                                    <button th:onclick="returnBook([[${borrow.id}]])" class="btn btn-warning"
                                         style="width: 45%;">Return</button>
                                 </div>
                             </div>
@@ -128,6 +128,7 @@
 
         // vrati cypujcenou knihu
         function returnBook(id) {
+            window.location.href = '/profile/returnBook?id=' + id;
         }
     </script>
 </th:block>

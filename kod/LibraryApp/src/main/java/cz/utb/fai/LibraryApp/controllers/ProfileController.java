@@ -7,6 +7,7 @@ import cz.utb.fai.LibraryApp.bussines.services.BookService;
 import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.Book;
+import cz.utb.fai.LibraryApp.model.Borrow;
 import cz.utb.fai.LibraryApp.model.BorrowHistory;
 import cz.utb.fai.LibraryApp.model.User;
 
@@ -182,6 +183,25 @@ public class ProfileController {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
     return AppRequestMapping.VIEW_PREFIX + "/profile/borrow_book";
+  }
+
+  /**
+   * Vrati aktualne vypujcenou knihu
+   * @param model ViewModel
+   * @param id ID knihy, ktera je vypujcena
+   * @return Nazev View
+   */
+  @GetMapping("returnBook")
+  public String returnBook(Model model, @RequestParam Long id) {
+    try {
+      this.chechProfileState();
+      
+      Borrow b = this.borrowService.returnBook(id);
+      model.addAttribute(AppRequestMapping.RESPONSE_SUCCESS, String.format("Book \"%s\" returnted", b.getBook().getName()));
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/profile/return_book";
   }
 
 }
