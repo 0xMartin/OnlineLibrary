@@ -34,8 +34,7 @@ public class Borrow {
    * Uzivatel, ktery si knihu pujcil
    */
   @Field("user_id")
-  @DocumentReference(lazy = false)
-  private User user;
+  private String user_id;
 
   /**
    * Knihy, kterou si uzivatel vypujcil
@@ -64,11 +63,11 @@ public class Borrow {
       Long id,
       Date date,
       long seconds,
-      User user,
+      String user_id,
       Book book) {
     this.id = id;
     this.date = date;
-    this.user = user;
+    this.user_id = user_id;
     this.book = book;
 
     Calendar cal = Calendar.getInstance();

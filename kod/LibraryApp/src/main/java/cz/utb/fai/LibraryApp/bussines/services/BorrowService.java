@@ -84,7 +84,7 @@ public class BorrowService {
                 (Long) this.borrowRepository.count(),
                 new java.util.Date(),
                 120, /* GlobalConfig.BORROW_DAY_COUNT * 24 * 3600 */
-                profile,
+                profile.getUsername(),
                 book);
         this.borrowRepository.save(b);
 

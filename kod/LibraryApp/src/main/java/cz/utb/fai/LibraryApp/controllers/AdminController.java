@@ -7,6 +7,8 @@ import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.User;
+import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,6 +33,9 @@ public class AdminController {
   @Autowired
   protected BorrowService borrowService;
 
+  @Autowired
+  protected BorrowHistoryRepository borrowHistoryRepository;
+
   // ###########################################################################################################
   // DEFAULT
   // ###########################################################################################################
@@ -48,7 +53,8 @@ public class AdminController {
   public String home(
       Model model,
       @RequestParam(required = false) String username,
-      @RequestParam(required = false) Boolean confirmed) {
+      @RequestParam(required = false) Boolean confirmed,
+      @RequestParam(required = false) String selected) {
     try {
       // pokud je specifikovano uzivatelske jmeno a stav potvrzeni => provede se zmena
       // stavu uctu
@@ -57,9 +63,36 @@ public class AdminController {
             username,
             confirmed ? EProfileState.CONFIRMED : EProfileState.NOT_CONFIRMED);
       }
+
       // notifikace -> uzivatele, kteri cekaji na schvaleni
-      List<User> users = userService.findUsersWithWaitingState();
-      model.addAttribute("NOTIFICATIONS", users);
+      List<User> notifications = this.userService.findUsersWithWaitingState();
+      model.addAttribute("NOTIFICATIONS", notifications);
+
+      // seznam vsech uzivatelu
+      List<User> users = this.userService.users();
+      model.addAttribute("USERS", users);
+
+      // vybrany uzivatel
+      User u = null;
+      if (selected != null) {
+        try {
+          u = this.userService.findUser(selected);
+        } catch (Exception e) {
+        }
+      }
+      if(u == null) {
+        List<User> list = this.userService.users();
+        if(!list.isEmpty()) {
+          u = this.userService.users().get(0);
+        }
+      }
+      if (u != null) {
+        model.addAttribute("SELECTED", u.getUsername());
+        // vsechny vypujcene knihy
+        model.addAttribute("BORROWS", u.getBorrows());
+        // historie vypujcenych knih
+        model.addAttribute("BORROW_HISTORY", u.getBorrowhistory());
+      }
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }

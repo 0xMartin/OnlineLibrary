@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document("BorrowsHistory")
@@ -13,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class BorrowHistory {
 
   @Id
-  @Indexed(unique=true)
+  @Indexed(unique = true)
   private Long id;
 
   /**
@@ -26,11 +25,11 @@ public class BorrowHistory {
    * Uzivatel, ktery si knihu pujcil
    */
   @Field("user_id")
-  @DocumentReference(lazy = false)
-  private User user;
+  private String user_id;
 
   /**
-   * Info o vypujcene knize (nepouziva se Book aby bylo mozne historii zobrazovat i po odstraneni knihy)
+   * Info o vypujcene knize (nepouziva se Book aby bylo mozne historii zobrazovat
+   * i po odstraneni knihy)
    */
   @Field("book_id")
   private Long book_id;
@@ -50,38 +49,41 @@ public class BorrowHistory {
   /**
    * Vytvori instanci reprezentujici historii vypujceni knihy
    *
-   * @param id      ID vypujceni
-   *                vytvoreni vypujcky)
-   * @param date    Datum vytvoreni vypujcky knihy
-   * @param seconds Na kolik sekund bude kniha vypujcena
-   * @param user    Uzivatel, ktery si knihu vypujcil
-   * @param book    Knihy, kterou si uzivatel vypujcil
+   * @param id          ID vypujceni
+   *                    
+   * @param date        Datum vytvoreni vypujcky knihy
+   * @param user_id     Uzivatel, ktery si knihu vypujcil
+   * @param book_id     ID vypujcene knihy
+   * @param book_name   Jmeno vypujcene knihy
+   * @param book_author Autor vypujcene knihy
    */
   public BorrowHistory(
       Long id,
       Date date,
-      long seconds,
-      User user,
-      Book book) {
+      String user_id,
+      Long book_id,
+      String book_name,
+      String book_author) {
     this.id = id;
     this.date = date;
-    this.user = user;
-    this.book_id = book.getId();
-    this.book_name = book.getName();
-    this.book_author = book.getAuthor();
+    this.user_id = user_id;
+    this.book_id = book_id;
+    this.book_name = book_name;
+    this.book_author = book_author;
   }
 
   /**
    * Vytvori instanci reprezentujici historii vypujceni knihy
    * 
    * @param id     - ID vypujcky
-   * @param borrow - Odkaz na vypujcku knihy ze ktere bude tato instance inicializovana
+   * @param borrow - Odkaz na vypujcku knihy ze ktere bude tato instance
+   *               inicializovana
    */
   public BorrowHistory(Long id, Borrow borrow) {
     this.id = id;
     this.date = borrow.getDate();
-    this.user = borrow.getUser();
-    
+    this.user_id = borrow.getUser_id();
+
     Book book = borrow.getBook();
     this.book_id = book.getId();
     this.book_name = book.getName();

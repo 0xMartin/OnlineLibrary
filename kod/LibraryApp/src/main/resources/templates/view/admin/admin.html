@@ -2,44 +2,125 @@
 
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 
+<th:block layout:fragment="page_css">
+    <style>
+        .custom-scrollbar {
+            position: relative;
+            height: 50vh;
+            overflow: auto;
+            display: block;
+        }
+    </style>
+</th:block>
+
 <th:block layout:fragment="content">
     <div class="container">
 
         <div class="d-flex justify-content-start">
             <h1>Admin</h1>
-            <button type="button" class="btn btn-secondary my-2 ml-5" th:onclick="window.location.href='/admin/users'"><i class="fa fa-user" aria-hidden="true"></i> Users</button>
-            <button type="button" class="btn btn-secondary my-2 ml-5" th:onclick="window.location.href='/admin/books'"><i class="fa fa-book" aria-hidden="true"></i> Books</button>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin/users'"><i class="fa fa-user" aria-hidden="true"></i>
+                Users</button>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin/books'"><i class="fa fa-book" aria-hidden="true"></i>
+                Books</button>
         </div>
 
-        <div class="bg-primary">
+        <div class="bg-dark">
             <h4 class="text-light p-2 m-0">Notifications</h4>
         </div>
-        <table class="table">
+        <table class="table border bg-dark">
             <tbody>
                 <th:block th:each="user : ${NOTIFICATIONS}">
                     <tr>
-                        <td>User <a class="text-primary font-weight-bold" th:text="${user.username}" href="#"></a>
+                        <td>User <span class="text-primary font-weight-bold" th:text="${user.username}"></span>
                             waiting for confirm</td>
-                        <td><button type="button" class="btn btn-success" th:onclick="confirm([[${user.username}]])">Confirm</button></td>
-                        <td><button type="button" class="btn btn-danger" th:onclick="reject([[${user.username}]])">Reject</button></td>
+                        <td><button type="button" class="btn btn-success"
+                                th:onclick="confirm([[${user.username}]])">Confirm</button></td>
+                        <td><button type="button" class="btn btn-danger"
+                                th:onclick="reject([[${user.username}]])">Reject</button></td>
                     </tr>
                 </th:block>
             </tbody>
         </table>
 
+        <div class="border border-secondary p-2" th:if="${SELECTED} != null">
+            <form action="/admin" method="GET">
+                <div class="row p-2">
+                    <div class="col-sm-10">
+                        <select id="selected" class="form-control" name="selected">
+                            <th:block th:each="user : ${USERS}">
+                                <option th:text="${user.username}" th:selected="${user.username} == ${SELECTED}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-primary w-100">Reload</button>
+                    </div>
+                </div>
+                <hr>
+            </form>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="bg-info">
+                        <h4 class="text-light p-2 m-0">Borrowed books</h4>
+                    </div>
+                    <div class="custom-scrollbar">
+                        <table class="table">
+                            <tbody>
+                                <th:block th:each="borrow : ${BORROWS}">
+                                    <tr>
+                                        <td><b>Book</b> "<a class="text-info font-weight-bold"
+                                                th:text="${borrow.book.name}"
+                                                th:href="'/home/info?id=' + ${borrow.book.id}"></a>"</td>
+                                        <td><b>User</b> "<span class="text-info font-weight-bold"
+                                                th:text="${borrow.user_id}"></span>"</td>
+                                        <td><b>Date</b> "<span class="text-info font-weight-bold"
+                                                th:text="${borrow.date}"></span>"</td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="bg-primary">
+                        <h4 class="text-light p-2 m-0">Borrow History</h4>
+                    </div>
+                    <div class="custom-scrollbar">
+                        <table class="table table-striped mb-0">
+                            <tbody>
+                                <th:block th:each="borrow : ${BORROW_HISTORY}">
+                                    <tr>
+                                        <td><b>Book</b> "<a class="text-primary font-weight-bold"
+                                                th:text="${borrow.book_name}"
+                                                th:href="'/home/info?id=' + ${borrow.book_id}"></a>"</td>
+                                        <td><b>User</b> "<span class="text-primary font-weight-bold"
+                                                th:text="${borrow.user_id}"></span>"</td>
+                                        <td><b>Date</b> "<span class="text-primary font-weight-bold"
+                                                th:text="${borrow.date}"></span>"</td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </th:block>
 
 <th:block layout:fragment="page_scripts">
-   <script>
-      function confirm(username) {
-        window.location.href = '/admin?username=' + username + '&confirmed=true';
-      }
+    <script>
+        function confirm(username) {
+            window.location.href = '/admin?username=' + username + '&confirmed=true';
+        }
 
-      function reject(username) {
-        window.location.href = '/admin?username=' + username + '&confirmed=false';
-      }
-   </script>
+        function reject(username) {
+            window.location.href = '/admin?username=' + username + '&confirmed=false';
+        }
+    </script>
 </th:block>
 
 </html>
