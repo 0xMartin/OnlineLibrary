@@ -153,7 +153,7 @@ public class BookService {
 
     // pokud ma nekdo vypujcenou knihu neni ji mozne odstranit
     if(!book.getBorrows().isEmpty()) {
-      throw new Exception("Someone has borrowed this book"); 
+      throw new Exception("Some users still have this book in the borrow list"); 
     }
 
     this.bookRepository.delete(book);
