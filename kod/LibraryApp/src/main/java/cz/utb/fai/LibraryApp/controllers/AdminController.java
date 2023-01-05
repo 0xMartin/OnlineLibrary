@@ -216,7 +216,7 @@ public class AdminController {
    * @param model ViweModel
    * @return Nazev view
    */
-  @GetMapping("createUser")
+  @GetMapping("/createUser")
   public String createUser(Model model) {
     return AppRequestMapping.VIEW_PREFIX + "/admin/create_user";
   }
@@ -229,7 +229,7 @@ public class AdminController {
    * @param user  Novy uzivatel
    * @return Nazev view
    */
-  @PostMapping(path = "createUser", consumes = "application/x-www-form-urlencoded")
+  @PostMapping(path = "/createUser", consumes = "application/x-www-form-urlencoded")
   public String createUser(Model model, User user) {
     try {
       // vytvori a automaticky potvrdi uzivatele
@@ -253,7 +253,7 @@ public class AdminController {
    * @param username Uzivatelske jmeno uzivatel, ktery bude editovan
    * @return Navez view
    */
-  @GetMapping("editUser")
+  @GetMapping("/editUser")
   public String editUser(Model model, @RequestParam String username) {
     try {
       User u = this.userService.findUser(username);
@@ -272,7 +272,7 @@ public class AdminController {
    * @param user     Nove paramtery uzivatele
    * @return Nazev View
    */
-  @PostMapping(path = "editUser", consumes = "application/x-www-form-urlencoded")
+  @PostMapping(path = "/editUser", consumes = "application/x-www-form-urlencoded")
   public String editUser(
       Model model,
       @RequestParam String username,
@@ -291,6 +291,45 @@ public class AdminController {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }
     return AppRequestMapping.VIEW_PREFIX + "/admin/edit_user";
+  }
+
+  /**
+   * Zobrazi view pro vygenerovani noveho hesla (jen view, heslo bude vygenerovane
+   * az POST pozadavku)
+   * 
+   * @param model    ViewModel
+   * @param username Uzivatelske jmeno uzivatele kteremu bude zmeneno heslo
+   * @return Nazev View
+   */
+  @GetMapping(path = "/generatePass")
+  public String generatePassView(Model model,
+      @RequestParam String username) {
+    try {
+      User u = this.userService.findUser(username);
+      model.addAttribute("USER", u);
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/admin/generate_pass";
+  }
+
+  /**
+   * Vygeneruje uzivateli nove heslo
+   * 
+   * @param model    ViewModel
+   * @param username Uzivatelske jmeno uzivatele kteremu bude zmeneno heslo
+   * @return Nazev View
+   */
+  @PostMapping(path = "/generatePass", consumes = "application/x-www-form-urlencoded")
+  public String generatePass(Model model,
+      @RequestParam String username) {
+    try {
+      String pass = this.userService.generatePass(username);
+      model.addAttribute(AppRequestMapping.RESPONSE_SUCCESS, pass);
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/admin/generate_pass";
   }
 
   // ###########################################################################################################
@@ -370,6 +409,7 @@ public class AdminController {
       @RequestParam(name = "author") String author,
       @RequestParam(name = "pageCount") Long pageCount,
       @RequestParam(name = "yearOfPublication") Long yearOfPublication,
+      @RequestParam(name = "description") String description,
       @RequestParam(name = "available") Long available) {
     try {
       Book book = new Book(
@@ -378,6 +418,7 @@ public class AdminController {
           author,
           pageCount,
           yearOfPublication,
+          description,
           "",
           available);
       this.bookService.createBook(book, bookImage);
@@ -398,7 +439,7 @@ public class AdminController {
    * @param id    ID knihy
    * @return Navez view
    */
-  @GetMapping("editBook")
+  @GetMapping("/editBook")
   public String editBook(Model model, @RequestParam Long id) {
     try {
       Book b = this.bookService.findBook(id);
@@ -417,7 +458,7 @@ public class AdminController {
    * @param book  Nove paramtery knihy
    * @return Nazev View
    */
-  @PostMapping(path = "editBook", consumes = "application/x-www-form-urlencoded")
+  @PostMapping(path = "/editBook", consumes = "application/x-www-form-urlencoded")
   public String editBook(
       Model model,
       @RequestParam Long id,

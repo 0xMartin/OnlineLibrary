@@ -27,16 +27,12 @@
                                         <td th:text="${BOOK.author}"></td>
                                     </tr>
                                     <tr>
-                                        <td><b>Year Of Publication</b></td>
+                                        <td><b>Year of publication</b></td>
                                         <td th:text="${BOOK.yearOfPublication}"></td>
                                     </tr>
                                     <tr>
-                                        <td><b>Page Count</b></td>
+                                        <td><b>Page count</b></td>
                                         <td th:text="${BOOK.pageCount}"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>Total Count</b></td>
-                                        <td th:text="${BOOK.available}"></td>
                                     </tr>
                                     <tr>
                                         <td><b>Available</b></td>
@@ -45,6 +41,9 @@
                                 </tbody>
                             </table>
                         </div>
+                        <h4>Description</h4>
+                        <p th:text="${BOOK.description}" class="text-justify"></p>
+                        <hr>
                         <div class="row">
                             <div class="col-sm-4">
                                 <button type="button" class="btn btn-secondary py-2 w-100"

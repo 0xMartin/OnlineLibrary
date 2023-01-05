@@ -79,11 +79,16 @@ public class BorrowService {
             }
         }
 
+        // overi zda je jeste tato kniha dostupna
+        if (book.getBorrows().size() >= book.getAvailable()) {
+            throw new Exception("Book is not available");
+        }
+
         // vytvori vypujcku knihy
         Borrow b = new Borrow(
                 (Long) this.borrowRepository.count(),
                 new java.util.Date(),
-                120, /* GlobalConfig.BORROW_DAY_COUNT * 24 * 3600 */
+                GlobalConfig.BORROW_DAY_COUNT * 24 * 3600,
                 profile.getUsername(),
                 book);
         this.borrowRepository.save(b);
@@ -103,9 +108,9 @@ public class BorrowService {
     public Borrow returnBook(long borrowID) throws Exception {
         User profile = this.userService.profile();
         Iterator<Borrow> it = profile.getBorrows().iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Borrow b = it.next();
-            if(b.getId().longValue() == borrowID) {
+            if (b.getId().longValue() == borrowID) {
                 this.borrowRepository.delete(b);
                 return b;
             }

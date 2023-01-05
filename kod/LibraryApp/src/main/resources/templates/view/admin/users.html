@@ -78,10 +78,23 @@
                         <td th:text="${user.address}"></td>
                         <td th:text="${user.personalID}"></td>
                         <td th:text="${user.state.name}"></td>
-                        <td><button type="button" class="btn btn-primary"
-                                th:onclick="editUser([[${user.username}]])">Edit</button></td>
-                        <td><button type="button" class="btn btn-danger"
-                                th:onclick="deleteUser([[${user.username}]])">Delete</button></td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Action
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item"
+                                        th:href="'/admin/editUser?username=' + ${user.username}">Edit</a>
+                                    <a class="dropdown-item"
+                                        th:href="'/admin/generatePass?username=' + ${user.username}">Generate
+                                        Password</a>
+                                    <a class="dropdown-item"
+                                        th:href="'/admin/userDelete?username=' + ${user.username}">Delete</a>
+                                </div>
+                            </div>
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -113,18 +126,6 @@
         </div>
 
     </div>
-</th:block>
-
-<th:block layout:fragment="page_scripts">
-    <script>
-        function editUser(username) {
-            window.location.href = '/admin/editUser?username=' + username;
-        }
-
-        function deleteUser(username) {
-            window.location.href = '/admin/userDelete?username=' + username;
-        }
-    </script>
 </th:block>
 
 </html>

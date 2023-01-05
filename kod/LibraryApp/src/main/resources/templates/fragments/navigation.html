@@ -39,9 +39,10 @@
                 </div>
             </li>
         </ul>
-
+        
         <!-- Logout button -->
         <div sec:authorize="isAuthenticated()">
+            <a class="text-white p-3" href="/profile"><i class="fa fa-user text-white" aria-hidden="true"></i></a>
             <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/logout'" type="button">Log
                 out</button>
         </div>

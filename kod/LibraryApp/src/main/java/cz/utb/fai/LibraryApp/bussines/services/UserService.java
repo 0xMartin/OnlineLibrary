@@ -9,6 +9,7 @@ import cz.utb.fai.LibraryApp.model.Role;
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.*;
 
+import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -240,6 +241,8 @@ public class UserService {
     user.setState(state);
 
     user.encodePassword();
+    user.setBorrowhistory(null);
+    user.setBorrows(null);
     this.userRepository.save(user);
   }
 
@@ -283,6 +286,8 @@ public class UserService {
       user_Db.setState(state);
     }
 
+    user_Db.setBorrowhistory(null);
+    user_Db.setBorrows(null);
     this.userRepository.save(user_Db);
 
     return user_Db;
@@ -294,6 +299,10 @@ public class UserService {
    * @param username Uzivatelske jmeno
    */
   public void removeUser(String username) throws Exception {
+    if(this.profile().getUsername().equals(username)) {
+      throw new Exception("You can't delete yourself");
+    }
+
     User user = this.findUser(username);
 
     // odstrani vypujcky knihy
@@ -352,4 +361,41 @@ public class UserService {
     user.setState(s);
     this.userRepository.save(user);
   }
+
+  /**
+   * Vygeneruje vybranemu uzivateli nove heslo
+   * 
+   * @param username Uzivatelske jmenu uzivatele kteremu bude vygenerovane nove
+   *                 heslo
+   * @return Nove heslo (paint text)
+   * @throws Exception
+   */
+  public String generatePass(String username) throws Exception {
+    if(this.profile().getUsername().equals(username)) {
+      throw new Exception("You can't generate a password for yourself");
+    }
+
+    User user = this.findUser(username);
+
+    String pass = UserService.generateRandomPassword(30, 48, 122);
+
+    user.setPassword(pass);
+    user.encodePassword();
+    user.setBorrowhistory(null);
+    user.setBorrows(null);
+    this.userRepository.save(user);
+
+    return pass;
+  }
+
+  public static String generateRandomPassword(int len, int randNumOrigin, int randNumBound) {
+    SecureRandom random = new SecureRandom();
+    return random.ints(randNumOrigin, randNumBound + 1)
+        .filter(i -> Character.isAlphabetic(i) || Character.isDigit(i))
+        .limit(len)
+        .collect(StringBuilder::new, StringBuilder::appendCodePoint,
+            StringBuilder::append)
+        .toString();
+  }
+
 }

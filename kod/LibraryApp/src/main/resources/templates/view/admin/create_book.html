@@ -21,7 +21,7 @@
 
         <form id="form" action="createBook" method='POST' autocomplete="off" enctype="multipart/form-data">
             <div class="row">
-                <div class="col-7">
+                <div class="col-6">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" name='name' class="form-control" id="name" placeholder="Enter name of book">
@@ -46,12 +46,16 @@
                             value="10">
                     </div>
                     <div class="form-group">
+                        <label for="available">Description</label>
+                        <textarea name="description" id="description" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label" for="bookImage">Image of book</label>
                         <input accept="image/*" type="file" class="form-control" id="bookImage" name="bookImage"
                             onchange="loadFile(event)" />
                     </div>
                 </div>
-                <div class="col-5">
+                <div class="col-6">
                     <div id="image_container" class="img-thumbnail w-100 h-100">
                         <div id="img_text" class="d-flex justify-content-center h-100">
                             <div class="d-flex align-items-center">

@@ -44,7 +44,13 @@ public class Book {
   private Long yearOfPublication;
 
   /**
-   * Obrazek knihy
+   * Strucny popis knihy
+   */
+  @Field("description")
+  private String description;
+
+  /**
+   * Obrazek knihy (URL)
    */
   @Field("image")
   private String image;
@@ -75,6 +81,7 @@ public class Book {
    * @param author            Autor knihy
    * @param pageCount         Pocet stran knihy
    * @param yearOfPublication Rok vydani knihy
+   * @param description       Popis knihy
    * @param image             Obrazek knihy
    * @param available         Pocet dostupnych knih v knihovne
    */
@@ -84,6 +91,7 @@ public class Book {
       String author,
       Long pageCount,
       Long yearOfPublication,
+      String description,
       String image,
       Long available) {
     this.id = id;
@@ -91,6 +99,7 @@ public class Book {
     this.author = author;
     this.pageCount = pageCount;
     this.yearOfPublication = yearOfPublication;
+    this.description = description;
     this.image = image;
     this.available = available;
   }

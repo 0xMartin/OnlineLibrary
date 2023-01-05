@@ -10,43 +10,53 @@
             <button type="button" class="btn btn-secondary my-2 ml-5"
                 th:onclick="window.location.href='/admin/books'">Back</button>
         </div>
-        <form th:if="${BOOK != null}" id="form" th:action="'editBook?id=' + ${BOOK.id}" method='POST' autocomplete="off">
+        <form th:if="${BOOK != null}" id="form" th:action="'editBook?id=' + ${BOOK.id}" method='POST'
+            autocomplete="off">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" name='name' class="form-control" id="name" placeholder="Enter Name"
                             th:value="${BOOK.name}">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label for="surname">Author</label>
                         <input type="text" name='author' class="form-control" id="author" placeholder="Enter Author"
                             th:value="${BOOK.author}">
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label for="personalID">Page Count</label>
                         <input type="number" name='pageCount' class="form-control" id="pageCount"
                             placeholder="Enter Page Count" th:value="${BOOK.pageCount}">
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="address">Year Of Publication</label>
-                        <input type="number" name='yearOfPublication' class="form-control" id="yearOfPublication" placeholder="Enter Address"
-                            th:value="${BOOK.yearOfPublication}">
+                        <input type="number" name='yearOfPublication' class="form-control" id="yearOfPublication"
+                            placeholder="Enter Address" th:value="${BOOK.yearOfPublication}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="address">Available</label>
-                        <input type="number" name='available' class="form-control" id="available" placeholder="Enter Address"
-                            th:value="${BOOK.available}">
+                        <input type="number" name='available' class="form-control" id="available"
+                            placeholder="Enter Address" th:value="${BOOK.available}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="available">Description</label>
+                        <textarea name="description" id="description" class="form-control"
+                            th:text="${BOOK.description}"></textarea>
                     </div>
                 </div>
             </div>

@@ -144,6 +144,9 @@ public class BookService {
     if (book.getYearOfPublication() < 0) {
       throw new Exception("Year must be positive value");
     }
+    if (book.getDescription().length() == 0) {
+      throw new Exception("Description is not defined");
+    }
     if (book.getAvailable() < 0) {
       throw new Exception("Available must be positive value");
     }
@@ -153,6 +156,7 @@ public class BookService {
     book.setId(this.bookRepository.count());
     book.setImage(imageUrl);
 
+    book.setBorrows(null);
     this.bookRepository.save(book);
   }
 
@@ -181,6 +185,9 @@ public class BookService {
     if (book.getYearOfPublication() <= 0) {
       throw new Exception("Year cant be negative or zero");
     }
+    if (book.getDescription().length() == 0) {
+      throw new Exception("Description is not defined");
+    }
     if (book.getAvailable() <= 0) {
       throw new Exception("Available count cant be negative or zero");
     }
@@ -190,9 +197,11 @@ public class BookService {
     book_Db.setAuthor(book.getAuthor());
     book_Db.setPageCount(book.getPageCount());
     book_Db.setYearOfPublication(book.getYearOfPublication());
+    book_Db.setDescription(book.getDescription());
     book_Db.setAvailable(book.getAvailable());
 
     // ulozeni zmen v databazi
+    book_Db.setBorrows(null);
     this.bookRepository.save(book_Db);
 
     return book_Db;
