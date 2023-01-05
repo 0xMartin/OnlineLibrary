@@ -5,37 +5,52 @@
 <th:block layout:fragment="content">
     <div class="container py-4">
         <h1>Book catalog</h1>
+        <input class="form-check-input" type="number" id="pageCount" th:value="${PAGE_COUNT}" hidden>
         <form action="/home" method="GET">
+            <input class="form-check-input" type="number" name="page" id="page" th:value="${PAGE_CURRENT}" hidden>
             <div class="form-row py-1">
                 <div class="col-sm-4">
-                    <input name="name" type="text" class="form-control" placeholder="Book name"
-                        th:value="${FILTER_NAME}">
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Book name"
+                        th:value="${FILTER_NAME}" minlength="3">
                 </div>
                 <div class="col-sm-4">
-                    <input name="author" type="text" class="form-control" placeholder="Author name"
-                        th:value="${FILTER_AUTHOR}">
+                    <input id="author" name="author" type="text" class="form-control" placeholder="Author name"
+                        th:value="${FILTER_AUTHOR}" minlength="3">
                 </div>
                 <div class="col-sm-4">
-                    <input name="yearOfPublication" type="text" class="form-control" placeholder="Year of publication"
-                        th:value="${FILTER_YEAR}">
+                    <input id="yearOfPublication" name="yearOfPublication" type="text" class="form-control"
+                        placeholder="Year of publication" th:value="${FILTER_YEAR}" minlength="4">
                 </div>
             </div>
-            <div class="d-flex justify-content-end py-1">
+            <div class="form-row py-1">
                 <div class="col-sm-2">
-                    <select name="sortedBy" class="form-control">
+                    <select id="pageSize" name="pageSize" class="form-control">
+                        <option value="1" th:selected="${PAGE_SIZE} == 1">1</option>
+                        <option value="3" th:selected="${PAGE_SIZE} == 3">3</option>
+                        <option value="6" th:selected="${PAGE_SIZE} == 6">6</option>
+                        <option value="9" th:selected="${PAGE_SIZE} == 9">9</option>
+                        <option value="12" th:selected="${PAGE_SIZE} == 12">12</option>
+                        <option value="15" th:selected="${PAGE_SIZE} == 15">15</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select id="sortedBy" name="sortedBy" class="form-control">
                         <option value="-1" th:selected="${FILTER_SORTED} == -1">None</option>
                         <option value="0" th:selected="${FILTER_SORTED} == 0">Name</option>
                         <option value="1" th:selected="${FILTER_SORTED} == 1">Author</option>
                         <option value="2" th:selected="${FILTER_SORTED} == 2">Year</option>
                     </select>
                 </div>
-                <div class="col-sm-1 d-flex align-items-center">
+                <div class="col-sm-1 d-flex align-items-center px-4">
                     <input class="form-check-input" type="checkbox" name="sortingASC" id="sortingASC"
                         th:checked="${FILTER_ASC} == true" value="true">
                     <label class="form-check-label" for="flexSwitchCheckChecked">Reverse</label>
                 </div>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i>
-                    Search</button>
+                <div class="col-sm-7 d-flex flex-row-reverse">
+                    <button id="search" type="submit" class="btn btn-primary px-4"><i class="fa fa-search"
+                            aria-hidden="true"></i>
+                        Search</button>
+                </div>
             </div>
         </form>
         <hr>
@@ -43,33 +58,38 @@
             <th:block th:each="book : ${BOOKS}">
                 <!--Book Card-->
                 <div class="col-md-4 pb-4">
-                    <div class="card p-2">
+                    <div class="card p-2  h-100">
                         <img class="card-img-top px-4" th:src="'/image?id=' + ${book.image}">
                         <div class="card-body">
                             <h4 class="card-title" th:text="${book.name}"></h4>
                             <p class="card-text"><b>Author: </b> <span th:text="${book.author}"></span></p>
                             <p class="card-text"><b>Year: </b> <span th:text="${book.yearOfPublication}"></span></p>
-                            <div class="d-flex justify-content-between">
-                                <button th:onclick="showInfo([[${book.id}]])" class="btn btn-primary"
-                                    style="width: 45%;">Info</button>
-                            </div>
+                            <button th:onclick="showInfo([[${book.id}]])" class="btn btn-primary"
+                                style="width: 45%;">Info</button>
                         </div>
                     </div>
                 </div>
             </th:block>
         </div>
         <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-secondary m-1">&#60;</button>
-            <button type="button" class="btn btn-primary m-1">1</button>
-            <button type="button" class="btn btn-secondary m-1">2</button>
-            <button type="button" class="btn btn-secondary m-1">3</button>
-            <button type="button" class="btn btn-secondary m-1">&#62;</button>
+            <button type="button" class="btn btn-secondary m-1" onclick="page_previes()">&#60;</button>
+            <th:block
+                th:each="i: ${#numbers.sequence(T(java.lang.Math).max(0, PAGE_CURRENT - 2), T(java.lang.Math).min(PAGE_CURRENT + 2, PAGE_COUNT - 1))}">
+                <button type="button" th:class="${i==PAGE_CURRENT} ? 'btn btn-primary m-1' : 'btn btn-secondary m-1'"
+                    th:onclick="'page_set(' + ${i} + ')'" th:text="${i + 1}"></button>
+            </th:block>
+            <button type="button" class="btn btn-secondary m-1" onclick="page_next()">&#62;</button>
         </div>
     </div>
 </th:block>
 
 <th:block layout:fragment="page_scripts">
     <script>
+        const search = document.querySelector("#search");
+        const page = document.querySelector("#page");
+        const pageSize = document.querySelector("#pageSize");
+        const pageCount = document.querySelector("#pageCount");
+
         // zobrazi info o vybrane knize
         function showInfo(id) {
             window.location.href = '/home/info?id=' + id;
@@ -77,22 +97,26 @@
 
         // zobrazi predchozi stranu v navracenem obsahu
         function page_previes() {
-
+            var i = Math.max(0, page.value - 1);
+            if (i == page.value) return;
+            page.value = i;
+            search.click();
         }
 
         // zobrazi dalsi stranu v navracenem obsahu
         function page_next() {
-
+            var i = Math.min(pageCount.value - 1, page.value + 1);
+            if (i == page.value) return;
+            page.value = i;
+            search.click();
         }
 
         // zobrazi konkretni stranu v navracenem obsahu
         function page_set(number) {
-
-        }
-
-        // vyhleda knihy (aplikuje vyhledavaci filtr)
-        function page_search() {
-
+            var i = Math.max(0, Math.min(number, pageCount.value - 1));
+            if (i == page.value) return;
+            page.value = i;
+            search.click();
         }
     </script>
 </th:block>

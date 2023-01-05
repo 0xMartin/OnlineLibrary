@@ -71,7 +71,7 @@ public class ProfileController {
       Iterator<BorrowHistory> ite = history.iterator();
       while (ite.hasNext()) {
         BorrowHistory bh = ite.next();
-        if (u.getBorrows().stream().anyMatch((b) -> { return b.getBook().getId() == bh.getBook_id();})) {
+        if (u.getBorrows().stream().anyMatch((b) -> { return b.getDate().getTime() == bh.getDate().getTime();})) {
           ite.remove();
         }
       }

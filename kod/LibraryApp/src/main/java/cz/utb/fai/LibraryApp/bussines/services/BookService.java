@@ -78,17 +78,17 @@ public class BookService {
     List<Criteria> criterias = new LinkedList<>();
 
     // vyhledavani podle jmena knihy
-    if (name.length() > 0) {
+    if (name.length() > 2) {
       criterias.add(Criteria.where("name").regex(name, "i"));
     }
 
     // vyhledavani podle autora
-    if (author.length() > 0) {
+    if (author.length() > 2) {
       criterias.add(Criteria.where("author").regex(author, "i"));
     }
 
     // vyhledavani podle roku
-    if (yearOfPublication.length() > 0) {
+    if (yearOfPublication.length() > 3) {
       try {
         criterias.add(Criteria.where("yearOfPublication").is(Long.parseLong(yearOfPublication)));
       } catch (Exception ex) {

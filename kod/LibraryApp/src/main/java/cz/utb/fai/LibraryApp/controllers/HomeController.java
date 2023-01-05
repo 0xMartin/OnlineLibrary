@@ -5,6 +5,7 @@ import cz.utb.fai.LibraryApp.bussines.services.BookService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.Book;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,15 @@ public class HomeController {
    */
   @GetMapping
   public String home(Model model,
+      // filtrace
       @RequestParam(required = false) String name,
       @RequestParam(required = false) String author,
       @RequestParam(required = false) String yearOfPublication,
       @RequestParam(required = false) Integer sortedBy,
       @RequestParam(required = false) Boolean sortingASC,
-      @RequestParam(required = false) Integer page) {
+      // strankovani
+      @RequestParam(required = false) Integer page,
+      @RequestParam(required = false) Integer pageSize) {
 
     if (name == null)
       name = "";
@@ -54,11 +58,24 @@ public class HomeController {
       sortedBy = -1;
     if (sortingASC == null)
       sortingASC = false;
+    if (page == null)
+      page = 0;
+    if (pageSize == null)
+      pageSize = 9;
 
     // vyhledani knih odpovidajicich zvolenemu filtru
-    List<Book> books = this.bookService.findBooks(
-        name, author, yearOfPublication, sortedBy, sortingASC);
-    model.addAttribute("BOOKS", books);
+    List<Book> books = this.bookService.findBooks(name, author, yearOfPublication, sortedBy, sortingASC);
+    List<Book> books_page = new LinkedList<>();
+    int i = 0;
+    int page_count = (int) Math.ceil((float) books.size() / pageSize);
+    page = Math.max(0, Math.min(page, page_count - 1));
+    for (Book b : books) {
+      if (i >= pageSize * page && i < pageSize * (page + 1)) {
+        books_page.add(b);
+      }
+      i++;
+    }
+    model.addAttribute("BOOKS", books_page);
 
     // aktualni konfigurace filtru
     model.addAttribute("FILTER_NAME", name);
@@ -67,8 +84,10 @@ public class HomeController {
     model.addAttribute("FILTER_SORTED", sortedBy);
     model.addAttribute("FILTER_ASC", sortingASC);
 
+    // konfigurece strankovani
     model.addAttribute("PAGE_CURRENT", page);
-    model.addAttribute("PAGE_COUNT", 3);
+    model.addAttribute("PAGE_SIZE", pageSize);
+    model.addAttribute("PAGE_COUNT", page_count);
 
     return AppRequestMapping.VIEW_PREFIX + "/home/index";
   }
