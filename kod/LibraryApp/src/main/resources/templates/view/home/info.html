@@ -12,7 +12,7 @@
         </div>
 
         <div th:if="${BOOK != null}">
-            <div class="row py-4">
+            <div class="row py-5">
                 <div class="col-sm-5 px-2">
                     <img class="card-img-top" th:src="'/image?id=' + ${BOOK.image}">
                 </div>
@@ -52,9 +52,11 @@
                             </div>
                             <div class="col-sm-4"></div>
                             <div class="col-sm-4">
-                                <button type="button" class="btn btn-success py-2 w-100"
-                                    th:if="${USER.state.name.toString().equals('CONFIRMED') && (BOOK.available - BOOK.borrows.size()) > 0}"
-                                    th:onclick="borrowBook([[${BOOK.id}]])">Borrow Book</button>
+                                <div th:if="${USER != null}">
+                                    <button type="button" class="btn btn-success py-2 w-100"
+                                        th:if="${USER.state.name.toString().equals('CONFIRMED') && (BOOK.available - BOOK.borrows.size()) > 0}"
+                                        th:onclick="borrowBook([[${BOOK.id}]])">Borrow Book</button>
+                                </div>
                                 <div class="alert alert-danger" role="alert"
                                     th:if="${(BOOK.available - BOOK.borrows.size()) <= 0}">
                                     Not available

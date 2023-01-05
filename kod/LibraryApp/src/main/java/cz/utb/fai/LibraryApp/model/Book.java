@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Book {
 
   @Id
-  @Indexed(unique=true)
+  @Indexed(unique = true)
   private Long id;
 
   /**
@@ -58,13 +58,14 @@ public class Book {
   /**
    * Seznam vsech vypujcek teto knihy
    */
-  @DocumentReference(lazy = false, lookup="{'book_id': ?#{#self._id}}")
+  @DocumentReference(lazy = false, lookup = "{'book_id': ?#{#self._id}}")
   private List<Borrow> borrows;
 
   /**
    * Defaultni konstruktor
    */
-  public Book() {}
+  public Book() {
+  }
 
   /**
    * Vytvori instanci knihy
@@ -78,14 +79,13 @@ public class Book {
    * @param available         Pocet dostupnych knih v knihovne
    */
   public Book(
-    Long id,
-    String name,
-    String author,
-    Long pageCount,
-    Long yearOfPublication,
-    String image,
-    Long available
-  ) {
+      Long id,
+      String name,
+      String author,
+      Long pageCount,
+      Long yearOfPublication,
+      String image,
+      Long available) {
     this.id = id;
     this.name = name;
     this.author = author;
@@ -94,5 +94,5 @@ public class Book {
     this.image = image;
     this.available = available;
   }
-  
+
 }

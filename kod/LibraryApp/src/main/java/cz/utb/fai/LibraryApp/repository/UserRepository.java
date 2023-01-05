@@ -20,4 +20,5 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findItemByRoleID(long roleID);
 
     public long count();
+
 }

@@ -3,8 +3,42 @@
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 
 <th:block layout:fragment="content">
-    <div class="container">
+    <div class="container py-4">
         <h1>Book catalog</h1>
+        <form action="/home" method="GET">
+            <div class="form-row py-1">
+                <div class="col-sm-4">
+                    <input name="name" type="text" class="form-control" placeholder="Book name"
+                        th:value="${FILTER_NAME}">
+                </div>
+                <div class="col-sm-4">
+                    <input name="author" type="text" class="form-control" placeholder="Author name"
+                        th:value="${FILTER_AUTHOR}">
+                </div>
+                <div class="col-sm-4">
+                    <input name="yearOfPublication" type="text" class="form-control" placeholder="Year of publication"
+                        th:value="${FILTER_YEAR}">
+                </div>
+            </div>
+            <div class="d-flex justify-content-end py-1">
+                <div class="col-sm-2">
+                    <select name="sortedBy" class="form-control">
+                        <option value="-1" th:selected="${FILTER_SORTED} == -1">None</option>
+                        <option value="0" th:selected="${FILTER_SORTED} == 0">Name</option>
+                        <option value="1" th:selected="${FILTER_SORTED} == 1">Author</option>
+                        <option value="2" th:selected="${FILTER_SORTED} == 2">Year</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 d-flex align-items-center">
+                    <input class="form-check-input" type="checkbox" name="sortingASC" id="sortingASC"
+                        th:checked="${FILTER_ASC} == true" value="true">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Reverse</label>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i>
+                    Search</button>
+            </div>
+        </form>
+        <hr>
         <div class="row">
             <th:block th:each="book : ${BOOKS}">
                 <!--Book Card-->

@@ -16,11 +16,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 public class User {
 
-    /**
+  /**
    * ID = Uzivatelske jmeno (pro prihlasovani)
    */
   @Id
-  @Indexed(unique=true)
+  @Indexed(unique = true)
   private String username;
 
   /**
@@ -70,19 +70,20 @@ public class User {
   /**
    * Seznam vsech vypujcek knih
    */
-  @DocumentReference(lazy = false, lookup="{'user_id': ?#{#self._id} }")
+  @DocumentReference(lazy = false, lookup = "{'user_id': ?#{#self._id} }")
   private List<Borrow> borrows;
 
   /**
    * Historie vsech vypujcenych knih
    */
-  @DocumentReference(lazy = false, lookup="{'user_id': ?#{#self._id} }")
+  @DocumentReference(lazy = false, lookup = "{'user_id': ?#{#self._id} }")
   private List<BorrowHistory> borrowhistory;
 
   /**
    * Defaultni konstruktor
    */
-  public User() {}
+  public User() {
+  }
 
   /**
    * Vytvori instanci uzivatele
@@ -97,15 +98,14 @@ public class User {
    * @param role      Role uzivatle (vice v ./enums/ERole.java)
    */
   public User(
-    String username,
-    String password,
-    String name,
-    String surname,
-    String personalID,
-    String address,
-    ProfileState state,
-    Role role
-  ) {
+      String username,
+      String password,
+      String name,
+      String surname,
+      String personalID,
+      String address,
+      ProfileState state,
+      Role role) {
     this.username = username;
     this.password = password;
     this.name = name;
@@ -117,7 +117,9 @@ public class User {
   }
 
   /**
-   * Zasifruje heslo. Pouzit jen v pripade pokud jde o noveho uzivatele, ktery bude nasledne pridan do databaze.
+   * Zasifruje heslo. Pouzit jen v pripade pokud jde o noveho uzivatele, ktery
+   * bude nasledne pridan do databaze.
+   * 
    * @return User
    */
   public User encodePassword() {

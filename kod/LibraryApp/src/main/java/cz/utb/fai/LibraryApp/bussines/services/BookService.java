@@ -4,9 +4,14 @@ import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.repository.BookRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,6 +54,9 @@ public class BookService {
     return this.bookRepository.findAll();
   }
 
+  @Autowired
+  MongoTemplate mongoTemplate;
+
   /**
    * V databazi vyhleda knihy, kteri splnuji specifikovane pozadavky vyhledavani
    * 
@@ -57,14 +65,62 @@ public class BookService {
    * @param yearOfPublication Rok vydani knihy
    * @param sortedBy          Razeni podle parametru (negativni cislo = bez
    *                          razeni, 0 - name, 1 - author, ...)
+   * @param sortingASC        Zpusob razeni (true -> vzestupne, false -> sestupne)
    * @return Filtrovany seznam knih
    */
   public List<Book> findBooks(
       String name,
       String author,
-      long yearOfPublication,
-      int sortedBy) {
-    return null;
+      String yearOfPublication,
+      int sortedBy,
+      boolean sortingASC) {
+
+    List<Criteria> criterias = new LinkedList<>();
+
+    // vyhledavani podle jmena knihy
+    if (name.length() > 0) {
+      criterias.add(Criteria.where("name").regex(name, "i"));
+    }
+
+    // vyhledavani podle autora
+    if (author.length() > 0) {
+      criterias.add(Criteria.where("author").regex(author, "i"));
+    }
+
+    // vyhledavani podle roku
+    if (yearOfPublication.length() > 0) {
+      try {
+        criterias.add(Criteria.where("yearOfPublication").is(Long.parseLong(yearOfPublication)));
+      } catch (Exception ex) {
+      }
+    }
+
+    Query query = null;
+    if (criterias.isEmpty()) {
+      query = Query.query(new Criteria());
+    } else {
+      query = Query.query(new Criteria().andOperator(criterias));
+    }
+
+    if (query == null) {
+      return null;
+    }
+
+    // razeni
+    switch (sortedBy) {
+      case 0:
+        query.with(Sort.by(sortingASC ? Sort.Direction.ASC : Sort.Direction.DESC, "name"));
+        break;
+      case 1:
+        query.with(Sort.by(sortingASC ? Sort.Direction.ASC : Sort.Direction.DESC, "author"));
+        break;
+      case 2:
+        query.with(Sort.by(sortingASC ? Sort.Direction.ASC : Sort.Direction.DESC, "yearOfPublication"));
+        break;
+    }
+
+    // provede dotaz na fitrovane vyhledavani
+    return mongoTemplate.find(query, Book.class);
   }
 
   /**
@@ -152,10 +208,14 @@ public class BookService {
     Book book = this.findBook(id);
 
     // pokud ma nekdo vypujcenou knihu neni ji mozne odstranit
-    if(!book.getBorrows().isEmpty()) {
-      throw new Exception("Some users still have this book in the borrow list"); 
+    if (!book.getBorrows().isEmpty()) {
+      throw new Exception("Some users still have this book in the borrow list");
     }
 
+    // odstraneni obrazku
+    this.imageService.readImage(book.getImage());
+
+    // odstraneni knihy
     this.bookRepository.delete(book);
   }
 }

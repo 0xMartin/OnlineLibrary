@@ -9,7 +9,7 @@ import cz.utb.fai.LibraryApp.model.Book;
  * Rozhrani pristukujici ke kolekci knih v databazi
  */
 public interface BookRepository extends MongoRepository<Book, Long> {
-    
+
     @Query("{name:'?0'}")
     Book findItemByName(String name);
 
