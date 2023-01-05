@@ -80,9 +80,9 @@ public class AdminController {
         } catch (Exception e) {
         }
       }
-      if(u == null) {
+      if (u == null) {
         List<User> list = this.userService.users();
-        if(!list.isEmpty()) {
+        if (!list.isEmpty()) {
           u = this.userService.users().get(0);
         }
       }
@@ -106,13 +106,50 @@ public class AdminController {
   /**
    * Navrati view se spravou pro uzivatele
    * 
-   * @param model ViewModel
+   * @param model      ViewModel
+   * @param name       - Jmeno uzivatele
+   * @param surname    - Prijemeni uzitele
+   * @param address    - Adresa bydliste uzivatele
+   * @param personalID - Osobni cislo
+   * @param sortedBy   - Radi podle: 0 - name, 1 - author, ... (pro
+   *                   filtrovani dat)
+   * @param sortingASC - Zpusob razeni true -> ASC / false -> DSC
    * @return Nazev view
    */
   @GetMapping("/users")
-  public String users(Model model) {
-    List<User> users = this.userService.users();
+  public String users(Model model,
+      @RequestParam(required = false) String name,
+      @RequestParam(required = false) String surname,
+      @RequestParam(required = false) String address,
+      @RequestParam(required = false) String personalID,
+      @RequestParam(required = false) Integer sortedBy,
+      @RequestParam(required = false) Boolean sortingASC) {
+
+    if (name == null)
+      name = "";
+    if (surname == null)
+      surname = "";
+    if (address == null)
+      address = "";
+    if (personalID == null)
+      personalID = "";
+    if (sortedBy == null)
+      sortedBy = -1;
+    if (sortingASC == null)
+      sortingASC = false;
+
+    // vyhledani uzivatelu
+    List<User> users = this.userService.findUsers(name, surname, address, personalID, sortedBy, sortingASC);
     model.addAttribute("USERS", users);
+
+    // aktualni konfigurace filtru
+    model.addAttribute("FILTER_NAME", name);
+    model.addAttribute("FILTER_SURNAME", surname);
+    model.addAttribute("FILTER_ADDRESS", address);
+    model.addAttribute("FILTER_PERSONAL_ID", personalID);
+    model.addAttribute("FILTER_SORTED", sortedBy);
+    model.addAttribute("FILTER_ASC", sortingASC);
+
     return AppRequestMapping.VIEW_PREFIX + "/admin/users";
   }
 
@@ -264,11 +301,44 @@ public class AdminController {
    * Navrati view se spravou pro knihy
    * 
    * @param model
+   * @param name              - Jmeno knihy (pro filtrovani dat)
+   * @param author            - Autor knihy (pro filtrovani dat)
+   * @param yearOfPublication - Rok vydani (pro filtrovani dat)
+   * @param sortedBy          - Radi podle: 0 - name, 1 - author, ... (pro
+   *                          filtrovani dat)
+   * @param sortingASC        - Zpusob razeni true -> ASC / false -> DSC
    * @return Navez view
    */
   @GetMapping("/books")
-  public String books(Model model) {
-    model.addAttribute("BOOKS", this.bookService.books());
+  public String books(Model model,
+      @RequestParam(required = false) String name,
+      @RequestParam(required = false) String author,
+      @RequestParam(required = false) String yearOfPublication,
+      @RequestParam(required = false) Integer sortedBy,
+      @RequestParam(required = false) Boolean sortingASC) {
+
+    if (name == null)
+      name = "";
+    if (author == null)
+      author = "";
+    if (yearOfPublication == null)
+      yearOfPublication = "";
+    if (sortedBy == null)
+      sortedBy = -1;
+    if (sortingASC == null)
+      sortingASC = false;
+
+    // vyhledani knih
+    List<Book> books = this.bookService.findBooks(name, author, yearOfPublication, sortedBy, sortingASC);
+    model.addAttribute("BOOKS", books);
+
+    // aktualni konfigurace filtru
+    model.addAttribute("FILTER_NAME", name);
+    model.addAttribute("FILTER_AUTHOR", author);
+    model.addAttribute("FILTER_YEAR", yearOfPublication);
+    model.addAttribute("FILTER_SORTED", sortedBy);
+    model.addAttribute("FILTER_ASC", sortingASC);
+
     return AppRequestMapping.VIEW_PREFIX + "/admin/books";
   }
 

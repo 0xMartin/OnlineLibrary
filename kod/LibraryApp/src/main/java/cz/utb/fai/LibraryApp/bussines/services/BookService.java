@@ -30,6 +30,9 @@ public class BookService {
   @Autowired
   protected ImageService imageService;
 
+  @Autowired
+  MongoTemplate mongoTemplate;
+
   /**
    * Najde knizku v databazi podle jejiho ID
    * 
@@ -53,9 +56,6 @@ public class BookService {
   public List<Book> books() {
     return this.bookRepository.findAll();
   }
-
-  @Autowired
-  MongoTemplate mongoTemplate;
 
   /**
    * V databazi vyhleda knihy, kteri splnuji specifikovane pozadavky vyhledavani

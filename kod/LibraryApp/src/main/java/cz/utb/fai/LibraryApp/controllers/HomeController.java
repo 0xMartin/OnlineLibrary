@@ -34,6 +34,9 @@ public class HomeController {
    * @param yearOfPublication - Rok vydani (pro filtrovani dat)
    * @param sortedBy          - Radi podle: 0 - name, 1 - author, ... (pro
    *                          filtrovani dat)
+   * @param sortingASC        - Zpusob razeni true -> ASC / false -> DSC
+   * @param page              - Index zobrazene stranky
+   * @param pageSize          - Velikost zobrazovane stranky
    * @return Nazev view
    */
   @GetMapping

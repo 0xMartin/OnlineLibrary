@@ -8,9 +8,15 @@ import cz.utb.fai.LibraryApp.model.ProfileState;
 import cz.utb.fai.LibraryApp.model.Role;
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.*;
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +42,9 @@ public class UserService {
 
   @Autowired
   protected BorrowHistoryRepository borrowHistoryRepository;
+
+  @Autowired
+  MongoTemplate mongoTemplate;
 
   /**
    * Navrati vsechny informace o aktualne prihlasenem uzivateli (profil uzivatele)
@@ -92,6 +101,7 @@ public class UserService {
    * @param personalID Rodne cislo uzivatle
    * @param sortedBy   Razeni podle parametru (negativni cislo = bez razeni, 0 -
    *                   name, 1 - surname, ...)
+   * @param sortingASC True -> razeni vzestupne, False -> razeni sestupne
    * @return List<User>
    */
   public List<User> findUsers(
@@ -99,8 +109,66 @@ public class UserService {
       String surname,
       String address,
       String personalID,
-      int sortedBy) {
-    return null;
+      int sortedBy,
+      boolean sortingASC) {
+
+    List<Criteria> criterias = new LinkedList<>();
+
+    // vyhledavani podle jmena
+    if (name.length() > 2) {
+      criterias.add(Criteria.where("name").regex(name, "i"));
+    }
+
+    // vyhledavani podle prijmeni
+    if (surname.length() > 2) {
+      criterias.add(Criteria.where("surname").regex(surname, "i"));
+    }
+
+    // vyhledavani podle adresy
+    if (address.length() > 2) {
+      try {
+        criterias.add(Criteria.where("address").regex(address, "i"));
+      } catch (Exception ex) {
+      }
+    }
+
+    // vyhledavani podle rodneho cisla
+    if (personalID.length() > 2) {
+      try {
+        criterias.add(Criteria.where("personalID").regex(personalID, "i"));
+      } catch (Exception ex) {
+      }
+    }
+
+    Query query = null;
+    if (criterias.isEmpty()) {
+      query = Query.query(new Criteria());
+    } else {
+      query = Query.query(new Criteria().andOperator(criterias));
+    }
+
+    if (query == null) {
+      return null;
+    }
+
+    // razeni
+    switch (sortedBy) {
+      case 0:
+        query.with(Sort.by(sortingASC ? Sort.Direction.ASC : Sort.Direction.DESC, "name"));
+        break;
+      case 1:
+        query.with(Sort.by(sortingASC ? Sort.Direction.ASC : Sort.Direction.DESC, "surname"));
+        break;
+      case 2:
+        query.with(Sort.by(sortingASC ? Sort.Direction.ASC : Sort.Direction.DESC, "address"));
+        break;
+      case 3:
+        query.with(Sort.by(sortingASC ? Sort.Direction.ASC : Sort.Direction.DESC, "personalID"));
+        break;
+    }
+
+    // provede dotaz na fitrovane vyhledavani
+    return mongoTemplate.find(query, User.class);
   }
 
   /**
