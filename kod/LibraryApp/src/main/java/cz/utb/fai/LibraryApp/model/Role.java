@@ -2,6 +2,7 @@ package cz.utb.fai.LibraryApp.model;
 
 import cz.utb.fai.LibraryApp.bussines.enums.ERole;
 import lombok.Data;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -33,4 +34,5 @@ public class Role {
     this.id = id;
     this.name = name;
   }
+
 }

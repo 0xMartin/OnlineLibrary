@@ -3,6 +3,7 @@ package cz.utb.fai.LibraryApp.model;
 import cz.utb.fai.LibraryApp.SecurityConfig;
 import java.util.List;
 import lombok.Data;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -130,4 +131,5 @@ public class User {
     this.password = SecurityConfig.encoder().encode(this.password);
     return this;
   }
+
 }

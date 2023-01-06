@@ -2,6 +2,7 @@ package cz.utb.fai.LibraryApp.model;
 
 import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
 import lombok.Data;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,8 +30,9 @@ public class ProfileState {
    */
   public ProfileState() {}
 
-  public ProfileState(long id, EProfileState name) {
+  public ProfileState(Long id, EProfileState name) {
     this.id = id;
     this.name = name;
   }
+
 }

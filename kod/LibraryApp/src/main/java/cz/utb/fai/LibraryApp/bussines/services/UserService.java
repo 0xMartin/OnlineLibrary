@@ -178,11 +178,11 @@ public class UserService {
    * @return List<User>
    */
   public List<User> findUsersWithWaitingState() throws Exception {
-    ProfileState state = this.profileStateRepository.findItemByName(EProfileState.WAITING);
-    if (state == null) {
+    Optional<ProfileState> state = this.profileStateRepository.findItemByName(EProfileState.WAITING);
+    if (!state.isPresent()) {
       throw new Exception("WAITING state not exists");
     }
-    long id = state.getId();
+    long id = state.get().getId();
     return this.userRepository.findAll()
         .stream()
         .filter(u -> u.getState().getId() == id)
@@ -227,23 +227,23 @@ public class UserService {
               user.getUsername()));
     }
 
-    Role role = roleRepository.findItemByName(ERole.CUSTOMER);
-    if (role == null) {
+    Optional<Role> role = roleRepository.findItemByName(ERole.CUSTOMER);
+    if (!role.isPresent()) {
       throw new Exception("Role setup error");
     }
-    user.setRole(role);
+    user.setRole(role.get());
 
-    ProfileState state = profileStateRepository.findItemByName(
+    Optional<ProfileState> state = profileStateRepository.findItemByName(
         EProfileState.WAITING);
-    if (state == null) {
+    if (!state.isPresent()) {
       throw new Exception("Profile state setup error");
     }
-    user.setState(state);
+    user.setState(state.get());
 
     user.encodePassword();
     user.setBorrowhistory(null);
     user.setBorrows(null);
-    this.userRepository.save(user);
+    this.userRepository.insert(user);
   }
 
   /**
@@ -279,11 +279,11 @@ public class UserService {
 
     // state
     if (user_Db.getRole().getName() != ERole.LIBRARIAN) {
-      ProfileState state = this.profileStateRepository.findItemByName(EProfileState.WAITING);
-      if (state == null) {
+      Optional<ProfileState> state = this.profileStateRepository.findItemByName(EProfileState.WAITING);
+      if (!state.isPresent()) {
         throw new Exception("WAITING state not found");
       }
-      user_Db.setState(state);
+      user_Db.setState(state.get());
     }
 
     user_Db.setBorrowhistory(null);
@@ -299,7 +299,7 @@ public class UserService {
    * @param username Uzivatelske jmeno
    */
   public void removeUser(String username) throws Exception {
-    if(this.profile().getUsername().equals(username)) {
+    if (this.profile().getUsername().equals(username)) {
       throw new Exception("You can't delete yourself");
     }
 
@@ -354,11 +354,11 @@ public class UserService {
       throw new Exception("You cannot modify the state of your own profile");
     }
 
-    ProfileState s = this.profileStateRepository.findItemByName(state);
-    if (s == null) {
+    Optional<ProfileState> s = this.profileStateRepository.findItemByName(state);
+    if (!s.isPresent()) {
       throw new Exception(String.format("%s not found", state));
     }
-    user.setState(s);
+    user.setState(s.get());
     this.userRepository.save(user);
   }
 
@@ -371,7 +371,7 @@ public class UserService {
    * @throws Exception
    */
   public String generatePass(String username) throws Exception {
-    if(this.profile().getUsername().equals(username)) {
+    if (this.profile().getUsername().equals(username)) {
       throw new Exception("You can't generate a password for yourself");
     }
 

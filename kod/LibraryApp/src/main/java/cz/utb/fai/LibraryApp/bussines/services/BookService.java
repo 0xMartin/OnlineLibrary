@@ -158,7 +158,7 @@ public class BookService {
     book.setImage(img);
 
     book.setBorrows(null);
-    this.bookRepository.save(book);
+    this.bookRepository.insert(book);
   }
 
   /**

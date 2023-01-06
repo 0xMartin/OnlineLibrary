@@ -1,5 +1,7 @@
 package cz.utb.fai.LibraryApp.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
@@ -12,6 +14,6 @@ import cz.utb.fai.LibraryApp.model.Role;
 public interface RoleRepository extends MongoRepository<Role, Long> {
     
     @Query("{name:'?0'}")
-    Role findItemByName(ERole name);
+    Optional<Role> findItemByName(ERole name);
 
 }

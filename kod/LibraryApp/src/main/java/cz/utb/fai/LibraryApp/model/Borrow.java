@@ -3,6 +3,7 @@ package cz.utb.fai.LibraryApp.model;
 import java.util.Calendar;
 import java.util.Date;
 import lombok.Data;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -64,7 +65,7 @@ public class Borrow {
   public Borrow(
       Long id,
       Date date,
-      long seconds,
+      Long seconds,
       String user_id,
       Book book) {
     this.id = id;
@@ -74,7 +75,8 @@ public class Borrow {
 
     Calendar cal = Calendar.getInstance();
     cal.setTime(this.date);
-    cal.add(Calendar.SECOND, (int) seconds);
+    cal.add(Calendar.SECOND, (int) seconds.longValue());
     this.expireAt = cal.getTime();
   }
+
 }

@@ -91,10 +91,10 @@ public class BorrowService {
                 GlobalConfig.BORROW_DAY_COUNT * 24 * 3600,
                 profile.getUsername(),
                 book);
-        this.borrowRepository.save(b);
+        this.borrowRepository.insert(b);
 
         // zapise vypujcku do historie
-        this.borrowHistoryRepository.save(new BorrowHistory(this.borrowHistoryRepository.count(), b));
+        this.borrowHistoryRepository.insert(new BorrowHistory(this.borrowHistoryRepository.count(), b));
 
         return b;
     }

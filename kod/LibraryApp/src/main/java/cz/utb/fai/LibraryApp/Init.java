@@ -9,7 +9,6 @@ import cz.utb.fai.LibraryApp.repository.ProfileStateRepository;
 import cz.utb.fai.LibraryApp.repository.RoleRepository;
 import cz.utb.fai.LibraryApp.repository.UserRepository;
 import java.io.FileReader;
-import java.util.Arrays;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
@@ -61,23 +60,32 @@ public class Init {
       UserRepository userRepository,
       RoleRepository roleRepository,
       ProfileStateRepository stateRepository) {
-    if (userRepository.count() == 0 && roleRepository.count() == 0 && stateRepository.count() == 0) {
-      return args -> {
+    return args -> {
 
-        Role role = new Role(1L, ERole.LIBRARIAN);
-        roleRepository.saveAll(
-            Arrays.asList(
-                new Role(0L, ERole.CUSTOMER),
-                role));
+      // role
+      if (!roleRepository.findItemByName(ERole.CUSTOMER).isPresent()) {
+        roleRepository.insert(new Role(0L, ERole.CUSTOMER));
+      }
+      if (!roleRepository.findItemByName(ERole.LIBRARIAN).isPresent()) {
+        roleRepository.insert(new Role(1L, ERole.LIBRARIAN));
+      }
 
-        ProfileState state = new ProfileState(2, EProfileState.CONFIRMED);
-        stateRepository.saveAll(
-            Arrays.asList(
-                new ProfileState(0, EProfileState.WAITING),
-                new ProfileState(1, EProfileState.NOT_CONFIRMED),
-                state,
-                new ProfileState(3, EProfileState.BANNED)));
+      // stavy porfilu
+      if (!stateRepository.findItemByName(EProfileState.WAITING).isPresent()) {
+        stateRepository.insert(new ProfileState(0L, EProfileState.WAITING));
+      }
+      if (!stateRepository.findItemByName(EProfileState.NOT_CONFIRMED).isPresent()) {
+        stateRepository.insert(new ProfileState(1L, EProfileState.NOT_CONFIRMED));
+      }
+      if (!stateRepository.findItemByName(EProfileState.CONFIRMED).isPresent()) {
+        stateRepository.insert(new ProfileState(2L, EProfileState.CONFIRMED));
+      }
+      if (!stateRepository.findItemByName(EProfileState.BANNED).isPresent()) {
+        stateRepository.insert(new ProfileState(3L, EProfileState.BANNED));
+      }
 
+      // admin uzivatel
+      if (!userRepository.findById("admin").isPresent()) {
         userRepository.save(
             new User(
                 "admin",
@@ -86,13 +94,10 @@ public class Init {
                 "Admin",
                 "000000/0000",
                 "Not defined",
-                state,
-                role).encodePassword());
-
-      };
-    } else {
-      return null;
-    }
+                stateRepository.findItemByName(EProfileState.CONFIRMED).get(),
+                roleRepository.findItemByName(ERole.LIBRARIAN).get()).encodePassword());
+      }
+    };
   }
 
 }

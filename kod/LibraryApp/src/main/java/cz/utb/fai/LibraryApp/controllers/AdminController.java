@@ -546,7 +546,13 @@ public class AdminController {
   @PostMapping(value = "/databaseImport", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public @ResponseBody String databaseImport(
       @RequestParam("databaseFile") MultipartFile databaseFile) {
-    return null;
+    try {
+      this.dbExportImportService.importDatabase(databaseFile, true);
+      return "The database import was successful";
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "Database import failed";
+    }
   }
 
 }

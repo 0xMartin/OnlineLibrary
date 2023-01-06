@@ -27,8 +27,8 @@
                     <p id="status"></p>
                     <p id="loaded_n_total"></p>
                     <br>
-                    <button name="submit" class="btn btn-warning py-2" onclick="uploadFile()">Import</button>
                 </form>
+                <button class="btn btn-warning py-2" onclick="uploadFile()">Import</button>
             </div>
         </div>
 
@@ -64,10 +64,10 @@
         }
 
         function progressHandler(event) {
-            _("loaded_n_total").innerHTML = "Nahrávání " + event.loaded + " B z " + event.total;
+            _("loaded_n_total").innerHTML = "Uploading " + event.loaded + " B from " + event.total;
             var percent = (event.loaded / event.total) * 100;
             _("progressBar").value = Math.round(percent);
-            _("status").innerHTML = Math.round(percent) + "% nahráno... prosím počkejte";
+            _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
         }
 
         function completeHandler(event) {
@@ -76,11 +76,11 @@
         }
 
         function errorHandler(event) {
-            _("status").innerHTML = "Nahrávání selhalo";
+            _("status").innerHTML = "Uploading failed";
         }
 
         function abortHandler(event) {
-            _("status").innerHTML = "Nahrávání ukončeno"
+            _("status").innerHTML = "Uploading stopped"
         }
     </script>
 </th:block>
