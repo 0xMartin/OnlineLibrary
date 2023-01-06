@@ -34,7 +34,7 @@ db.createUser(
 
 <img src="./dokumentace/view/view_diagram.png">
 
-## Views
+## Počáteční navrhy views
 > Login
 
 <img src="./dokumentace/view/login/login.png" width="80%">
