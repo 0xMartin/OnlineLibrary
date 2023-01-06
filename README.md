@@ -1,5 +1,29 @@
 ![AP7PD_projekt](./dokumentace/AP7PD_projekt.png)
 
+> Aplikace vyžaduje Java JRE & JDK 17
+
+## Nastavení databaze
+1) Instalace Mongo DB https://www.mongodb.com/docs/manual/installation/
+```
+mongosh
+```
+
+2) Zvolení databaze
+```
+use libraryapp
+```
+
+3) Vytvoření uživatele pro aplikaci
+```
+db.createUser(
+  {
+    user: "LibraryUser",
+    pwd:  "WmdOpdSs9YHiGShT3f00",  
+    roles: [ { role: "readWrite", db: "libraryapp" } ]
+  }
+)
+```
+
 > Java Spring + MongoDB + Thymeleaf
 
 ## ERD diabram
