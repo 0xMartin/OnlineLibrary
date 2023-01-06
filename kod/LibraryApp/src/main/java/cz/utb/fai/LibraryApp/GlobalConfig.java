@@ -3,8 +3,7 @@ package cz.utb.fai.LibraryApp;
 public class GlobalConfig {
 
   /**
-   * douba, na kterou si uzivatel pujcuje knihu (po uplynuti se kniha automaticky
-   * vrati)
+   * douba, na kterou si uzivatel pujcuje knihu (po uplynuti se kniha automaticky vrati)
    * [DNY]
    */
   public static long BORROW_DAY_COUNT = 6;
