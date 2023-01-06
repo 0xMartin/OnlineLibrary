@@ -285,7 +285,7 @@ public class DBExportImportService {
                                     Borrow e2 = new Borrow(
                                             (Long) obj.get("id"),
                                             new java.util.Date((Long) obj.get("date")),
-                                            ((Long) obj.get("expireAt") - (Long) obj.get("date")),
+                                            ((Long) obj.get("expireAt") - (Long) obj.get("date")) / 1000L,
                                             (String) obj.get("user_id"),
                                             this.bookRepository.findById((Long) obj2.get("id")).get());
                                     this.borrowRepository.insert(e2);

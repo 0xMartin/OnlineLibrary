@@ -6,6 +6,17 @@
 
         <!-- Navigation -->
         <ul class="navbar-nav mr-auto">
+            <!-- Search -->
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
+                <form action="/home/search" method="GET" class="px-3">
+                    <div class="d-flex justify-content-center">
+                        <input type="text" class="form-control" id="text" placeholder="Search ..." name="text" th:value="${SEARCH_TEXT}">
+                        <button type="submit" class="btn text-white"><i class="fa fa-search"
+                                aria-hidden="true"></i></button>
+                    </div>
+                </form>
+            </li>
+
             <!-- Home (book catalog) -->
             <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
                 <a class="nav-link" href="/home">Catalog <span class="sr-only">(current)</span></a>
@@ -45,18 +56,18 @@
                 </div>
             </li>
         </ul>
-        
+
         <!-- Logout button -->
         <div sec:authorize="isAuthenticated()">
             <a class="text-white p-3" href="/profile"><i class="fa fa-user text-white" aria-hidden="true"></i></a>
-            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/logout'" type="button">Log
-                out</button>
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/logout'"
+                type="button">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></button>
         </div>
 
         <!-- Login button -->
         <div sec:authorize="isAnonymous()">
-            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/login'" type="button">Log
-                in</button>
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/login'" type="button">Login
+                <i class="fa fa-sign-in" aria-hidden="true"></i></button>
         </div>
 
     </div>

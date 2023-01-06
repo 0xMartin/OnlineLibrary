@@ -2,6 +2,7 @@ package cz.utb.fai.LibraryApp.controllers;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
 import cz.utb.fai.LibraryApp.bussines.services.BookService;
+import cz.utb.fai.LibraryApp.bussines.services.SearchService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.Book;
 
@@ -24,6 +25,9 @@ public class HomeController {
 
   @Autowired
   protected BookService bookService;
+
+  @Autowired
+  protected SearchService searchService;
 
   /**
    * View s katalogem knih (homepage)
@@ -125,4 +129,24 @@ public class HomeController {
   public String about() {
     return AppRequestMapping.VIEW_PREFIX + "/home/about";
   }
+
+  /**
+   * Prohleda vsechen dostupny obsah a zobrazi vysledek vyhledavani
+   * 
+   * @param model ViewModel
+   * @param text  Hledany text
+   * @return Nazev view
+   */
+  @GetMapping("/search")
+  public String search(Model model, @RequestParam String text) {
+    model.addAttribute("SEARCH_TEXT", text);
+    try {
+      List<SearchService.SearchEntry> URLs = this.searchService.search(text);
+      model.addAttribute("URLs", URLs);
+    } catch (Exception e) {
+      model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
+    }
+    return AppRequestMapping.VIEW_PREFIX + "/home/search_result";
+  }
+
 }
