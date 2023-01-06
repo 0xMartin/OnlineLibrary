@@ -9,6 +9,9 @@
             <div th:if="${USER.state.name.toString().equals('WAITING')}" class="alert alert-warning m-2" role="alert">
                 Your account is waiting for confirmation. Now you can't borrow a book.
             </div>
+            <div th:if="${USER.state.name.toString().equals('NOT_CONFIRMED')}" class="alert alert-danger m-2" role="alert">
+                Your account is not confirmed. Now you can't borrow a book.
+            </div>
         </div>
 
         <div th:if="${BOOK != null}">

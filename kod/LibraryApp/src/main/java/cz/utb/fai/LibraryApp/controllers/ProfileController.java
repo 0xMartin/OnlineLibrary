@@ -65,13 +65,16 @@ public class ProfileController {
       User u = this.userService.profile();
       // profil prihlaseneho uzivatele
       model.addAttribute("USER", u);
-      // historie vypujcek knih => serazeni + odebere z historie aktualne pujcene knihy
+      // historie vypujcek knih => serazeni + odebere z historie aktualne pujcene
+      // knihy
       List<BorrowHistory> history = u.getBorrowhistory();
       Collections.reverse(history);
       Iterator<BorrowHistory> ite = history.iterator();
       while (ite.hasNext()) {
         BorrowHistory bh = ite.next();
-        if (u.getBorrows().stream().anyMatch((b) -> { return b.getDate().getTime() == bh.getDate().getTime();})) {
+        if (u.getBorrows().stream().anyMatch((b) -> {
+          return b.getDate().getTime() == bh.getDate().getTime();
+        })) {
           ite.remove();
         }
       }
@@ -88,7 +91,7 @@ public class ProfileController {
    * @param model ViewModel
    * @return Nazev View
    */
-  @GetMapping("edit")
+  @GetMapping("/edit")
   public String edit(Model model) {
     try {
       User u = this.userService.profile();
@@ -106,10 +109,13 @@ public class ProfileController {
    * @param user  Nove paramtery profilu uzivatele
    * @return Nazev View
    */
-  @PostMapping(path = "edit", consumes = "application/x-www-form-urlencoded")
+  @PostMapping(path = "/edit", consumes = "application/x-www-form-urlencoded")
   public String edit(Model model, User user) {
     try {
-      this.chechProfileState();
+      if (this.userService.profile().getState().getName() == EProfileState.WAITING ||
+          this.userService.profile().getState().getName() == EProfileState.BANNED) {
+        throw new Exception("Your account is not confirmed");
+      }
 
       User u = this.userService.profile();
       model.addAttribute("USER", u);
@@ -131,7 +137,7 @@ public class ProfileController {
    * 
    * @return Nazev View
    */
-  @GetMapping("changePassword")
+  @GetMapping("/changePassword")
   public String changePassword() {
     return AppRequestMapping.VIEW_PREFIX + "/profile/change_password";
   }
@@ -144,7 +150,7 @@ public class ProfileController {
    * @param newPass     Nove heslo
    * @return Nazev View
    */
-  @PostMapping(path = "changePassword", consumes = "application/x-www-form-urlencoded")
+  @PostMapping(path = "/changePassword", consumes = "application/x-www-form-urlencoded")
   public String changePassword(
       Model model,
       String currentPass,
@@ -169,7 +175,7 @@ public class ProfileController {
    * @param id    ID knihy, ktera bude vypujcena
    * @return Nazev View
    */
-  @GetMapping("borrowBook")
+  @GetMapping("/borrowBook")
   public String borrowBook(Model model, @RequestParam Long id) {
     try {
       this.chechProfileState();
@@ -187,17 +193,19 @@ public class ProfileController {
 
   /**
    * Vrati aktualne vypujcenou knihu
+   * 
    * @param model ViewModel
-   * @param id ID knihy, ktera je vypujcena
+   * @param id    ID knihy, ktera je vypujcena
    * @return Nazev View
    */
-  @GetMapping("returnBook")
+  @GetMapping("/returnBook")
   public String returnBook(Model model, @RequestParam Long id) {
     try {
       this.chechProfileState();
-      
+
       Borrow b = this.borrowService.returnBook(id);
-      model.addAttribute(AppRequestMapping.RESPONSE_SUCCESS, String.format("Book \"%s\" returnted", b.getBook().getName()));
+      model.addAttribute(AppRequestMapping.RESPONSE_SUCCESS,
+          String.format("Book \"%s\" returnted", b.getBook().getName()));
     } catch (Exception e) {
       model.addAttribute(AppRequestMapping.RESPONSE_ERROR, e.getMessage());
     }

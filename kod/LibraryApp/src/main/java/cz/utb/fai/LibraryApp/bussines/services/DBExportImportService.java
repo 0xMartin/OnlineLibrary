@@ -7,10 +7,12 @@ import java.io.FileReader;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.bson.BsonBinarySubType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -311,9 +313,11 @@ public class DBExportImportService {
 
                                     /************************************************************************************/
                                     // IMAGE
+                                    obj2 = (JSONObject) obj.get("image");
+                                    byte[] data = Base64.getDecoder().decode(obj2.get("data").toString());
                                     Image e4 = new Image(
                                             (Long) obj.get("id"),
-                                            new org.bson.types.Binary(obj.get("image").toString().getBytes()));
+                                            new org.bson.types.Binary(BsonBinarySubType.BINARY, data));
                                     this.imageRepository.insert(e4);
                                     // IMAGE
                                     /************************************************************************************/

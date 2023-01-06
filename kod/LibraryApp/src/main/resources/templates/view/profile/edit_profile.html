@@ -7,21 +7,34 @@
 
         <div class="d-flex justify-content-start">
             <h1>Edit profile</h1>
-            <button type="button" class="btn btn-secondary my-2 ml-5" th:onclick="window.location.href='/profile'">Back</button>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/profile'">Back</button>
         </div>
 
-        <form id="form" action="edit" method='POST' autocomplete="off">
+        <div th:if="${USER != null}">
+            <div th:if="${USER.state.name.toString().equals('WAITING')}" class="alert alert-warning m-2" role="alert">
+                Your account is waiting for confirmation.
+            </div>
+            <div th:if="${USER.state.name.toString().equals('NOT_CONFIRMED')}" class="alert alert-danger m-2"
+                role="alert">
+                Your account is not confirmed. Change your profile and wait for confirmation.
+            </div>
+        </div>
+
+        <form id="form" action="edit" method='POST' autocomplete="off" th:if="${ERROR == null}">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" name='name' class="form-control" id="name" placeholder="Enter Name" th:value="${USER.name}">
+                        <input type="text" name='name' class="form-control" id="name" placeholder="Enter Name"
+                            th:value="${USER.name}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="surname">Surname</label>
-                        <input type="text" name='surname' class="form-control" id="surname" placeholder="Enter Surname" th:value="${USER.surname}">
+                        <input type="text" name='surname' class="form-control" id="surname" placeholder="Enter Surname"
+                            th:value="${USER.surname}">
                     </div>
                 </div>
             </div>
@@ -36,18 +49,20 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="address">Address</label>
-                        <input type="text" name='address' class="form-control" id="address" placeholder="Enter Address" th:value="${USER.address}">
+                        <input type="text" name='address' class="form-control" id="address" placeholder="Enter Address"
+                            th:value="${USER.address}">
                     </div>
                 </div>
             </div>
             <button type="submit" name="submit" class="btn btn-primary">Update</button>
-            <div th:if="${ERROR != null}">
-                <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
-            </div>
-            <div th:if="${SUCCESS != null}">
-                <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
-            </div>
         </form>
+
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+        <div th:if="${SUCCESS != null}">
+            <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+        </div>
 
     </div>
 </th:block>
