@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Trida reprezentujici knihu
  */
@@ -64,6 +66,7 @@ public class Book {
   /**
    * Seznam vsech vypujcek teto knihy
    */
+  @JsonIgnore
   @DocumentReference(lazy = false, lookup = "{'book_id': ?#{#self._id}}")
   private List<Borrow> borrows;
 

@@ -2,6 +2,40 @@
 
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 
+<th:block layout:fragment="page_css">
+    <style>
+        .tableFixHead {
+            overflow-y: auto;
+            /* make the table scrollable if height is more than 200 px  */
+            height: 60vh;
+            /* gives an initial height of 200px to the table */
+        }
+
+        .tableFixHead thead th {
+            position: sticky;
+            /* make the table heads sticky */
+            top: 0px;
+            /* table head will be placed from the top of the table and sticks to it */
+        }
+
+        table {
+            border-collapse: collapse;
+            /* make the table borders collapse to each other */
+            width: 100%;
+        }
+
+        th,
+        td {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background: #eee;
+        }
+    </style>
+</th:block>
+
 <th:block layout:fragment="content">
     <div class="container">
 
@@ -51,34 +85,36 @@
                 </div>
             </div>
         </form>
-        <table class="table">
-            <thead>
-                <th>Name</th>
-                <th>Author</th>
-                <th>Page Count</th>
-                <th>Year Of Publication</th>
-                <th>Available</th>
-                <th>Borrowed</th>
-                <th></th>
-                <th></th>
-            </thead>
-            <tbody>
-                <th:block th:each="book : ${BOOKS}">
-                    <tr>
-                        <td th:text="${book.name}"></td>
-                        <td th:text="${book.author}"></td>
-                        <td th:text="${book.pageCount}"></td>
-                        <td th:text="${book.yearOfPublication}"></td>
-                        <td th:text="${book.available}"></td>
-                        <td th:text="${book.borrows.size()}"></td>
-                        <td><button type="button" class="btn btn-primary"
-                                th:onclick="editBook([[${book.id}]])">Edit</button></td>
-                        <td><button type="button" class="btn btn-danger"
-                                th:onclick="deleteBook([[${book.id}]])">Delete</button></td>
-                    </tr>
-                </th:block>
-            </tbody>
-        </table>
+        <div class="tableFixHead">
+            <table class="table">
+                <thead>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Page Count</th>
+                    <th>Year Of Publication</th>
+                    <th>Available</th>
+                    <th>Borrowed</th>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <th:block th:each="book : ${BOOKS}">
+                        <tr>
+                            <td th:text="${book.name}"></td>
+                            <td th:text="${book.author}"></td>
+                            <td th:text="${book.pageCount}"></td>
+                            <td th:text="${book.yearOfPublication}"></td>
+                            <td th:text="${book.available}"></td>
+                            <td th:text="${book.borrows.size()}"></td>
+                            <td><button type="button" class="btn btn-primary"
+                                    th:onclick="editBook([[${book.id}]])">Edit</button></td>
+                            <td><button type="button" class="btn btn-danger"
+                                    th:onclick="deleteBook([[${book.id}]])">Delete</button></td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
         <div th:if="${ERROR != null}">
             <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
         </div>

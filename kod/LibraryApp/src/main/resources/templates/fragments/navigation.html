@@ -8,7 +8,12 @@
         <ul class="navbar-nav mr-auto">
             <!-- Home (book catalog) -->
             <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
-                <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/home">Catalog <span class="sr-only">(current)</span></a>
+            </li>
+
+            <!-- About  -->
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
+                <a class="nav-link" href="/home/about">About</a>
             </li>
 
             <!-- Profile (only for logined users) -->
@@ -36,6 +41,7 @@
                     <a class="dropdown-item" href="/admin">Main page</a>
                     <a class="dropdown-item" href="/admin/users">Users</a>
                     <a class="dropdown-item" href="/admin/books">Books</a>
+                    <a class="dropdown-item" href="/admin/database">Database</a>
                 </div>
             </li>
         </ul>

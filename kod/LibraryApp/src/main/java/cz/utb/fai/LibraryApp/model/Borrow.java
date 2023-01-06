@@ -9,13 +9,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-
 @Document("Borrows")
 @Data
 public class Borrow {
 
   @Id
-  @Indexed(unique=true)
+  @Indexed(unique = true)
   private Long id;
 
   /**
@@ -31,7 +30,7 @@ public class Borrow {
   private Date expireAt;
 
   /**
-   * Uzivatel, ktery si knihu pujcil
+   * ID Uzivatele, ktery si knihu pujcil
    */
   @Field("user_id")
   private String user_id;
@@ -56,7 +55,7 @@ public class Borrow {
    *                vytvoreni vypujcky)
    * @param date    Datum vytvoreni vypujcky knihy
    * @param seconds Na kolik sekund bude kniha vypujcena
-   * @param user    Uzivatel, ktery si knihu vypujcil
+   * @param user_id Uzivatel, ktery si knihu vypujcil
    * @param book    Knihy, kterou si uzivatel vypujcil
    */
   public Borrow(

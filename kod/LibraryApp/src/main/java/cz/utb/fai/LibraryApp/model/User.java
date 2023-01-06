@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Trida reprezentujici uzivatele
  */
@@ -70,12 +72,14 @@ public class User {
   /**
    * Seznam vsech vypujcek knih
    */
+  @JsonIgnore
   @DocumentReference(lazy = false, lookup = "{'user_id': ?#{#self._id} }")
   private List<Borrow> borrows;
 
   /**
    * Historie vsech vypujcenych knih
    */
+  @JsonIgnore
   @DocumentReference(lazy = false, lookup = "{'user_id': ?#{#self._id} }")
   private List<BorrowHistory> borrowhistory;
 

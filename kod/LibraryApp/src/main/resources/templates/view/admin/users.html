@@ -2,6 +2,40 @@
 
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
 
+<th:block layout:fragment="page_css">
+    <style>
+        .tableFixHead {
+            overflow-y: auto;
+            /* make the table scrollable if height is more than 200 px  */
+            height: 60vh;
+            /* gives an initial height of 200px to the table */
+        }
+
+        .tableFixHead thead th {
+            position: sticky;
+            /* make the table heads sticky */
+            top: 0px;
+            /* table head will be placed from the top of the table and sticks to it */
+        }
+
+        table {
+            border-collapse: collapse;
+            /* make the table borders collapse to each other */
+            width: 100%;
+        }
+
+        th,
+        td {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background: #eee;
+        }
+    </style>
+</th:block>
+
 <th:block layout:fragment="content">
     <div class="container">
 
@@ -55,69 +89,74 @@
                 </div>
             </div>
         </form>
-        <table class="table">
-            <thead>
-                <th>Role</th>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Address</th>
-                <th>Personal ID</th>
-                <th>State</th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </thead>
-            <tbody>
-                <th:block th:each="user : ${USERS}">
-                    <tr>
-                        <td th:text="${user.role.name}"></td>
-                        <td th:text="${user.username}"></td>
-                        <td th:text="${user.name}"></td>
-                        <td th:text="${user.surname}"></td>
-                        <td th:text="${user.address}"></td>
-                        <td th:text="${user.personalID}"></td>
-                        <td th:text="${user.state.name}"></td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Action
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item"
-                                        th:href="'/admin/editUser?username=' + ${user.username}">Edit</a>
-                                    <a class="dropdown-item"
-                                        th:href="'/admin/generatePass?username=' + ${user.username}">Generate
-                                        Password</a>
-                                    <a class="dropdown-item"
-                                        th:href="'/admin/userDelete?username=' + ${user.username}">Delete</a>
+        
+        <div class="tableFixHead">
+            <table class="table">
+                <thead>
+                    <th class="th-sm">Role</th>
+                    <th class="th-sm">Username</th>
+                    <th class="th-sm">Name</th>
+                    <th class="th-sm">Surname</th>
+                    <th class="th-sm">Address</th>
+                    <th class="th-sm">Personal ID</th>
+                    <th class="th-sm">State</th>
+                    <th class="th-sm"></th>
+                    <th class="th-sm"></th>
+                </thead>
+                <tbody>
+                    <th:block th:each="user : ${USERS}">
+                        <tr>
+                            <td th:text="${user.role.name}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.surname}"></td>
+                            <td th:text="${user.address}"></td>
+                            <td th:text="${user.personalID}"></td>
+                            <td th:text="${user.state.name}"></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-warning dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/editUser?username=' + ${user.username}">Edit</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/generatePass?username=' + ${user.username}">Generate
+                                            Password</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/userDelete?username=' + ${user.username}">Delete</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    State
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item"
-                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=CONFIRMED'">Confirmed</a>
-                                    <a class="dropdown-item"
-                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=NOT_CONFIRMED'">Not
-                                        confirmed</a>
-                                    <a class="dropdown-item"
-                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=WAITING'">Waiting</a>
-                                    <a class="dropdown-item"
-                                        th:href="'/admin/setUserState?username=' + ${user.username} + '&state=BANNED'">Banned</a>
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        State
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=CONFIRMED'">Confirmed</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=NOT_CONFIRMED'">Not
+                                            confirmed</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=WAITING'">Waiting</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=BANNED'">Banned</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </th:block>
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+
         <div th:if="${ERROR != null}">
             <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
         </div>

@@ -4,12 +4,17 @@ import cz.utb.fai.LibraryApp.AppRequestMapping;
 import cz.utb.fai.LibraryApp.bussines.enums.EProfileState;
 import cz.utb.fai.LibraryApp.bussines.services.BookService;
 import cz.utb.fai.LibraryApp.bussines.services.BorrowService;
+import cz.utb.fai.LibraryApp.bussines.services.DBExportImportService;
 import cz.utb.fai.LibraryApp.bussines.services.UserService;
 import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -35,6 +41,9 @@ public class AdminController {
 
   @Autowired
   protected BorrowHistoryRepository borrowHistoryRepository;
+
+  @Autowired
+  protected DBExportImportService dbExportImportService;
 
   // ###########################################################################################################
   // DEFAULT
@@ -500,6 +509,45 @@ public class AdminController {
     model.addAttribute("BOOKS", books);
 
     return AppRequestMapping.VIEW_PREFIX + "/admin/books";
+  }
+
+  // ###########################################################################################################
+  // SPRAVA DATABAZE
+  // ###########################################################################################################
+
+  /**
+   * Navrati view pro spravu databaze
+   * 
+   * @return Nazev view
+   */
+  @GetMapping("/database")
+  public String database() {
+    return AppRequestMapping.VIEW_PREFIX + "/admin/database";
+  }
+
+  /**
+   * Exportuje databazi a jeji data navrati ve forme ZIP souboru
+   * 
+   * @return ZIP soubor s databazi
+   */
+  @GetMapping(value = "/databaseExport", produces = "application/zip")
+  public void databaseExport(HttpServletResponse response) throws IOException {
+    // setting headers
+    response.setStatus(HttpServletResponse.SC_OK);
+    response.addHeader("Content-Disposition", "attachment; filename=\"LibraryDB.zip\"");
+    // export db
+    this.dbExportImportService.exportDatabase(response.getOutputStream());
+  }
+
+  /**
+   * Imporutje databazi zee ZIP. Stavajici databaze bude nahrazena novou!!!
+   * 
+   * @return Status
+   */
+  @PostMapping(value = "/databaseImport", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String databaseImport(
+      @RequestParam("databaseFile") MultipartFile databaseFile) {
+    return null;
   }
 
 }
