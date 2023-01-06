@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+/**
+ * Trida reprezentujici vypujceni knihy
+ */
 @Document("Borrows")
 @Data
 public class Borrow {

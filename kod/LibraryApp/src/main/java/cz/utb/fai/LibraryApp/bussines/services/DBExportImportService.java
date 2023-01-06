@@ -1,22 +1,27 @@
 package cz.utb.fai.LibraryApp.bussines.services;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cz.utb.fai.LibraryApp.model.Image;
 import cz.utb.fai.LibraryApp.repository.BookRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowRepository;
+import cz.utb.fai.LibraryApp.repository.ImageRepository;
 import cz.utb.fai.LibraryApp.repository.ProfileStateRepository;
 import cz.utb.fai.LibraryApp.repository.RoleRepository;
 import cz.utb.fai.LibraryApp.repository.UserRepository;
 
+/**
+ * Servis urceny pro export a import databaze
+ */
 @Service
 public class DBExportImportService {
 
@@ -38,7 +43,21 @@ public class DBExportImportService {
     @Autowired
     protected BorrowHistoryRepository borrowHistoryRepository;
 
-    public void exportDatabase(OutputStream outputStream) throws IOException {
+    @Autowired
+    protected ImageRepository imageRepository;
+
+    /**
+     * Exportuje vsechny kolekce v databazi do souboru ve json formatu a vsechny
+     * soubory vlozi do zipu
+     * 
+     * @param outputStream Output stream
+     * @throws Exception
+     */
+    public void exportDatabase(OutputStream outputStream) throws Exception {
+        if (outputStream == null) {
+            throw new Exception("OutputStream is null");
+        }
+
         ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -78,13 +97,38 @@ public class DBExportImportService {
         zipOutputStream.write(borrowHistoryList.getBytes());
         zipOutputStream.closeEntry();
 
+        // obrazky
+        zipOutputStream.putNextEntry(new ZipEntry("images.json"));
+        for (Image img : imageRepository.findAll()) {
+            String imageList = objectMapper.writeValueAsString(new Image.Export(img));
+            zipOutputStream.write(imageList.getBytes());
+        }
+        zipOutputStream.closeEntry();
+
         // ukonceni zip streamu
         zipOutputStream.flush();
         zipOutputStream.close();
     }
 
-    public void importDatabase() {
+    /**
+     * Imporutje databazovy soubor. Jde o ZIP ktery obsahuje presne pojmenovane
+     * soubor ve json formatu
+     * 
+     * @param file  MultipartFile
+     * @param clear True -> Pred importem dat smaze vsechny data ve vsech kolekcich
+     *              databaze
+     * @throws Exception
+     */
+    public void importDatabase(MultipartFile file, boolean clear) throws Exception {
+        if (file == null) {
+            throw new Exception("ZIP is not defined");
+        }
 
+        // unzip files
+
+        // drop database
+
+        // import data from files
     }
 
 }

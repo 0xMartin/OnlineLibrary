@@ -7,6 +7,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+/**
+ * Trida reprezentujici historii vypujceni knihy
+ */
 @Document("BorrowsHistory")
 @Data
 public class BorrowHistory {

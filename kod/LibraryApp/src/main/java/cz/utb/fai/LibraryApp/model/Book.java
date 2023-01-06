@@ -55,7 +55,8 @@ public class Book {
    * Obrazek knihy (URL)
    */
   @Field("image")
-  private String image;
+  @DocumentReference(lazy = false)
+  private Image image;
 
   /**
    * Pocet dostupnych knih v knihovne
@@ -95,7 +96,7 @@ public class Book {
       Long pageCount,
       Long yearOfPublication,
       String description,
-      String image,
+      Image image,
       Long available) {
     this.id = id;
     this.name = name;

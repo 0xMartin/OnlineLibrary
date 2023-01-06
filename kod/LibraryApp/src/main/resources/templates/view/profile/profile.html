@@ -66,7 +66,7 @@
                     <!--Book Card-->
                     <div class="col-md-4 pb-4">
                         <div class="card p-2 h-100">
-                            <img class="card-img-top px-4" th:src="'/image?id=' + ${borrow.book.image}">
+                            <img class="card-img-top px-4" th:src="'/image?id=' + ${borrow.book.image.id}">
                             <div class="card-body">
                                 <h4 class="card-title" th:text="${borrow.book.name}"></h4>
                                 <p class="card-text"><b>Date: </b> <span th:text="${borrow.date}"></span></p>

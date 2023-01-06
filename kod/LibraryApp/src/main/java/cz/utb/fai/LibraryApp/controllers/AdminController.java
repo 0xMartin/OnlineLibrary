@@ -10,7 +10,6 @@ import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -413,7 +412,7 @@ public class AdminController {
   @PostMapping(path = "/createBook", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public String createBook(
       Model model,
-      @RequestParam("bookImage") MultipartFile bookImage,
+      @RequestParam(name = "bookImage") MultipartFile bookImage,
       @RequestParam(name = "name") String name,
       @RequestParam(name = "author") String author,
       @RequestParam(name = "pageCount") Long pageCount,
@@ -428,7 +427,7 @@ public class AdminController {
           pageCount,
           yearOfPublication,
           description,
-          "",
+          null,
           available);
       this.bookService.createBook(book, bookImage);
 
@@ -531,7 +530,7 @@ public class AdminController {
    * @return ZIP soubor s databazi
    */
   @GetMapping(value = "/databaseExport", produces = "application/zip")
-  public void databaseExport(HttpServletResponse response) throws IOException {
+  public void databaseExport(HttpServletResponse response) throws Exception {
     // setting headers
     response.setStatus(HttpServletResponse.SC_OK);
     response.addHeader("Content-Disposition", "attachment; filename=\"LibraryDB.zip\"");

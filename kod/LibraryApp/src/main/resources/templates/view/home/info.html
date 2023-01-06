@@ -14,7 +14,7 @@
         <div th:if="${BOOK != null}">
             <div class="row py-5">
                 <div class="col-sm-5 px-2">
-                    <img class="card-img-top" th:src="'/image?id=' + ${BOOK.image}">
+                    <img class="card-img-top" th:src="'/image?id=' + ${BOOK.image.id}">
                 </div>
                 <div class="col-sm-7 px-4">
                     <div class="d-flex justify-content-between flex-column h-100">

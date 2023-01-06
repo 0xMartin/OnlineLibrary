@@ -1,7 +1,5 @@
 package cz.utb.fai.LibraryApp.controllers;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.utb.fai.LibraryApp.AppRequestMapping;
 import cz.utb.fai.LibraryApp.bussines.services.ImageService;
+import cz.utb.fai.LibraryApp.model.Image;
 
 @Controller
 @RequestMapping(value = AppRequestMapping.IMAGE)
@@ -23,14 +22,15 @@ public class ImageController {
     /**
      * Nacte obraze z disku a navrati ho
      * 
-     * @param id - ID obrazku (jeho nazev)
+     * @param id - ID obrazku
      * @return Obrazek
      */
     @GetMapping(value = "", produces = MediaType.IMAGE_JPEG_VALUE)
-    public @ResponseBody byte[] getImage(@RequestParam String id) {
+    public @ResponseBody byte[] getImage(@RequestParam Long id) {
         try {
-            return this.imageService.readImage(id);
-        } catch (IOException e) {
+            Image img = this.imageService.findImage(id);
+            return this.imageService.readImage(img);
+        } catch (Exception e) {
             return null;
         }
     }

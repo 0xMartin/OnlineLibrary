@@ -22,10 +22,4 @@ public class GlobalConfig {
    */
   public static long MIN_PASSWORD_LENGTH = 8;
 
-  /**
-   * Nazev adresare do ktereho se budou uploadovat obrazky (cesta k adresari se
-   * bere relativne k .jar webove app)
-   */
-  public static String IMAGE_UPLOAD_DIR = "images";
-
 }

@@ -51,12 +51,6 @@ public class Init {
         GlobalConfig.MIN_PASSWORD_LENGTH = (long) MIN_PASSWORD_LENGTH.longValue();
         logger.info("MIN_PASSWORD_LENGTH set on: " + MIN_PASSWORD_LENGTH);
       }
-
-      String IMAGE_UPLOAD_DIR = (String) obj.get("IMAGE_UPLOAD_DIR");
-      if (IMAGE_UPLOAD_DIR != null) {
-        GlobalConfig.IMAGE_UPLOAD_DIR = IMAGE_UPLOAD_DIR;
-        logger.info("IMAGE_UPLOAD_DIR set on: " + IMAGE_UPLOAD_DIR);
-      }
     } catch (Exception e) {
       e.printStackTrace();
     }

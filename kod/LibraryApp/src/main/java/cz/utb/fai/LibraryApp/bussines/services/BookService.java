@@ -1,6 +1,7 @@
 package cz.utb.fai.LibraryApp.bussines.services;
 
 import cz.utb.fai.LibraryApp.model.Book;
+import cz.utb.fai.LibraryApp.model.Image;
 import cz.utb.fai.LibraryApp.repository.BookRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
 
@@ -151,10 +152,10 @@ public class BookService {
       throw new Exception("Available must be positive value");
     }
 
-    String imageUrl = this.imageService.uploadImage(image);
+    Image img = this.imageService.uploadImage(image);
 
     book.setId(this.bookRepository.count());
-    book.setImage(imageUrl);
+    book.setImage(img);
 
     book.setBorrows(null);
     this.bookRepository.save(book);
