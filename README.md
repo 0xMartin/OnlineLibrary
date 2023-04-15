@@ -1,4 +1,4 @@
-![AP7PD_projekt](./dokumentace/AP7PD_projekt.png)
+![OnlineLibrary](https://socialify.git.ci/0xMartin/OnlineLibrary/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&stargazers=1&theme=Light)
 
 Online library web application (Java Spring + MongoDB + Thymeleaf). Require Java JRE & JDK 17. 
 
