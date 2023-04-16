@@ -32,6 +32,8 @@ db.createUser(
 * export & import of database in admin section
 * admin section (user management, book management, all borrowed books, history of all borrows)
 * create new book (title, author, text, image of book, ...)
+* book borrow/return & automatic return after time has elapsed (defaults set on 6 days)
+* possibility to set some application properties using a json file ([config.json](./kod/LibraryApp/config.json))
 
 ## ERD diabram
 <img src="./dokumentace/erd_diagram/erd_diagram.png">
