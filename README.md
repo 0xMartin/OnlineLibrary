@@ -2,18 +2,18 @@
 
 Online library web application (Java Spring + MongoDB + Thymeleaf). Require Java JRE & JDK 17. 
 
-## Nastavení databaze
-1) Instalace Mongo DB https://www.mongodb.com/docs/manual/installation/
+## Database setup
+1) Install Mongo DB and Mongo shell: https://www.mongodb.com/docs/manual/installation/
 ```
 mongosh
 ```
 
-2) Zvolení databaze
+2) Selecte db name
 ```
 use libraryapp
 ```
 
-3) Vytvoření uživatele pro aplikaci
+3) Create DB user for library app
 ```
 db.createUser(
   {
@@ -24,6 +24,14 @@ db.createUser(
 )
 ```
 
+## Features
+* book catalog with filter options
+* user profile (profile editing, borrowed books, borrow history)
+* full text searching
+* export & import of database in admin section
+* admin section (user management, book management, all borrowed books, history of all borrows)
+* create new book (title, author, text, image of book, ...)
+
 ## ERD diabram
 <img src="./dokumentace/erd_diagram/erd_diagram.png">
 
@@ -32,14 +40,14 @@ db.createUser(
 
 <img src="./dokumentace/view/view_diagram.png">
 
-## Základní nahled do aplikace
-> Katalog knih
+## App preview
+> Book catalog
 <img src="./dokumentace/catalog.png">
 
-> Info o knize
+> Book info
 <img src="./dokumentace/info.png">
 
-> Profil uživatel
+> User profile
 <img src="./dokumentace/profile.png">
 
 > Admin - books
