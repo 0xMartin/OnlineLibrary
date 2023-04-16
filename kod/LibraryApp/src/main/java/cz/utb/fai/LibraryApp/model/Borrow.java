@@ -2,6 +2,9 @@ package cz.utb.fai.LibraryApp.model;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.persistence.Transient;
+
 import lombok.Data;
 
 import org.springframework.data.annotation.Id;
@@ -16,6 +19,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("Borrows")
 @Data
 public class Borrow {
+
+  /**
+   * Unikatni ID entity databaze
+   */
+  @Transient
+  public static final String ID = "BORROW";
 
   @Id
   @Indexed(unique = true)

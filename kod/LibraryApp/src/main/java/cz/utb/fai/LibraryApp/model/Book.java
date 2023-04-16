@@ -1,6 +1,9 @@
 package cz.utb.fai.LibraryApp.model;
 
 import java.util.List;
+
+import javax.persistence.Transient;
+
 import lombok.Data;
 
 import org.springframework.data.annotation.Id;
@@ -17,6 +20,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Document("Books")
 @Data
 public class Book {
+
+  /**
+   * Unikatni ID entity databaze
+   */
+  @Transient
+  public static final String ID = "BOOK";
 
   @Id
   @Indexed(unique = true)

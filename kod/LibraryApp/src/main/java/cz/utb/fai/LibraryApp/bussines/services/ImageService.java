@@ -10,13 +10,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import cz.utb.fai.LibraryApp.model.Image;
+import cz.utb.fai.LibraryApp.model.Sequence;
 import cz.utb.fai.LibraryApp.repository.ImageRepository;
+import cz.utb.fai.LibraryApp.repository.SequenceRepository;
 
 /**
  * Servis, ktery umoznuje pracovat s obrazky na disku
  */
 @Service
 public class ImageService {
+
+  @Autowired
+  private SequenceRepository sequenceRepository;
 
   @Autowired
   private ImageRepository imageRepository;
@@ -49,7 +54,7 @@ public class ImageService {
     }
 
     Image image = new Image(
-        this.imageRepository.count(),
+        Sequence.generateUniqueID(this.sequenceRepository, Image.ID),
         new Binary(BsonBinarySubType.BINARY, file.getBytes()));
     image = this.imageRepository.insert(image);
 

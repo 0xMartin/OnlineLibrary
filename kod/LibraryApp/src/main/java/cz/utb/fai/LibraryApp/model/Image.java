@@ -1,5 +1,7 @@
 package cz.utb.fai.LibraryApp.model;
 
+import javax.persistence.Transient;
+
 import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,6 +17,12 @@ import lombok.Data;
 @Document("Images")
 @Data
 public class Image {
+
+    /**
+     * Unikatni ID entity databaze
+     */
+    @Transient
+    public static final String ID = "IMAGE";
 
     @Id
     private Long id;

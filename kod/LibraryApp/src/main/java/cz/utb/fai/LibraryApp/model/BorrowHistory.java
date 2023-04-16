@@ -1,6 +1,9 @@
 package cz.utb.fai.LibraryApp.model;
 
 import java.util.Date;
+
+import javax.persistence.Transient;
+
 import lombok.Data;
 
 import org.springframework.data.annotation.Id;
@@ -14,6 +17,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("BorrowsHistory")
 @Data
 public class BorrowHistory {
+
+  /**
+   * Unikatni ID entity databaze
+   */
+  @Transient
+  public static final String ID = "BORROWHISTORY";
 
   @Id
   @Indexed(unique = true)
@@ -54,7 +63,7 @@ public class BorrowHistory {
    * Vytvori instanci reprezentujici historii vypujceni knihy
    *
    * @param id          ID vypujceni
-   *                    
+   * 
    * @param date        Datum vytvoreni vypujcky knihy
    * @param user_id     Uzivatel, ktery si knihu vypujcil
    * @param book_id     ID vypujcene knihy

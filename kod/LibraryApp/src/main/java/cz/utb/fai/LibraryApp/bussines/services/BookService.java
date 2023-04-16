@@ -2,8 +2,10 @@ package cz.utb.fai.LibraryApp.bussines.services;
 
 import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.Image;
+import cz.utb.fai.LibraryApp.model.Sequence;
 import cz.utb.fai.LibraryApp.repository.BookRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
+import cz.utb.fai.LibraryApp.repository.SequenceRepository;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class BookService {
+
+  @Autowired
+  private SequenceRepository sequenceRepository;
 
   @Autowired
   protected BookRepository bookRepository;
@@ -154,7 +159,7 @@ public class BookService {
 
     Image img = this.imageService.uploadImage(image);
 
-    book.setId(this.bookRepository.count());
+    book.setId(Sequence.generateUniqueID(this.sequenceRepository, Book.ID));
     book.setImage(img);
 
     book.setBorrows(null);

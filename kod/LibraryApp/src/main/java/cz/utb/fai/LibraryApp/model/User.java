@@ -2,6 +2,9 @@ package cz.utb.fai.LibraryApp.model;
 
 import cz.utb.fai.LibraryApp.SecurityConfig;
 import java.util.List;
+
+import javax.persistence.Transient;
+
 import lombok.Data;
 
 import org.springframework.data.annotation.Id;
@@ -18,6 +21,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Document("Users")
 @Data
 public class User {
+
+  /**
+   * Unikatni ID entity databaze
+   */
+  @Transient
+  public static final String ID = "USER";
 
   /**
    * ID = Uzivatelske jmeno (pro prihlasovani)

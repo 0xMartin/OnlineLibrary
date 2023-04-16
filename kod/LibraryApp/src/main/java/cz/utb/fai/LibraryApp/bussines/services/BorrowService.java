@@ -11,12 +11,17 @@ import cz.utb.fai.LibraryApp.GlobalConfig;
 import cz.utb.fai.LibraryApp.model.Book;
 import cz.utb.fai.LibraryApp.model.Borrow;
 import cz.utb.fai.LibraryApp.model.BorrowHistory;
+import cz.utb.fai.LibraryApp.model.Sequence;
 import cz.utb.fai.LibraryApp.model.User;
 import cz.utb.fai.LibraryApp.repository.BorrowHistoryRepository;
 import cz.utb.fai.LibraryApp.repository.BorrowRepository;
+import cz.utb.fai.LibraryApp.repository.SequenceRepository;
 
 @Service
 public class BorrowService {
+
+    @Autowired
+    private SequenceRepository sequenceRepository;
 
     @Autowired
     protected BorrowRepository borrowRepository;
@@ -86,7 +91,7 @@ public class BorrowService {
 
         // vytvori vypujcku knihy
         Borrow b = new Borrow(
-                (Long) this.borrowRepository.count(),
+                (Long) Sequence.generateUniqueID(this.sequenceRepository, Borrow.ID),
                 new java.util.Date(),
                 GlobalConfig.BORROW_DAY_COUNT * 24 * 3600,
                 profile.getUsername(),
@@ -94,7 +99,9 @@ public class BorrowService {
         this.borrowRepository.insert(b);
 
         // zapise vypujcku do historie
-        this.borrowHistoryRepository.insert(new BorrowHistory(this.borrowHistoryRepository.count(), b));
+        this.borrowHistoryRepository.insert(new BorrowHistory(
+                Sequence.generateUniqueID(this.sequenceRepository, Borrow.ID),
+                b));
 
         return b;
     }
