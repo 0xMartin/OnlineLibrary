@@ -25,6 +25,7 @@ db.createUser(
 ```
 
 ## Features
+* user login/register
 * book catalog with filter options
 * user profile (profile editing, borrowed books, borrow history)
 * full text searching
