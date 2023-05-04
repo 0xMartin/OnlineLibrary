@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+   <div class="container py-4">
+
+      <h1>Login</h1>
+
+      <form action="login" method='POST'>
+
+         <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name='username' class="form-control" id="username" placeholder="Enter Username">
+         </div>
+
+         <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name='password' class="form-control" id="password" placeholder="Enter Password">
+         </div>
+
+         <button type="submit" name="submit" class="btn btn-primary">Login</button>
+         <a class="btn btn-secondary text-white" onclick="location.href='/auth/register'">Register</a>
+         <div id="alert_container"></div>
+      </form>
+
+   </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+   <script>
+      const alert_container = document.querySelector("#alert_container");
+      const urlParams = new URLSearchParams(window.location.search);
+      if(urlParams.get('error') === "true") {
+         alert_container.innerHTML = '<div class="alert alert-danger m-3" role="alert">Wrong username or password</div>';
+      }
+   </script>
+</th:block>
+
+</html>

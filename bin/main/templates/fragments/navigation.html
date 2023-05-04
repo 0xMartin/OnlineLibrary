@@ -1,0 +1,74 @@
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" id="navigation">
+
+    <a class="navbar-brand" href="/home"><i class="fa fa-book" aria-hidden="true"></i></a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <!-- Navigation -->
+        <ul class="navbar-nav mr-auto">
+            <!-- Search -->
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
+                <form action="/home/search" method="GET" class="px-3">
+                    <div class="d-flex justify-content-center">
+                        <input type="text" class="form-control" id="text" placeholder="Search ..." name="text" th:value="${SEARCH_TEXT}">
+                        <button type="submit" class="btn text-white"><i class="fa fa-search"
+                                aria-hidden="true"></i></button>
+                    </div>
+                </form>
+            </li>
+
+            <!-- Home (book catalog) -->
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
+                <a class="nav-link" href="/home">Catalog <span class="sr-only">(current)</span></a>
+            </li>
+
+            <!-- About  -->
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home/about' ? 'active':''}">
+                <a class="nav-link" href="/home/about">About</a>
+            </li>
+
+            <!-- Profile (only for logined users) -->
+            <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/profile') ? 'active':''}">
+                    Profile
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/profile">Info</a>
+                    <a class="dropdown-item" href="/profile/edit">Edit</a>
+                    <a class="dropdown-item" href="/profile/changePassword">Change Password</a>
+                </div>
+            </li>
+
+            <!-- Admin (only for user with role librarian = ADMIN) -->
+            <li sec:authorize="isAuthenticated() && hasRole('ROLE_LIBRARIAN')" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"
+                    th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin') ? 'active':''}">
+                    Admin
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/admin">Main page</a>
+                    <a class="dropdown-item" href="/admin/users">Users</a>
+                    <a class="dropdown-item" href="/admin/books">Books</a>
+                    <a class="dropdown-item" href="/admin/database">Database</a>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Logout button -->
+        <div sec:authorize="isAuthenticated()">
+            <a class="text-white p-3" href="/profile"><i class="fa fa-user text-white" aria-hidden="true"></i></a>
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/logout'"
+                type="button">Logout <i class="fa fa-sign-out" aria-hidden="true"></i></button>
+        </div>
+
+        <!-- Login button -->
+        <div sec:authorize="isAnonymous()">
+            <button class="btn btn-outline-info my-2 my-sm-0" onclick="location.href='/auth/login'" type="button">Login
+                <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+        </div>
+
+    </div>
+</nav>

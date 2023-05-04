@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="d-flex justify-content-start">
+            <h1>Database</h1>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin'">Back</button>
+        </div>
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h3>Export database to *.zip file</h3>
+                <a href="/admin/databaseExport" target="_blank" class="btn btn-primary">Export</a>
+            </div>
+        </div>
+
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h3>Import database from *.zip file</h3>
+                <form enctype="multipart/form-data">
+                    <input type="file" id="databaseFile" name="databaseFile" class="py-2">
+                    <progress id="progressBar" value="0" max="100" class="w-100"></progress>
+                    <p id="status"></p>
+                    <p id="loaded_n_total"></p>
+                    <br>
+                </form>
+                <button class="btn btn-warning py-2" onclick="uploadFile()">Import</button>
+            </div>
+        </div>
+
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+        <div th:if="${SUCCESS != null}">
+            <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        // uploading
+        /*********************************************************************************************** */
+        function _(el) {
+            return document.getElementById(el);
+        }
+
+        function uploadFile() {
+            var file = _("databaseFile").files[0];
+            var formdata = new FormData();
+            formdata.append("databaseFile", file);
+            var ajax = new XMLHttpRequest();
+            ajax.upload.addEventListener("progress", progressHandler, false);
+            ajax.addEventListener("load", completeHandler, false);
+            ajax.addEventListener("error", errorHandler, false);
+            ajax.addEventListener("abort", abortHandler, false);
+            ajax.open("POST", "/admin/databaseImport");
+            ajax.send(formdata);
+        }
+
+        function progressHandler(event) {
+            _("loaded_n_total").innerHTML = "Uploading " + event.loaded + " B from " + event.total;
+            var percent = (event.loaded / event.total) * 100;
+            _("progressBar").value = Math.round(percent);
+            _("status").innerHTML = Math.round(percent) + "% uploaded... please wait";
+        }
+
+        function completeHandler(event) {
+            _("status").innerHTML = event.target.responseText;
+            _("progressBar").value = 0;
+        }
+
+        function errorHandler(event) {
+            _("status").innerHTML = "Uploading failed";
+        }
+
+        function abortHandler(event) {
+            _("status").innerHTML = "Uploading stopped"
+        }
+    </script>
+</th:block>
+
+</html>

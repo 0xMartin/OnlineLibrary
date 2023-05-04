@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div th:if="${USER != null}">
+            <div th:if="${USER.state.name.toString().equals('WAITING')}" class="alert alert-warning m-2" role="alert">
+                Your account is waiting for confirmation. Now you can't borrow a book.
+            </div>
+            <div th:if="${USER.state.name.toString().equals('NOT_CONFIRMED')}" class="alert alert-danger m-2" role="alert">
+                Your account is not confirmed. Now you can't borrow a book.
+            </div>
+        </div>
+
+        <div th:if="${BOOK != null}">
+            <div class="row py-5">
+                <div class="col-sm-5 px-2">
+                    <img class="card-img-top" th:src="'/image?id=' + ${BOOK.image.id}">
+                </div>
+                <div class="col-sm-7 px-4">
+                    <div class="d-flex justify-content-between flex-column h-100">
+                        <div>
+                            <h1 th:text="${BOOK.name}"></h1>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td><b>Author</b></td>
+                                        <td th:text="${BOOK.author}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Year of publication</b></td>
+                                        <td th:text="${BOOK.yearOfPublication}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Page count</b></td>
+                                        <td th:text="${BOOK.pageCount}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Available</b></td>
+                                        <td th:text="${BOOK.available} - ${BOOK.borrows.size()}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4>Description</h4>
+                        <p th:text="${BOOK.description}" class="text-justify"></p>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <button type="button" class="btn btn-secondary py-2 w-100"
+                                    th:onclick="history.back();">Back</button>
+                            </div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div th:if="${USER != null}">
+                                    <button type="button" class="btn btn-success py-2 w-100"
+                                        th:if="${USER.state.name.toString().equals('CONFIRMED') && (BOOK.available - BOOK.borrows.size()) > 0}"
+                                        th:onclick="borrowBook([[${BOOK.id}]])">Borrow Book</button>
+                                </div>
+                                <div class="alert alert-danger" role="alert"
+                                    th:if="${(BOOK.available - BOOK.borrows.size()) <= 0}">
+                                    Not available
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        function borrowBook(id) {
+            window.location.href = '/profile/borrowBook?id=' + id;
+        }
+    </script>
+</th:block>
+
+</html>

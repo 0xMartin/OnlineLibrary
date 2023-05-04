@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+        <h1>Profile</h1>
+
+        <div th:if="${USER.state.name.toString().equals('CONFIRMED')}" class="alert alert-success m-2" role="alert">
+            The account is confirmed
+        </div>
+        <div th:if="${USER.state.name.toString().equals('NOT_CONFIRMED')}" class="alert alert-danger m-2" role="alert">
+            The account is not confirmed
+        </div>
+        <div th:if="${USER.state.name.toString().equals('WAITING')}" class="alert alert-warning m-2" role="alert">
+            The account is waiting for confirmation
+        </div>
+        <div th:if="${USER.state.name.toString().equals('BANNED')}" class="alert alert-danger m-2" role="alert">
+            The account is banned
+        </div>
+
+        <div class="row">
+            <!-- User info -->
+            <div class="col-8">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td><b>Role</b> <span class="badge badge-primary" th:text="${USER.role.name}"></span></td>
+                            <td><b>Name</b> <span class="badge badge-primary" th:text="${USER.name}"></span></td>
+                            <td><b>Surname</b> <span class="badge badge-primary" th:text="${USER.surname}"></span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Username</b> <span class="badge badge-primary" th:text="${USER.username}"></span>
+                            </td>
+                            <td><b>Personal ID</b> <span class="badge badge-primary"
+                                    th:text="${USER.personalID}"></span>
+                            </td>
+                            <td><b>Address</b> <span class="badge badge-primary" th:text="${USER.address}"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-4 d-flex flex-column">
+                <button type="button" class="btn btn-secondary m-1" onclick="window.location='/profile/edit'">
+                    <i class="fa fa-user" aria-hidden="true"></i> Edit profile</button>
+                <button type="button" class="btn btn-secondary m-1"
+                    onclick="window.location='/profile/changePassword'"><i class="fa fa-key" aria-hidden="true"></i>
+                    Change password</button>
+            </div>
+        </div>
+
+        <!-- Borrowed books -->
+        <div class="container-fluid py-2">
+            <h3 class="pr-5 my-0 bg-dark text-white p-2 rounded-top">Borrowed books</h3>
+            <div class="d-flex flex-row flex-nowrap overflow-auto border border-secondary rounded-bottom p-3 mb-5">
+                <!--Info text = no books-->
+                <div class="col-md-12" th:if="${USER.borrows.size() == 0}">
+                    <div class="d-flex justify-content-center">
+                        <h3 class="text-info py-5">Empty</h3>
+                    </div>
+                </div>
+                <!--Books-->
+                <th:block th:each="borrow : ${USER.borrows}">
+                    <!--Book Card-->
+                    <div class="col-md-4 pb-4">
+                        <div class="card p-2 h-100">
+                            <img class="card-img-top px-4" th:src="'/image?id=' + ${borrow.book.image.id}">
+                            <div class="card-body">
+                                <h4 class="card-title" th:text="${borrow.book.name}"></h4>
+                                <p class="card-text"><b>Date: </b> <span th:text="${borrow.date}"></span></p>
+                                <p class="card-text"><b>Expire: </b> <span th:text="${borrow.expireAt}"></span></p>
+                                <p class="card-text text-danger"><b>Remaining days: </b> <span
+                                        th:text="${borrow.expireAt.getDate() - new java.util.Date().getDate()}"></span>
+                                </p>
+                                <div class="d-flex justify-content-between">
+                                    <button th:onclick="showInfo([[${borrow.book.id}]])" class="btn btn-primary"
+                                        style="width: 45%;">Info</button>
+                                    <button th:onclick="returnBook([[${borrow.id}]])" class="btn btn-warning"
+                                        style="width: 45%;">Return</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+        <!-- Borrowed books history -->
+        <div class="container-fluid py-2">
+            <h3 class="pr-5 my-0 bg-dark text-white p-2 rounded-top">Borrow History</h3>
+            <ul class="list-group list-group-flush overflow-auto border border-secondary rounded-bottom py-3 mb-5"
+                style="max-height: 40vh;">
+                <!--Info text = no books-->
+                <div class="col-md-12" th:if="${BORROW_HISTORY.size() == 0}">
+                    <div class="d-flex justify-content-center">
+                        <h3 class="list-group-item text-info py-5">Empty</h3>
+                    </div>
+                </div>
+                <th:block th:each="bh : ${BORROW_HISTORY}">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <span class="text-primary font-weight-bold" th:text="${bh.book_name}"></span>
+                            </div>
+                            <div class="col-sm-5">
+                                <span class="text-info" th:text="${bh.date}"></span>
+                            </div>
+                            <div class="col-sm-2">
+                                <button th:onclick="showInfo([[${bh.book_id}]])"
+                                    class="btn btn-primary px-5 w-100">Info</button>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        // zobrazi info o vybrane knize
+        function showInfo(id) {
+            window.location.href = '/home/info?id=' + id;
+        }
+
+        // vrati cypujcenou knihu
+        function returnBook(id) {
+            window.location.href = '/profile/returnBook?id=' + id;
+        }
+    </script>
+</th:block>
+
+</html>
