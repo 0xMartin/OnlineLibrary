@@ -22,7 +22,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: your-docker-hub-username/your-app-name:latest
+        tags: 0xm4r71n/libraryapp:latest
         
     - name: Push image digest to file
       id: digest
