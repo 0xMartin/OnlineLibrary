@@ -1,0 +1,2 @@
+{"username":"uzivatel1","password":"$2a$10$yKkoAIxYj5WPV3e354Psm.J.fb8lB981O3FZ2JPfWJ0t3m8k//zOi","name":"Martin12","surname":"Krčma","personalID":"6666666","address":"V Dědině 79","state":{"id":2,"name":"CONFIRMED"},"role":{"id":0,"name":"CUSTOMER"}}
+{"username":"admin","password":"$2a$10$KD9LfOwoABttcbj7fxpY.ersKJOl.Ix6jMqgswXspe0x6E5wZOmsC","name":"Admin","surname":"Admin","personalID":"000000/0000","address":"Not defined","state":{"id":2,"name":"CONFIRMED"},"role":{"id":1,"name":"LIBRARIAN"}}

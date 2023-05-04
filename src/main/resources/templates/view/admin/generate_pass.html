@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="d-flex justify-content-start">
+            <h1>Generate new password</h1>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin/users'">Back</button>
+        </div>
+
+        <form th:if="${USER != null}" id="form" th:action="'/admin/generatePass?username=' + ${USER.username}" method='POST'
+            autocomplete="off">
+            <div class="form-group">
+                <label for="surname">Username</label>
+                <input type="text" name='surname' class="form-control" id="surname" th:value="${USER.username}" disabled>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">Generate</button>
+        </form>
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+        <div th:if="${SUCCESS != null}">
+            <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+        </div>
+
+    </div>
+</th:block>
+
+</html>

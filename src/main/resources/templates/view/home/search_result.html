@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container p-4">
+        <h1>Searching</h1>
+        <hr>
+        <p><b>Results: </b><span th:if="${URLs != null}" th:text="${URLs.size()}"></span></p>
+        <ul class="list-group" style="max-width: 60vh; overflow: auto;"></ul>
+        <th:block it:if="${URLs != null}" th:each="entry : ${URLs}">
+            <li class="list-group-item">
+                <b><span th:text="${entry.title}"></span></b>
+                <a th:text="${entry.url}" th:href="${entry.url}" class="mx-4"></a>
+            </li>
+        </th:block>
+        </ul>
+        <hr>
+
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+    </div>
+</th:block>
+
+</html>

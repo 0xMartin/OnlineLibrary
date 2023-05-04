@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="page_css">
+    <style>
+        .tableFixHead {
+            overflow-y: auto;
+            /* make the table scrollable if height is more than 200 px  */
+            height: 60vh;
+            /* gives an initial height of 200px to the table */
+        }
+
+        .tableFixHead thead th {
+            position: sticky;
+            /* make the table heads sticky */
+            top: 0px;
+            /* table head will be placed from the top of the table and sticks to it */
+        }
+
+        table {
+            border-collapse: collapse;
+            /* make the table borders collapse to each other */
+            width: 100%;
+        }
+
+        th,
+        td {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background: #eee;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="d-flex justify-content-start">
+            <h1>Admin - Users</h1>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin'">Back</button>
+            <button type="button" class="btn btn-success my-2 ml-5"
+                th:onclick="window.location.href='/admin/createUser'">Create
+                new user</button>
+        </div>
+
+        <form action="/admin/users" method="GET">
+            <div class="form-row py-1">
+                <div class="col-sm-3">
+                    <input id="name" name="name" type="text" class="form-control" placeholder="Name"
+                        th:value="${FILTER_NAME}" minlength="3">
+                </div>
+                <div class="col-sm-3">
+                    <input id="surname" name="surname" type="text" class="form-control" placeholder="Surname"
+                        th:value="${FILTER_SURNAME}" minlength="3">
+                </div>
+                <div class="col-sm-3">
+                    <input id="address" name="address" type="text" class="form-control" placeholder="Address"
+                        th:value="${FILTER_ADDRESS}" minlength="3">
+                </div>
+                <div class="col-sm-3">
+                    <input id="personalID" name="personalID" type="text" class="form-control" placeholder="Personal ID"
+                        th:value="${FILTER_PERSONAL_ID}" minlength="3">
+                </div>
+            </div>
+            <div class="form-row py-1">
+                <div class="col-sm-2">
+                    <select id="sortedBy" name="sortedBy" class="form-control">
+                        <option value="-1" th:selected="${FILTER_SORTED} == -1">None</option>
+                        <option value="0" th:selected="${FILTER_SORTED} == 0">Name</option>
+                        <option value="1" th:selected="${FILTER_SORTED} == 1">Surname</option>
+                        <option value="2" th:selected="${FILTER_SORTED} == 2">Address</option>
+                        <option value="2" th:selected="${FILTER_SORTED} == 3">Personal ID</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 d-flex align-items-center px-4">
+                    <input class="form-check-input" type="checkbox" name="sortingASC" id="sortingASC"
+                        th:checked="${FILTER_ASC} == true" value="true">
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Reverse</label>
+                </div>
+                <div class="col-sm-9 d-flex flex-row-reverse">
+                    <button id="search" type="submit" class="btn btn-primary px-4"><i class="fa fa-search"
+                            aria-hidden="true"></i>
+                        Search</button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="tableFixHead">
+            <table class="table">
+                <thead>
+                    <th class="th-sm">Role</th>
+                    <th class="th-sm">Username</th>
+                    <th class="th-sm">Name</th>
+                    <th class="th-sm">Surname</th>
+                    <th class="th-sm">Address</th>
+                    <th class="th-sm">Personal ID</th>
+                    <th class="th-sm">State</th>
+                    <th class="th-sm"></th>
+                    <th class="th-sm"></th>
+                </thead>
+                <tbody>
+                    <th:block th:each="user : ${USERS}">
+                        <tr>
+                            <td th:text="${user.role.name}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.surname}"></td>
+                            <td th:text="${user.address}"></td>
+                            <td th:text="${user.personalID}"></td>
+                            <td th:text="${user.state.name}"></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-warning dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/editUser?username=' + ${user.username}">Edit</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/generatePass?username=' + ${user.username}">Generate
+                                            Password</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/userDelete?username=' + ${user.username}">Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        State
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=CONFIRMED'">Confirmed</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=NOT_CONFIRMED'">Not
+                                            confirmed</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=WAITING'">Waiting</a>
+                                        <a class="dropdown-item"
+                                            th:href="'/admin/setUserState?username=' + ${user.username} + '&state=BANNED'">Banned</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${ERROR != null}">
+            <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+        </div>
+        <div th:if="${SUCCESS != null}">
+            <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+        </div>
+
+    </div>
+</th:block>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="content">
+    <div class="container h-100">
+        <div class="d-flex justify-content-center p-5">
+            <div th:if="${ERROR != null}">
+                <h1 class="text-danger" th:text="${ERROR}"></h1>
+            </div>
+            <div th:if="${SUCCESS != null}">
+                <h1 class="text-success" th:text="${SUCCESS}"></h1>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center pb-5">
+            <button type="button" class="btn btn-info py-2 px-5 mx-2"
+                th:onclick="window.location.href='/profile'"><i class="fa fa-user" aria-hidden="true"></i>Back Profile</button>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+    </script>
+</th:block>
+
+</html>

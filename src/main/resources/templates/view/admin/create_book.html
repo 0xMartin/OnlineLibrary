@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+
+<th:block layout:fragment="page_css">
+    <style>
+        img {
+            max-width: 100%;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="content">
+    <div class="container">
+
+        <div class="d-flex justify-content-start">
+            <h1>Create Book</h1>
+            <button type="button" class="btn btn-secondary my-2 ml-5"
+                th:onclick="window.location.href='/admin/books'">Back</button>
+        </div>
+
+        <form id="form" action="createBook" method='POST' autocomplete="off" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" name='name' class="form-control" id="name" placeholder="Enter name of book">
+                    </div>
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" name='author' class="form-control" id="author"
+                            placeholder="Enter name of author">
+                    </div>
+                    <div class="form-group">
+                        <label for="pageCount">Page Count</label>
+                        <input type="number" name='pageCount' class="form-control" id="pageCount" min="1" value="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="yearOfPublication">Year Of Publication</label>
+                        <input type="number" name='yearOfPublication' class="form-control" id="yearOfPublication"
+                            min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="available">Available</label>
+                        <input type="number" name='available' class="form-control" id="yearOfPublication" min="1"
+                            value="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="available">Description</label>
+                        <textarea name="description" id="description" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookImage">Image of book</label>
+                        <input accept="image/*" type="file" class="form-control" id="bookImage" name="bookImage"
+                            onchange="loadFile(event)" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div id="image_container" class="img-thumbnail w-100 h-100">
+                        <div id="img_text" class="d-flex justify-content-center h-100">
+                            <div class="d-flex align-items-center">
+                                <h2 class="text-primary">Upload image</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary">Create</button>
+            <div th:if="${ERROR != null}">
+                <div class="alert alert-danger m-2" role="alert" th:text="${ERROR}"></div>
+            </div>
+            <div th:if="${SUCCESS != null}">
+                <div class="alert alert-success m-2" role="alert" th:text="${SUCCESS}"></div>
+            </div>
+        </form>
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="page_scripts">
+    <script>
+        document.querySelector("#yearOfPublication").value = new Date().getFullYear();
+
+        const image_container = document.querySelector("#image_container");
+
+        function readURL(event) {
+            var activimg = document.getElementsByClassName("activimg");
+            var url = URL.createObjectURL(event.target.files[0]);
+            activimg[0].innerHTML = "<img class=\"output\" src=\"" + url + "\" alt=\"img\" >";
+        }
+
+        var loadFile = function (event) {
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(event.target.files[0]);
+            image_container.removeChild(document.querySelector("#img_text"));
+            image_container.appendChild(img);
+        };
+
+    </script>
+</th:block>
+
+</html>
