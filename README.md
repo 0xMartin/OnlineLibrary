@@ -4,6 +4,7 @@ Online library web application (Java Spring + MongoDB + Thymeleaf). Require Java
 
 ## Database setup
 1) Install Mongo DB and Mongo shell: https://www.mongodb.com/docs/manual/installation/
+2) 
 ```
 mongosh
 ```
